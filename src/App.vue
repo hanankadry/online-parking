@@ -1,5 +1,6 @@
 <template>
-  <nav>
-  </nav>
-  <router-view/>
+  <router-view />
 </template>
+<style>
+@import url('@/assets/styles/index.css');
+</style>
