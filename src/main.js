@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import Background from '@/components/Background'
+import VueApexCharts from "vue3-apexcharts";
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
@@ -22,4 +23,5 @@ const app = createApp(App)
 
 initializeApp(firebaseConfig);
 app.use(router).mount('#app')
+app.use(VueApexCharts)
 app.component("Background", Background)

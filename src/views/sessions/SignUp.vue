@@ -70,7 +70,7 @@
                 required
               />
             </div>
-            <div class="col-lg-4 col-md-4">
+            <div class="col-lg-4">
               <i class="bi bi-gender-ambiguous sm-icon" />
               <label for="gender" class="form-label">Gender</label>
               <select
@@ -230,6 +230,18 @@
               />
             </div>
             <div class="col-lg-4 col-md-6">
+              <i class="bi bi-box sm-icon" />
+              <label for="capacity" class="form-label">Capacity</label>
+              <input
+                type="number"
+                v-model="parkingSpace.capacity"
+                class="form-control input-xl"
+                required
+              />
+            </div>
+          </div>
+          <div class="row pb-3 px-5">
+            <div class="col-lg-3">
               <input
                 class="form-check-input"
                 type="checkbox"
@@ -243,18 +255,6 @@
                 v-model="parkingSpace.fee"
                 class="form-control input-xl"
                 v-if="parkingSpace.fees == true"
-                required
-              />
-            </div>
-          </div>
-          <div class="row pb-3 px-5">
-            <div class="col-lg-3">
-              <i class="bi bi-box sm-icon" />
-              <label for="capacity" class="form-label">Capacity</label>
-              <input
-                type="number"
-                v-model="parkingSpace.capacity"
-                class="form-control input-xl"
                 id="capacity"
                 required
               />
@@ -264,7 +264,7 @@
                 >Slot Naming</label
               >
               <select
-                class="form-select selector-xl"
+                class="form-select selector-xl mt-1"
                 v-model="parkingSpace.slotNaming"
                 id="slotNaming"
                 required
@@ -282,7 +282,7 @@
               <input
                 type="number"
                 v-model="numOfAlpha"
-                class="form-control input-xl"
+                class="form-control input-xl  mt-1"
                 id="alphabet"
                 required
               />
@@ -298,7 +298,7 @@
                 type="number"
                 v-model="numPerAlpha"
                 @change="getSlots(numOfAlpha, numPerAlpha)"
-                class="form-control input-xl"
+                class="form-control input-xl mt-1"
                 id="numberPerAlphabet"
                 required
               />
@@ -359,7 +359,7 @@ export default {
     const Alphabets = Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
     const goBack = () => {
-      router.push("/login");
+      router.push("/");
     };
     const createAccount = () => {
       router.push("/dashboard");
@@ -523,6 +523,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   height: 25px;
   width: 25px;
   margin: 0 0 0 2px;
+}
+
+@media screen and (max-width: 960px) {
+  .form-check-input {
+    height: 20px;
+    width: 20px;
+    margin-top: 5px;
+  }
 }
 
 .form-check-input:checked {

@@ -7,7 +7,7 @@ const routes = [
   
   //sessions
   {
-    path: '/login',
+    path: '/',
     name: 'login',
     component: () => import('@/views/sessions/Login'),
 
