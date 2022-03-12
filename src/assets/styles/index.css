@@ -21,29 +21,34 @@ body {
     background: #555;
 }
 
-.input-icons i {
-    position: absolute;
-}
-
 .input-icons {
     width: 100%;
     margin-bottom: 10px;
 }
 
 .icon {
+    position: absolute;
     padding-top: 7px;
     padding-left: 7px;
-    margin-left: 10px;
     min-width: 40px;
     color: #f74464;
 }
 
-.input-large {
+.input-lg {
     border-radius: 95px;
     height: 40px;
     width: 20rem;
-    text-align: center;
+    padding-left: 2.5rem;
     border: none;
+}
+
+.input-md {
+    border-radius: 95px;
+    height: 40px;
+    width: 15rem;
+    padding-left: 2.5rem;
+    padding-bottom: 3px;
+    border: 3px solid #374258;
 }
 
 .button-lg-fill {

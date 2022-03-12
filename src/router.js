@@ -4,10 +4,16 @@ import NotFound from '@/views/pages/NotFound'
 //we'll group related routes.
 
 const routes = [
+
+  {
+    path: '/',
+    name: 'home',
+    component: () => import('@/views/Home.vue'),
+  },
   
   //sessions
   {
-    path: '/',
+    path: '/login',
     name: 'login',
     component: () => import('@/views/sessions/Login'),
 

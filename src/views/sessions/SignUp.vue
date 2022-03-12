@@ -124,7 +124,7 @@
                 <button
                   class="addon"
                   type="button"
-                  v-if="phone1 == false"
+                  v-if="phones.phone1 == false"
                   @click="checkPhone1"
                 >
                   +
@@ -134,7 +134,7 @@
                 </button>
               </div>
             </div>
-            <div class="col-lg-4 col-md-4" v-if="phone1 == true">
+            <div class="col-lg-4 col-md-4" v-if="phones.phone1 == true">
               <i class="bi bi-telephone sm-icon" />
               <label for="phone2" class="form-label">Phone</label>
               <div class="input-group mb-3">
@@ -148,7 +148,7 @@
                 <button
                   class="addon"
                   type="button"
-                  v-if="phone2 == false"
+                  v-if="phones.phone2 == false"
                   @click="checkPhone2"
                 >
                   +
@@ -158,7 +158,7 @@
                 </button>
               </div>
             </div>
-            <div class="col-lg-4 col-md-4" v-if="phone2 == true">
+            <div class="col-lg-4 col-md-4" v-if="phones.phone2 == true">
               <i class="bi bi-telephone sm-icon" />
               <label for="phone3" class="form-label">Phone</label>
               <div class="input-group mb-3">
@@ -209,7 +209,7 @@
           <div class="row pb-3 px-5">
             <div class="col-lg-4">
               <i class="bi bi-file-earmark-text sm-icon" />
-              <label for="description" class="form-label">Descriptions</label>
+              <label for="description" class="form-label">Description</label>
               <input
                 type="text"
                 v-model="parkingSpace.description"
@@ -282,7 +282,7 @@
               <input
                 type="number"
                 v-model="numOfAlpha"
-                class="form-control input-xl  mt-1"
+                class="form-control input-xl mt-1"
                 id="alphabet"
                 required
               />
@@ -297,7 +297,6 @@
               <input
                 type="number"
                 v-model="numPerAlpha"
-                @change="getSlots(numOfAlpha, numPerAlpha)"
                 class="form-control input-xl mt-1"
                 id="numberPerAlphabet"
                 required
@@ -309,7 +308,7 @@
           <button
             class="button-xl-fill"
             type="submit"
-            @click.prevent="createAccount"
+            @click.prevent="createAccount(numOfAlpha, numPerAlpha)"
           >
             Create Account
           </button>
@@ -323,65 +322,63 @@
 import { ref } from "@vue/reactivity";
 import router from "@/router";
 export default {
-  data() {
-    return {
-      user: {
-        name: "",
-        nationalID: 0,
-        email: "",
-        address: "",
-        password: "",
-        confirmPassword: "",
-        gender: ["male", "female"],
-        phones: [],
-        dateOfBirth: "",
-      },
-      parkingSpace: {
-        location: "",
-        category: ["mall", "club", "public"],
-        description: "",
-        levels: 0,
-        fees: false,
-        fee: 0,
-        capacity: 0,
-        name: "",
-        slotNaming: ["alpha", "numerical"],
-        slotLevel: 0,
-      },
-    };
-  },
   setup() {
-    const phone1 = ref(false);
-    const phone2 = ref(false);
+    const parkingSpace = ref({
+      location: "",
+      category: ["mall", "club", "public"],
+      description: "",
+      levels: 0,
+      fees: false,
+      fee: 0,
+      capacity: 0,
+      name: "",
+      slotNaming: ["alpha", "numerical"],
+      slotLevel: 0,
+    });
+    const user = ref({
+      name: "",
+      nationalID: 0,
+      email: "",
+      address: "",
+      password: "",
+      confirmPassword: "",
+      gender: ["male", "female"],
+      phones: [],
+      dateOfBirth: "",
+    });
+    const phones = ref({ phone1: false, phone2: false });
     const numOfAlpha = ref(0);
     const numPerAlpha = ref(0);
-    const slots = [];
+    var slots = [];
     const Alphabets = Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
     const goBack = () => {
       router.push("/");
     };
-    const createAccount = () => {
-      router.push("/dashboard");
+    const createAccount = (val1, val2) => {
+      getSlots(val1, val2);
+      console.log(user.value, parkingSpace.value);
+      router.push("/login");
     };
 
     const checkPhone1 = () => {
-      if (phone1.value == false) {
-        phone1.value = true;
-      } else if (phone1.value == true && phone2.value == true) {
-        phone2.value = false;
+      if (phones.value.phone1 == false) {
+        phones.value.phone1 = true;
+      } else if (phones.value.phone1 == true && phones.value.phone2 == true) {
+        phones.value.phone2 = false;
       } else {
-        phone1.value = false;
+        phones.value.phone1 = false;
       }
     };
     const checkPhone2 = () => {
-      if (phone2.value == false) {
-        phone2.value = true;
+      if (phones.value.phone2 == false) {
+        phones.value.phone2 = true;
       } else {
-        phone2.value = false;
+        phones.value.phone2 = false;
       }
     };
     const getSlots = (endValue, numValue) => {
+      slots = [];
       const letters = Alphabets.slice(0, endValue);
       const numOfSlots = [...Array(numValue - 1 + 1).keys()].map((x) => x + 1);
 
@@ -391,13 +388,13 @@ export default {
           slots.push(slotName);
         }
       }
-      console.log(slots);
       return slots;
     };
 
     return {
-      phone1,
-      phone2,
+      user,
+      parkingSpace,
+      phones,
       numOfAlpha,
       numPerAlpha,
       checkPhone1,

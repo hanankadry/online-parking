@@ -1,5 +1,5 @@
 <template>
-  <Background />
+  <background />
   <div class="container">
     <div class="row justify-content-end">
       <h1>Forgot Password?</h1>
@@ -12,7 +12,7 @@
             <i class="bi bi-envelope icon" />
             <input
               type="email"
-              class="form-control m-1 mb-5 input-large"
+              class="form-control m-1 mb-5 input-lg"
               id="email"
               placeholder="Enter Email"
               v-model="email"
@@ -64,7 +64,6 @@ export default {
 </script>
 
 <style scoped>
-
 .container {
   font-weight: bold;
   text-align: justify;
@@ -81,12 +80,21 @@ h4 {
   margin: 0;
 }
 
-.input-large {
+.input-lg {
   border-radius: 95px;
   height: 40px;
   width: 20rem;
-  text-align: center;
+  padding-left: 2.5rem;
+  padding-bottom: 8px;
   border: none;
+}
+
+.icon {
+  position: absolute;
+  padding-top: 7px;
+  padding-left: 1rem;
+  min-width: 40px;
+  color: #f74464;
 }
 
 @media screen and (max-width: 1140px) {

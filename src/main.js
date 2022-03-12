@@ -4,6 +4,8 @@ import router from './router'
 import Background from '@/components/Background'
 import VueApexCharts from "vue3-apexcharts";
 import { initializeApp } from "firebase/app";
+import VueGoodTablePlugin from 'vue-good-table-next';
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyBB8YSbamKhUF4D5cMhPlbrfZyJ3gkYdpA",
@@ -18,10 +20,12 @@ import '@popperjs/core'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
 import 'bootstrap-icons/font/bootstrap-icons.css'
+import "vue-good-table-next/dist/vue-good-table-next.css";
 
 const app = createApp(App)
 
 initializeApp(firebaseConfig);
 app.use(router).mount('#app')
 app.use(VueApexCharts)
-app.component("Background", Background)
+app.use(VueGoodTablePlugin);
+app.component("background", Background)

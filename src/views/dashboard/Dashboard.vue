@@ -1,12 +1,7 @@
 <template>
   <div class="container-fluid background">
-    <nav class="px-5 pt-5">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-      </ol>
-      <p class="date">Fri - Mar, 3rd. 2022</p>
-    </nav>
-    <div class="container mt-5">
+    <breadcrumb />
+    <div class="container-fluid mt-5">
       <div class="row">
         <div class="col-md-4">
           <div class="card-counter">
@@ -38,138 +33,150 @@
           </div>
         </div>
       </div>
+
+      <chart />
+      <hr />
     </div>
-    <div class="container chart my-5">
-      <apexchart
-        type="line"
-        height="350"
-        :options="chartOptions"
-        :series="series"
-      ></apexchart>
+    <div class="container-fluid">
+      <div class="row g-3 ms-5 ">
+        <div class="col-md-7">
+          <p class="label">Reservations</p>
+          <vue-table :columns="reservationColumns" :rows="reservationRows" />
+        </div>
+        <div class="col-md-5">
+          <p class="label">Parking Slots</p>
+          <vue-table class="slots" :columns="slotColumns" :rows="slotRows" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import VueApexCharts from "apexcharts";
+import VueTable from "@/components/Table.vue";
+import Chart from "@/components/Chart.vue";
+import Breadcrumb from "@/components/Breadcrumb.vue";
 export default {
   components: {
-    apexcharts: VueApexCharts,
+    Chart,
+    Breadcrumb,
+    VueTable,
   },
   data() {
     return {
-      series: [
+      search: false,
+      pagination: false,
+      reservationColumns: [
         {
-          name: "Sales",
-          data: [4, 3, 10, 9, 29, 19, 22, 9, 12, 7, 19, 5, 13, 9, 17, 2, 7, 5],
+          label: "Name",
+          field: "name",
+          sortable: false,
+        },
+        {
+          label: "Slot Name",
+          field: "slotName",
+          sortable: false,
+        },
+        {
+          label: "Car Id",
+          field: "carId",
+          sortable: false,
+        },
+        {
+          label: "Status",
+          field: "status",
+          sortable: false,
+        },
+        {
+          label: "Time",
+          field: "time",
+          sortable: false,
         },
       ],
-      chartOptions: {
-        chart: {
-          height: 350,
-          type: "line",
-          toolbar: {
-            tools: {
-              download: true,
-              selection: false,
-              zoom: false,
-              zoomin: false,
-              zoomout: false,
-              pan: false,
-              reset: false | '<img src="/static/icons/reset.png" width="20">',
-            },
-          },
+      slotColumns: [
+        {
+          label: "Slot Name",
+          field: "slotName",
+          sortable: false,
         },
-        stroke: {
-          width: 5,
-          curve: "smooth",
+        {
+          label: "Status",
+          field: "status",
+          sortable: false,
         },
-        xaxis: {
-          type: "datetime",
-          categories: [
-            "1/11/2000",
-            "2/11/2000",
-            "3/11/2000",
-            "4/11/2000",
-            "5/11/2000",
-            "6/11/2000",
-            "7/11/2000",
-            "8/11/2000",
-            "9/11/2000",
-            "10/11/2000",
-            "11/11/2000",
-            "12/11/2000",
-            "1/11/2001",
-            "2/11/2001",
-            "3/11/2001",
-            "4/11/2001",
-            "5/11/2001",
-            "6/11/2001",
-          ],
-          tickAmount: 10,
-          labels: {
-            formatter: function (value, timestamp, opts) {
-              return opts.dateFormatter(new Date(timestamp), "dd MMM");
-            },
-          },
+      ],
+      reservationRows: [
+        {
+          id: 1,
+          name: "John",
+          slotName: "A1",
+          carId: "sal1234",
+          status: "checked in",
+          time: "00:00",
         },
-        responsive: [
-          {
-            breakpoint: 960,
-            options: {},
-          },
-        ],
-        title: {
-          text: "This Week",
-          align: "left",
-          style: {
-            fontSize: "16px",
-            color: "#374258",
-          },
+        {
+          id: 2,
+          name: "Jane",
+          slotName: "B24",
+          carId: "sal1234",
+          status: "checked in",
+          time: "00:00",
         },
-        fill: {
-          type: "gradient",
-          gradient: {
-            shade: "dark",
-            gradientToColors: ["#374258"],
-            shadeIntensity: 1,
-            type: "horizontal",
-            opacityFrom: 1,
-            opacityTo: 1,
-            stops: [0, 100, 100, 100],
-          },
+        {
+          id: 3,
+          name: "Mike",
+          slotName: "A31",
+          carId: "sal1234",
+          status: "missed",
+          time: "-",
         },
-        yaxis: {
-          min: -10,
-          max: 40,
+        {
+          id: 4,
+          name: "Jenna",
+          slotName: "C4",
+          carId: "sal1234",
+          status: "pending",
+          time: "00:23",
         },
-      },
+      ],
+      slotRows: [
+        {
+          id: 1,
+          slotName: "A1",
+          name: "John",
+          status: "available",
+          time: "00:00",
+        },
+        {
+          id: 2,
+          slotName: "B24",
+          name: "Jane",
+          status: "available",
+          time: "00:00",
+        },
+        {
+          id: 3,
+          slotName: "A31",
+          name: "Mike",
+          status: "out of order",
+          time: "-",
+        },
+        {
+          id: 4,
+          slotName: "C4",
+          name: "Jenna",
+          status: "reserved",
+          time: "00:23",
+        },
+      ],
     };
   },
 };
 </script>
 
 <style scoped>
-nav {
-  --bs-breadcrumb-divider: ">";
-}
-
-.date {
-  text-align: end;
-  color: #374258;
-  letter-spacing: 2px;
-  text-transform: capitalize;
-  font-size: 16pt;
-  position: relative;
-}
-
-.breadcrumb-item > a {
-  text-decoration: none;
-  text-transform: uppercase;
-  font-size: 28pt;
-  letter-spacing: 5px;
-  color: #f74464;
-  position: absolute;
+.background {
+  padding: 50px;
 }
 
 .card-counter {
@@ -214,11 +221,16 @@ nav {
   color: #374258;
 }
 
-.chart {
-  background-color: white;
-  border: 3px solid #f74464;
-  padding: 25px;
-  box-shadow: 5px 10px #374258;
+.label {
+  color: #f74464;
+  font-size: 16pt;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-left: 20px;
+}
+
+.slots {
+  width: 400px;
 }
 
 @media screen and (max-width: 1140px) {
@@ -231,11 +243,11 @@ nav {
     font-size: 10pt;
     margin-top: 5px;
   }
+  .slots {
+    width: 100%;
+  }
 }
 @media screen and (max-width: 767.2px) {
-  .breadcrumb-item > a {
-    position: relative;
-  }
   .count-name {
     font-size: 16pt;
     margin-top: 0px;

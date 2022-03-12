@@ -54,10 +54,6 @@
   <div class="container box" />
 </template>
 
-<script>
-export default {};
-</script>
-
 <style scoped>
 .shape {
   height: 600px;
