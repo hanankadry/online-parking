@@ -56,9 +56,9 @@ const routes = [
     component: () => import('@/views/dashboard/Dashboard')
   },
   {
-    path: '/reservations',
-    name: 'reservations',
-    component: () => import('@/views/dashboard/Reservations')
+    path: '/registrations',
+    name: 'registrations',
+    component: () => import('@/views/dashboard/Registrations')
   },
   {
     path: '/parkingSettings',

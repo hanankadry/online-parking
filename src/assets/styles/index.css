@@ -6,17 +6,14 @@ body {
     width: 10px;
 }
 
-/* Track */
 ::-webkit-scrollbar-track {
     background: #f1f1f1;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
     background: #888;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
@@ -77,6 +74,32 @@ body {
     text-align: center;
 }
 
+.button-xs-fill {
+    background-color: #f74464;
+    border-radius: 95px;
+    height: 40px;
+    width: 5rem;
+    color: white;
+    position: relative;
+    margin: 5px;
+    border: none;
+    font-weight: bold;
+    text-align: center;
+}
+
+.button-xs-unfill {
+    border: 3px solid #f74464;
+    border-radius: 95px;
+    height: 40px;
+    background-color: transparent;
+    width: 5rem;
+    padding-top: 0;
+    margin: 5px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+
 .button-xl-fill {
     background-color: #f74464;
     border-radius: 95px;
@@ -88,7 +111,58 @@ body {
     font-size: larger;
 }
 
+.button-sm-fill {
+    background-color: #f74464;
+    border-radius: 95px;
+    height: 40px;
+    width: 8rem;
+    color: white;
+    position: relative;
+    border: none;
+    font-weight: bold;
+    padding: 5px;
+}
+
 .separator {
     margin-bottom: 10px;
     border: 2px solid;
+}
+
+.table-style {
+    box-shadow: 5px 10px #374258;
+    padding: 0;
+    border: 3px solid #f74464;
+    margin: 0;
+}
+
+.status-success {
+    background-color: #02b902;
+    color: white;
+    border-radius: 95px;
+    padding: 7px;
+}
+
+.status-danger {
+    background-color: #fd1d1d;
+    color: white;
+    border-radius: 95px;
+    padding: 7px;
+}
+
+.status-warning {
+    background-color: #faaa17;
+    color: white;
+    border-radius: 95px;
+    padding: 7px;
+}
+
+.background {
+    padding: 50px;
+}
+
+.table-icon {
+    margin: 6px;
+    min-width: 40px;
+    font-size: 14pt;
+    color: #374258;
 }

@@ -1,14 +1,35 @@
 <template>
   <nav class="px-5 pt-5">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+      <li class="breadcrumb-item">
+        <a :href="href">{{ label }}</a>
+      </li>
     </ol>
-    <p class="date">Fri - Mar, 3rd. 2022</p>
+    <p class="date">{{ this.date }}</p>
   </nav>
 </template>
 
 <script>
-export default {};
+export default {
+  props: ["crumbLabel", "crumbHref"],
+  mounted() {
+    var today = new Date().toLocaleDateString("en-us", {
+      weekday: "long",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+    this.date = today;
+  },
+  methods: {},
+  data() {
+    return {
+      label: this.crumbLabel,
+      href: this.crumbHref,
+      date: "",
+    };
+  },
+};
 </script>
 
 <style scoped>

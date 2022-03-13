@@ -1,13 +1,673 @@
 <template>
-  
+  <div class="container-fluid background">
+    <breadcrumb :crumbLabel="label" :crumbHref="href" />
+    <div class="container-fluid mt-5 p-3">
+      <div class="row">
+        <div class="col-auto me-auto input-icons">
+          <i class="bi bi-search icon" />
+          <input
+            type="text"
+            class="m-1 input-md"
+            placeholder="Search"
+            v-model="searchInput"
+          />
+        </div>
+        <div class="col-auto">
+          <button
+            class="m-1 button-sm-fill"
+            type="submit"
+            data-bs-toggle="modal"
+            data-bs-target=".add-modal"
+          >
+            Add Security
+          </button>
+        </div>
+      </div>
+      <vue-good-table
+        :columns="columns"
+        :rows="rows"
+        styleClass="vgt-table"
+        class="table-style"
+        :pagination-options="{
+          enabled: true,
+          mode: 'remote',
+        }"
+        :search-options="{
+          enabled: false,
+          externalQuery: searchInput,
+        }"
+        :select-options="{
+          enabled: true,
+          selectOnCheckboxOnly: true,
+          selectionInfoClass: 'custom-class',
+          selectionText: 'rows selected',
+          clearSelectionText: 'clear',
+          disableSelectInfo: true,
+          selectAllByGroup: true,
+        }"
+        ><template #table-row="props">
+          <span v-if="props.column.field == 'status'">
+            <span class="status-success" v-if="props.row.status == 'active'">{{
+              props.row.status
+            }}</span
+            ><span class="status-danger" v-else>{{ props.row.status }}</span>
+          </span>
+          <span v-if="props.column.field == 'button'">
+            <a href="" data-bs-toggle="modal" data-bs-target=".edit-modal">
+              <i class="bi bi-pencil-square table-icon"></i>
+              {{ props.row.button }}</a
+            >
+            <a href="" data-bs-toggle="modal" data-bs-target=".info-modal">
+              <i class="bi bi-info-circle table-icon text-success"></i>
+              {{ props.row.button }}</a
+            >
+            <a href="" data-bs-toggle="modal" data-bs-target=".activate-modal">
+              <i class="bi bi-clock table-icon text-warning"></i>
+              {{ props.row.button }}</a
+            >
+            <a href="" data-bs-toggle="modal" data-bs-target=".delete-modal">
+              <i class="bi bi-x-lg table-icon text-danger"></i>
+              {{ props.row.button }}</a
+            >
+          </span>
+        </template>
+      </vue-good-table>
+    </div>
+    <!-- Edit Modal -->
+    <div
+      class="modal fade edit-modal"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">
+              Edit Security Man
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+              @click="updateSecurity"
+            >
+              Update
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info Modal -->
+    <div
+      class="modal fade info-modal"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">
+              More Infromation
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">Name: ...</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              @click="infoSecurity"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activate Modal -->
+    <div
+      class="modal fade activate-modal"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" v-if="status == true">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">
+              Disactivate Security Man
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to disactivate this {{}}?
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+              @click="activateSecurity"
+            >
+              Disactivate
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-dialog" v-else>
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">
+              Activate Security Man
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to Activate this {{}}?
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-success"
+              data-bs-dismiss="modal"
+              @click="activateSecurity"
+            >
+              Activate
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div
+      class="modal fade delete-modal"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">
+              Delete Security Man
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">Are you sure you want to delete {{}}?</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              data-bs-dismiss="modal"
+              @click="deleteSecurity"
+              class="btn btn-danger"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Modal -->
+    <div
+      class="modal fade add-modal"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content form-modal">
+          <div class="modal-header">
+            <h5 class="modal-title">Add Security Man</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="row form-box justify-content-center">
+                <div class="row">
+                  <div class="col-md-6">
+                    <i class="bi bi-person sm-icon" />
+                    <label for="name" class="form-label">Name</label>
+                    <input
+                      type="text"
+                      v-model="user.name"
+                      class="form-control input-lg"
+                      id="name"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-6">
+                    <i class="bi bi-envelope sm-icon" />
+                    <label for="email" class="form-label">Email</label>
+                    <input
+                      type="email"
+                      v-model="user.email"
+                      class="form-control input-lg"
+                      id="email"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <i class="bi bi-person-lines-fill sm-icon" />
+                    <label for="nationalId" class="form-label"
+                      >National ID</label
+                    >
+                    <input
+                      type="number"
+                      v-model="user.nationalID"
+                      class="form-control input-lg"
+                      id="nationalId"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-6">
+                    <i class="bi bi-gender-ambiguous sm-icon" />
+                    <label for="gender" class="form-label">Gender</label>
+                    <select
+                      class="form-select selector-lg"
+                      id="gender"
+                      v-model="user.gender"
+                      required
+                    >
+                      <option selected>Choose Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <i class="bi bi-geo-alt sm-icon" />
+                    <label for="address" class="form-label">Address</label>
+                    <input
+                      type="text"
+                      v-model="user.address"
+                      class="form-control input-lg"
+                      id="address"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <i class="bi bi-calendar2-week sm-icon" />
+                    <label for="dateOfBirth" class="form-label"
+                      >Date of Birth</label
+                    >
+                    <input
+                      type="date"
+                      v-model="user.dateOfBirth"
+                      class="form-control input-lg date"
+                      id="dateOfBirth"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-6">
+                    <i class="bi bi-clock sm-icon" />
+                    <label for="workHours" class="form-label">Work Hours</label>
+                    <input
+                      type="text"
+                      v-model="user.workHours"
+                      class="form-control input-lg"
+                      id="workHours"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <i class="bi bi-telephone sm-icon" />
+                    <label for="phone1" class="form-label">Phone</label>
+                    <div class="input-group mb-3">
+                      <input
+                        type="text"
+                        v-model="user.phones"
+                        class="form-control input-lg"
+                        id="phone1"
+                        required
+                      />
+                      <button
+                        class="addon"
+                        type="button"
+                        v-if="phone == false"
+                        @click="checkPhone1"
+                      >
+                        +
+                      </button>
+                      <button
+                        class="addon"
+                        type="button"
+                        v-else
+                        @click="checkPhone1"
+                      >
+                        -
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-6" v-if="phone == true">
+                    <i class="bi bi-telephone sm-icon" />
+                    <label for="phone2" class="form-label">Phone</label>
+                    <div class="input-group mb-3">
+                      <input
+                        type="text"
+                        v-model="user.phones"
+                        class="form-control input-lg"
+                        id="phone2"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="button-xs-unfill"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              data-bs-dismiss="modal"
+              @click="addSecurity"
+              class="button-xs-fill"
+            >
+              Add
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-
-}
+  methods: {
+    addSecurity() {
+      console.log(this.user);
+    },
+    updateSecurity() {
+      console.log("updated");
+    },
+    infoSecurity() {
+      console.log("security info");
+    },
+    activateSecurity() {
+      if (this.status == true) {
+        this.status = false;
+        console.log("disactivated");
+      } else {
+        this.status = true;
+        console.log("activated");
+      }
+    },
+    deleteSecurity() {
+      console.log("deleted");
+    },
+    checkPhone1() {
+      if (this.phone == false) {
+        this.phone = true;
+      } else {
+        this.phone = false;
+      }
+    },
+  },
+  data() {
+    return {
+      user: {
+        name: "",
+        nationalID: 0,
+        email: "",
+        address: "",
+        gender: ["male", "female"],
+        phones: [],
+        dateOfBirth: "",
+      },
+      phone: false,
+      status: true,
+      searchInput: "",
+      label: "Security Men",
+      href: "/securityMen",
+      columns: [
+        {
+          label: "ID",
+          field: "id",
+          sortable: false,
+        },
+        {
+          label: "Name",
+          field: "name",
+          sortable: false,
+        },
+        {
+          label: "Work Hours",
+          field: "hours",
+          sortable: false,
+        },
+        {
+          label: "Date of Employment",
+          field: "date",
+          sortable: false,
+          dateInputFormat: "yyyy-MM-dd",
+          dateOutputFormat: "MMM do yyyy",
+        },
+        {
+          label: "Status",
+          field: "status",
+          sortable: false,
+          width: "150px",
+        },
+        {
+          label: "Action",
+          field: "button",
+          sortable: false,
+          width: "200px"
+        },
+      ],
+      rows: [
+        {
+          id: 1,
+          name: "John",
+          hours: "7:00 - 2:00",
+          date: "2009-12-03",
+          status: "active",
+        },
+        {
+          id: 2,
+          name: "Jane",
+          hours: "2:00 - 12:00",
+          date: "2009-12-03",
+          status: "active",
+        },
+        {
+          id: 3,
+          name: "Mike",
+          hours: "12:00 - 7:00",
+          date: "2009-12-03",
+          status: "inactive",
+        },
+      ],
+    };
+  },
+};
 </script>
 
-<style>
+<style scoped>
+.form-modal {
+  background-color: #374258;
+}
 
+.form-modal > .modal-header,
+.btn-close {
+  color: #f74464;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.form-modal > .modal-body {
+  background-color: white;
+}
+
+.input-lg {
+  border-radius: 95px;
+  height: 50px;
+  background-color: #374258;
+  color: white;
+  border: none;
+}
+
+.sm-icon {
+  color: #f74464;
+  font-size: 1.5rem;
+  padding-right: 10px;
+}
+
+.form-label {
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: normal;
+  font-size: 16pt;
+  margin-bottom: 0px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  background-image: url("@/assets/images/icons8-calendar-96.png");
+  background-position: end;
+  background-size: 20px 20px, 20px 20px;
+  background-repeat: no-repeat;
+}
+
+.addon {
+  background-color: #f74464;
+  border-radius: 0 95px 95px 0;
+  font-size: 22pt;
+  padding-top: 0;
+  border: none;
+  width: 40px;
+}
+
+.selector-lg {
+  border-radius: 95px;
+  height: 50px;
+  background-color: #374258;
+  color: white;
+  border: none;
+  padding-left: 30px;
+  background-image: url("@/assets/images/icons8-chevron-down-96.png");
+  background-position: calc(100% - 25px) calc(1em + 0.5px),
+    calc(100% - 19.8px) calc(1em + 5px);
+  background-size: 30px 30px, 30px 30px;
+  background-repeat: no-repeat;
+}
+.selector-lg > option {
+  background-color: #f74464;
+  color: #374258;
+  border: none;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.selector-lg > option:hover {
+  background-color: white;
+  color: #374258;
+}
+
+.icon {
+  padding-left: 20px;
+  padding-top: 10px;
+  font-size: 14pt;
+}
+
+span > a {
+  text-decoration: none;
+}
+
+.text-success {
+  color: #02b902;
+}
+.text-danger {
+  color: #fd1d1d;
+}
+.text-warning {
+  color: #faaa17;
+}
 </style>

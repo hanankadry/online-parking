@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid background">
-    <breadcrumb />
+    <breadcrumb :crumbLabel="label" :crumbHref="href" />
     <div class="container-fluid mt-5">
       <div class="row">
         <div class="col-md-4">
@@ -9,7 +9,7 @@
               <i class="bi bi-card-checklist lg-icon"></i>
             </div>
             <p class="count-numbers">12</p>
-            <p class="count-name">New Reservations</p>
+            <p class="count-name">New Registrations</p>
           </div>
         </div>
 
@@ -38,14 +38,74 @@
       <hr />
     </div>
     <div class="container-fluid">
-      <div class="row g-3 ms-5 ">
-        <div class="col-md-7">
-          <p class="label">Reservations</p>
-          <vue-table :columns="reservationColumns" :rows="reservationRows" />
+      <div class="row g-4 mx-5">
+        <div class="col-xl-8">
+          <p class="label">Registrations</p>
+          <vue-good-table
+            :columns="registrationColumns"
+            :rows="registrationRows"
+            styleClass="vgt-table"
+            class="table-style"
+            :select-options="{
+              enabled: true,
+              selectOnCheckboxOnly: true,
+              selectionInfoClass: 'custom-class',
+              selectionText: 'rows selected',
+              clearSelectionText: 'clear',
+              disableSelectInfo: true,
+              selectAllByGroup: true,
+            }"
+            ><template #table-row="props">
+              <span v-if="props.column.field == 'status'">
+                <span
+                  class="status-success"
+                  v-if="props.row.status == 'checked in'"
+                  >{{ props.row.status }}</span
+                >
+                <span
+                  class="status-danger"
+                  v-else-if="props.row.status == 'missed'"
+                  >{{ props.row.status }}</span
+                ><span class="status-warning" v-else>{{
+                  props.row.status
+                }}</span>
+              </span>
+            </template></vue-good-table
+          >
         </div>
-        <div class="col-md-5">
+        <div class="col-xl-4">
           <p class="label">Parking Slots</p>
-          <vue-table class="slots" :columns="slotColumns" :rows="slotRows" />
+          <vue-good-table
+            :columns="slotColumns"
+            :rows="slotRows"
+            styleClass="vgt-table"
+            class="table-style"
+            :select-options="{
+              enabled: true,
+              selectOnCheckboxOnly: true,
+              selectionInfoClass: 'custom-class',
+              selectionText: 'rows selected',
+              clearSelectionText: 'clear',
+              disableSelectInfo: true,
+              selectAllByGroup: true,
+            }"
+            ><template #table-row="props">
+              <span v-if="props.column.field == 'status'">
+                <span
+                  class="status-success"
+                  v-if="props.row.status == 'available'"
+                  >{{ props.row.status }}</span
+                >
+                <span
+                  class="status-danger"
+                  v-else-if="props.row.status == 'out of order'"
+                  >{{ props.row.status }}</span
+                ><span class="status-warning" v-else>{{
+                  props.row.status
+                }}</span>
+              </span>
+            </template></vue-good-table
+          >
         </div>
       </div>
     </div>
@@ -53,20 +113,23 @@
 </template>
 
 <script>
-import VueTable from "@/components/Table.vue";
 import Chart from "@/components/Chart.vue";
-import Breadcrumb from "@/components/Breadcrumb.vue";
 export default {
   components: {
     Chart,
-    Breadcrumb,
-    VueTable,
   },
   data() {
     return {
+      label: "Dashboard",
+      href: "/dashboard",
       search: false,
       pagination: false,
-      reservationColumns: [
+      registrationColumns: [
+        {
+          label: "ID",
+          field: "id",
+          sortable: false,
+        },
         {
           label: "Name",
           field: "name",
@@ -86,14 +149,25 @@ export default {
           label: "Status",
           field: "status",
           sortable: false,
+          width: "165px",
         },
         {
-          label: "Time",
-          field: "time",
+          label: "Leave Time",
+          field: "leaveTime",
+          sortable: false,
+        },
+        {
+          label: "Check-In Time",
+          field: "checkInTime",
           sortable: false,
         },
       ],
       slotColumns: [
+        {
+          label: "ID",
+          field: "id",
+          sortable: false,
+        },
         {
           label: "Slot Name",
           field: "slotName",
@@ -103,16 +177,18 @@ export default {
           label: "Status",
           field: "status",
           sortable: false,
+          width: "165px",
         },
       ],
-      reservationRows: [
+      registrationRows: [
         {
           id: 1,
           name: "John",
           slotName: "A1",
           carId: "sal1234",
           status: "checked in",
-          time: "00:00",
+          leaveTime: "00:00",
+          checkInTime: "00:00",
         },
         {
           id: 2,
@@ -120,7 +196,8 @@ export default {
           slotName: "B24",
           carId: "sal1234",
           status: "checked in",
-          time: "00:00",
+          leaveTime: "00:00",
+          checkInTime: "00:00",
         },
         {
           id: 3,
@@ -128,7 +205,8 @@ export default {
           slotName: "A31",
           carId: "sal1234",
           status: "missed",
-          time: "-",
+          leaveTime: "00:00",
+          checkInTime: "-",
         },
         {
           id: 4,
@@ -136,7 +214,8 @@ export default {
           slotName: "C4",
           carId: "sal1234",
           status: "pending",
-          time: "00:23",
+          leaveTime: "00:00",
+          checkInTime: "00:23",
         },
       ],
       slotRows: [
@@ -227,10 +306,6 @@ export default {
   text-transform: uppercase;
   font-weight: 500;
   margin-left: 20px;
-}
-
-.slots {
-  width: 400px;
 }
 
 @media screen and (max-width: 1140px) {

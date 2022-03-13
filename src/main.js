@@ -2,9 +2,10 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import Background from '@/components/Background'
-import VueApexCharts from "vue3-apexcharts";
-import { initializeApp } from "firebase/app";
-import VueGoodTablePlugin from 'vue-good-table-next';
+import VueApexCharts from "vue3-apexcharts"
+import { initializeApp } from "firebase/app"
+import Breadcrumb from "@/components/Breadcrumb.vue"
+import VueGoodTablePlugin from 'vue-good-table-next'
 
 
 const firebaseConfig = {
@@ -20,12 +21,13 @@ import '@popperjs/core'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import "vue-good-table-next/dist/vue-good-table-next.css";
+import "vue-good-table-next/dist/vue-good-table-next.css"
 
 const app = createApp(App)
 
 initializeApp(firebaseConfig);
 app.use(router).mount('#app')
 app.use(VueApexCharts)
-app.use(VueGoodTablePlugin);
+app.use(VueGoodTablePlugin)
+app.component("breadcrumb", Breadcrumb)
 app.component("background", Background)
