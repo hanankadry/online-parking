@@ -46,15 +46,6 @@
             :rows="registrationRows"
             styleClass="vgt-table"
             class="table-style"
-            :select-options="{
-              enabled: true,
-              selectOnCheckboxOnly: true,
-              selectionInfoClass: 'custom-class',
-              selectionText: 'rows selected',
-              clearSelectionText: 'clear',
-              disableSelectInfo: true,
-              selectAllByGroup: true,
-            }"
             ><template #table-row="props">
               <span v-if="props.column.field == 'status'">
                 <span
@@ -80,15 +71,6 @@
             :rows="slotRows"
             styleClass="vgt-table"
             class="table-style"
-            :select-options="{
-              enabled: true,
-              selectOnCheckboxOnly: true,
-              selectionInfoClass: 'custom-class',
-              selectionText: 'rows selected',
-              clearSelectionText: 'clear',
-              disableSelectInfo: true,
-              selectAllByGroup: true,
-            }"
             ><template #table-row="props">
               <span v-if="props.column.field == 'status'">
                 <span

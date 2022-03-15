@@ -49,6 +49,10 @@
             ><span class="status-warning" v-else>{{ props.row.status }}</span>
           </span>
           <span v-if="props.column.field == 'button'">
+            <a href="" data-bs-toggle="modal" data-bs-target=".edit-modal">
+              <i class="bi bi-pencil-square table-icon"></i>
+              {{ props.row.button }}</a
+            >
             <a href="" data-bs-toggle="modal" data-bs-target=".info-modal">
               <i class="bi bi-info-circle table-icon text-success"></i>
               {{ props.row.button }}</a
@@ -68,7 +72,7 @@
       tabindex="-1"
       aria-hidden="true"
     >
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">More Infromation</h5>
@@ -79,15 +83,160 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body">Name: ...</div>
+          <div class="modal-body">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-6">
+                  <h3>ID:</h3>
+                  <p>{{ current_registration.id }}</p>
+                </div>
+                <div class="col-md-6">
+                  <h3>Created At:</h3>
+                  <p>{{ current_registration.createdAt }}</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <h3>User ID:</h3>
+                  <p>{{ current_registration.userId }}</p>
+                </div>
+                <div class="col-md-4">
+                  <h3>Car ID:</h3>
+                  <p>{{ current_registration.carId }}</p>
+                </div>
+                <div class="col-md-4">
+                  <h3>Status:</h3>
+                  <p>{{ current_registration.status }}</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <h3>Slot Name:</h3>
+                  <p>{{ current_registration.slotName }}</p>
+                </div>
+                <div class="col-md-4">
+                  <h3>Leave Time:</h3>
+                  <p>{{ current_registration.leaveTime }}</p>
+                </div>
+                <div class="col-md-4">
+                  <h3>Check In Time:</h3>
+                  <p>{{ current_registration.checkInTime }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="modal-footer">
             <button
               type="button"
               class="btn btn-secondary"
               data-bs-dismiss="modal"
-              @click="infoRegistraction"
+              @click="infoRegistraction(this)"
             >
               Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div
+      class="modal fade edit-modal"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">
+              Edit Registration
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="row form-box justify-content-center">
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="id" class="form-label"
+                      >ID: {{ current_registration.id }}</label
+                    >
+                  </div>
+                  <div class="col-md-6">
+                    <label for="createdAt" class="form-label"
+                      >Created At: {{ current_registration.createdAt }}</label
+                    >
+                  </div>
+                </div>
+                <div class="row mt-5">
+                  <div class="col-md-6">
+                    <label for="status" class="form-label">Status</label>
+                    <input
+                      type="text"
+                      v-model="current_registration.status"
+                      class="form-control input-lg"
+                      id="status"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-6">
+                    <label for="slotName" class="form-label">Slot Name</label>
+                    <input
+                      type="text"
+                      v-model="current_registration.slotName"
+                      class="form-control input-lg"
+                      id="slotName"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="leaveTime" class="form-label">Leave Time</label>
+                    <input
+                      type="text"
+                      v-model="current_registration.leaveTime"
+                      class="form-control input-lg"
+                      id="leaveTime"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-6">
+                    <label for="checkIn" class="form-label">Check In Time</label>
+                    <input
+                      type="text"
+                      v-model="current_registration.checkInTime"
+                      class="form-control input-lg"
+                      id="checkIn"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+              @click="updateRegistration(this)"
+            >
+              Update
             </button>
           </div>
         </div>
@@ -112,7 +261,9 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body">Are you sure you want to delete {{}}?</div>
+          <div class="modal-body">
+            Are you sure you want to delete {{ current_registration.id }}?
+          </div>
           <div class="modal-footer">
             <button
               type="button"
@@ -124,7 +275,7 @@
             <button
               type="button"
               data-bs-dismiss="modal"
-              @click="deleteRegistration"
+              @click="deleteRegistration(this)"
               class="btn btn-danger"
             >
               Delete
@@ -139,24 +290,27 @@
 <script>
 export default {
   methods: {
-    infoRegistration() {
+    infoRegistration(index) {
       console.log("registration info");
     },
-    deleteRegistration() {
-      console.log("deleted");
+    updateRegistration(index) {
+      console.log("registration updated");
+    },
+    deleteRegistration(index) {
+      console.log("registration deleted");
     },
   },
   data() {
     return {
-      registration: {
+      current_registration: {
         id: 0,
         userId: 1,
         carId: 1,
         status: "",
         slotName: "",
         leaveTime: 0,
-        checkinTime: "",
-        createdAt: "2009-2-4",
+        checkInTime: "",
+        createdAt: "",
       },
       searchInput: "",
       label: "Registrations",
@@ -173,7 +327,7 @@ export default {
           sortable: false,
         },
         {
-          label: "User Car",
+          label: "User Car ID",
           field: "userCar",
           sortable: false,
         },
@@ -206,25 +360,25 @@ export default {
           id: 1,
           slotName: "A1",
           userCar: "rex1234",
-          leaveTime: "7:00 - 2:00",
+          leaveTime: "2:00",
           status: "pending",
-          createdAt: "2009-12-03",
+          createdAt: "2020-12-03",
         },
         {
           id: 2,
           slotName: "A3",
           userCar: "rex1234",
-          leaveTime: "7:00 - 2:00",
+          leaveTime: "7:00",
           status: "checked in",
-          createdAt: "2009-12-03",
+          createdAt: "2019-02-03",
         },
         {
           id: 3,
           slotName: "A3",
           userCar: "rex1234",
-          leaveTime: "7:00 - 2:00",
+          leaveTime: "12:00",
           status: "missed",
-          createdAt: "2009-12-03",
+          createdAt: "2009-12-13",
         },
       ],
     };
@@ -256,60 +410,12 @@ export default {
   border: none;
 }
 
-.sm-icon {
-  color: #f74464;
-  font-size: 1.5rem;
-  padding-right: 10px;
-}
-
 .form-label {
   letter-spacing: 2px;
   text-transform: uppercase;
   font-weight: normal;
   font-size: 16pt;
   margin-bottom: 0px;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-  background-image: url("@/assets/images/icons8-calendar-96.png");
-  background-position: end;
-  background-size: 20px 20px, 20px 20px;
-  background-repeat: no-repeat;
-}
-
-.addon {
-  background-color: #f74464;
-  border-radius: 0 95px 95px 0;
-  font-size: 22pt;
-  padding-top: 0;
-  border: none;
-  width: 40px;
-}
-
-.selector-lg {
-  border-radius: 95px;
-  height: 50px;
-  background-color: #374258;
-  color: white;
-  border: none;
-  padding-left: 30px;
-  background-image: url("@/assets/images/icons8-chevron-down-96.png");
-  background-position: calc(100% - 25px) calc(1em + 0.5px),
-    calc(100% - 19.8px) calc(1em + 5px);
-  background-size: 30px 30px, 30px 30px;
-  background-repeat: no-repeat;
-}
-.selector-lg > option {
-  background-color: #f74464;
-  color: #374258;
-  border: none;
-  font-weight: bold;
-  padding: 10px;
-}
-
-.selector-lg > option:hover {
-  background-color: white;
-  color: #374258;
 }
 
 .icon {

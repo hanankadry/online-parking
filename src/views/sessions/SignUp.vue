@@ -110,13 +110,17 @@
             </div>
           </div>
           <div class="row pb-3 px-5">
-            <div class="col-lg-4 col-md-4">
+            <div
+              class="col-lg-4 col-md-4"
+              v-for="(input, index) in user.phoneNumbers"
+              :key="`phoneInput-${index}`"
+            >
               <i class="bi bi-telephone sm-icon" />
               <label for="phone1" class="form-label">Phone</label>
               <div class="input-group mb-3">
                 <input
                   type="text"
-                  v-model="user.phones[0]"
+                  v-model="input.phone"
                   class="form-control input-xl"
                   id="phone1"
                   required
@@ -124,51 +128,19 @@
                 <button
                   class="addon"
                   type="button"
-                  v-if="phones.phone1 == false"
-                  @click="checkPhone1"
+                  v-show="user.phoneNumbers.length < 3"
+                  @click="addPhone(input, user.phoneNumbers)"
                 >
                   +
                 </button>
-                <button class="addon" type="button" v-else @click="checkPhone1">
-                  -
-                </button>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-4" v-if="phones.phone1 == true">
-              <i class="bi bi-telephone sm-icon" />
-              <label for="phone2" class="form-label">Phone</label>
-              <div class="input-group mb-3">
-                <input
-                  type="text"
-                  v-model="user.phones[1]"
-                  class="form-control input-xl"
-                  id="phone2"
-                  required
-                />
                 <button
                   class="addon"
                   type="button"
-                  v-if="phones.phone2 == false"
-                  @click="checkPhone2"
+                  v-show="user.phoneNumbers.length > 1"
+                  @click="removePhone(index, user.phoneNumbers)"
                 >
-                  +
-                </button>
-                <button class="addon" type="button" v-else @click="checkPhone2">
                   -
                 </button>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-4" v-if="phones.phone2 == true">
-              <i class="bi bi-telephone sm-icon" />
-              <label for="phone3" class="form-label">Phone</label>
-              <div class="input-group mb-3">
-                <input
-                  type="text"
-                  v-model="user.phones[3]"
-                  class="form-control input-xl"
-                  id="phone3"
-                  required
-                />
               </div>
             </div>
           </div>
@@ -343,10 +315,9 @@ export default {
       password: "",
       confirmPassword: "",
       gender: ["male", "female"],
-      phones: [],
+      phoneNumbers: [{ phone: "" }],
       dateOfBirth: "",
     });
-    const phones = ref({ phone1: false, phone2: false });
     const numOfAlpha = ref(0);
     const numPerAlpha = ref(0);
     var slots = [];
@@ -361,22 +332,16 @@ export default {
       router.push("/login");
     };
 
-    const checkPhone1 = () => {
-      if (phones.value.phone1 == false) {
-        phones.value.phone1 = true;
-      } else if (phones.value.phone1 == true && phones.value.phone2 == true) {
-        phones.value.phone2 = false;
-      } else {
-        phones.value.phone1 = false;
-      }
+    const addPhone = (value, array) => {
+      array.push({ value: "" });
+      console.log(array);
     };
-    const checkPhone2 = () => {
-      if (phones.value.phone2 == false) {
-        phones.value.phone2 = true;
-      } else {
-        phones.value.phone2 = false;
-      }
+
+    const removePhone = (index, array) => {
+      array.splice(index, 1);
+      console.log(array);
     };
+
     const getSlots = (endValue, numValue) => {
       slots = [];
       const letters = Alphabets.slice(0, endValue);
@@ -394,11 +359,10 @@ export default {
     return {
       user,
       parkingSpace,
-      phones,
       numOfAlpha,
       numPerAlpha,
-      checkPhone1,
-      checkPhone2,
+      addPhone,
+      removePhone,
       goBack,
       getSlots,
       createAccount,
@@ -539,7 +503,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-radius: 0 95px 95px 0;
   font-size: 22pt;
   padding-top: 0;
-  border: none;
+  border: 2px solid #374258;
   width: 40px;
 }
 
