@@ -1,7 +1,9 @@
 <template>
+  <nav-bar />
+  <side-bar />
   <div class="container-fluid background">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
-    <div class="container-fluid mt-5">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-md-4">
           <div class="card-counter">

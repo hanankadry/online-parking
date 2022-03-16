@@ -1,7 +1,9 @@
 <template>
+  <nav-bar />
+  <side-bar />
   <div class="container-fluid background">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
-    <div class="container-fluid mt-5 p-3">
+    <div class="container-fluid p-3">
       <div class="row">
         <div class="col-auto me-auto input-icons">
           <i class="bi bi-search icon" />
@@ -359,7 +361,7 @@
             <button
               type="button"
               class="button-xs-danger"
-              style="width: 6rem;"
+              style="width: 6rem"
               data-bs-dismiss="modal"
               @click="activateSecurity(this)"
             >
@@ -626,7 +628,6 @@
 </template>
 
 <script>
-import { Toast } from "bootstrap";
 export default {
   methods: {
     addSecurity() {

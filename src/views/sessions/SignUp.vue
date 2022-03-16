@@ -324,7 +324,7 @@ export default {
     const Alphabets = Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
     const goBack = () => {
-      router.push("/");
+      router.push("/login");
     };
     const createAccount = (val1, val2) => {
       getSlots(val1, val2);

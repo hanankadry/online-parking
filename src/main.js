@@ -5,6 +5,8 @@ import Background from '@/components/Background'
 import VueApexCharts from "vue3-apexcharts"
 import { initializeApp } from "firebase/app"
 import Breadcrumb from "@/components/Breadcrumb.vue"
+import NavBar from "@/components/NavBar.vue"
+import SideBar from "@/components/SideBar.vue"
 import VueGoodTablePlugin from 'vue-good-table-next'
 
 
@@ -31,3 +33,5 @@ app.use(VueApexCharts)
 app.use(VueGoodTablePlugin)
 app.component("breadcrumb", Breadcrumb)
 app.component("background", Background)
+app.component("nav-bar", NavBar)
+app.component("side-bar", SideBar)

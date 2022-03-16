@@ -1,4 +1,6 @@
 <template>
+  <nav-bar />
+  <side-bar />
   <div class="container-fluid background">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
     <div class="container-fluid mt-5 p-3">
@@ -209,7 +211,9 @@
                     />
                   </div>
                   <div class="col-md-6">
-                    <label for="checkIn" class="form-label">Check In Time</label>
+                    <label for="checkIn" class="form-label"
+                      >Check In Time</label
+                    >
                     <input
                       type="text"
                       v-model="current_registration.checkInTime"

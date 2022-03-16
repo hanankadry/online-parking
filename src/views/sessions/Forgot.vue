@@ -1,7 +1,7 @@
 <template>
   <background />
   <div class="container">
-    <div class="row justify-content-end">
+    <div class="row mt-5 justify-content-end">
       <h1>Forgot Password?</h1>
       <h4 class="mb-5">Don't worry. You can reset it.</h4>
 
