@@ -128,7 +128,7 @@
           <div class="modal-footer">
             <button
               type="button"
-              class="btn btn-secondary"
+              class="button-xs-unfill"
               data-bs-dismiss="modal"
               @click="infoRegistraction(this)"
             >
@@ -225,14 +225,14 @@
           <div class="modal-footer">
             <button
               type="button"
-              class="btn btn-danger"
+              class="button-xs-unfill"
               data-bs-dismiss="modal"
             >
               Cancel
             </button>
             <button
               type="button"
-              class="btn btn-primary"
+              class="button-xs-fill"
               data-bs-dismiss="modal"
               @click="updateRegistration(this)"
             >
@@ -267,7 +267,7 @@
           <div class="modal-footer">
             <button
               type="button"
-              class="btn btn-secondary"
+              class="button-xs-unfill"
               data-bs-dismiss="modal"
             >
               Cancel
@@ -276,7 +276,7 @@
               type="button"
               data-bs-dismiss="modal"
               @click="deleteRegistration(this)"
-              class="btn btn-danger"
+              class="button-xs-danger"
             >
               Delete
             </button>
@@ -387,18 +387,18 @@ export default {
 </script>
 
 <style scoped>
-.form-modal {
+.modal-content {
   background-color: #374258;
 }
 
-.form-modal > .modal-header,
+.modal-content > .modal-header,
 .btn-close {
   color: #f74464;
   text-transform: uppercase;
   text-align: center;
 }
 
-.form-modal > .modal-body {
+.modal-content > .modal-body {
   background-color: white;
 }
 

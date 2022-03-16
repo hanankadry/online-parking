@@ -87,6 +87,32 @@ body {
     text-align: center;
 }
 
+.button-xs-danger {
+    background-color: #fd1d1d;
+    border-radius: 95px;
+    height: 40px;
+    width: 5rem;
+    color: white;
+    position: relative;
+    margin: 5px;
+    border: none;
+    font-weight: bold;
+    text-align: center;
+}
+
+.button-xs-success {
+    background-color: #02b902;
+    border-radius: 95px;
+    height: 40px;
+    width: 5rem;
+    color: white;
+    position: relative;
+    margin: 5px;
+    border: none;
+    font-weight: bold;
+    text-align: center;
+}
+
 .button-xs-unfill {
     border: 3px solid #f74464;
     border-radius: 95px;
