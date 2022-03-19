@@ -192,3 +192,12 @@ body {
     font-size: 14pt;
     color: #374258;
 }
+
+.logo {
+    background-color: #f74464;
+    padding: 3px;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    width: 25%;
+  }
