@@ -1,6 +1,5 @@
 <template>
   <nav-bar />
-  <side-bar />
   <div class="container-fluid background">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
     <div class="container-fluid">

@@ -91,11 +91,6 @@
 <style scoped>
 .logo {
   background-color: #f74464;
-  padding: 3px;
-  border: none;
-  border-radius: 50%;
-  color: white;
-  width: 25%;
 }
 .header {
   background-color: #374258;

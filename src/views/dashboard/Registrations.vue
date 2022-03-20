@@ -1,9 +1,8 @@
 <template>
   <nav-bar />
-  <side-bar />
   <div class="container-fluid background">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
-    <div class="container-fluid mt-5 p-3">
+    <div class="container-fluid p-3">
       <div class="row">
         <div class="col-auto me-auto input-icons">
           <i class="bi bi-search icon" />

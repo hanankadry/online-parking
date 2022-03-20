@@ -149,6 +149,19 @@ body {
     padding: 5px;
 }
 
+.button-sm-unfill {
+    border: 3px solid #f74464;
+    border-radius: 95px;
+    height: 40px;
+    width: 8rem;
+    background-color: transparent;
+    color: white;
+    position: relative;
+    border: none;
+    font-weight: bold;
+    padding: 5px;
+}
+
 .separator {
     margin-bottom: 10px;
     border: 2px solid;
@@ -183,7 +196,7 @@ body {
 }
 
 .background {
-    padding: 50px;
+    padding: 10px 50px 50px 50px;
 }
 
 .table-icon {
@@ -194,10 +207,94 @@ body {
 }
 
 .logo {
-    background-color: #f74464;
+    background-color: #374258;
     padding: 3px;
     border: none;
     border-radius: 50%;
     color: white;
     width: 25%;
-  }
+}
+
+.modal-content {
+    background-color: #374258;
+}
+
+.modal-content>.modal-header,
+.btn-close {
+    color: #f74464;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.modal-content>.modal-body {
+    background-color: white;
+}
+
+.input-lg {
+    border-radius: 95px;
+    height: 50px;
+    background-color: #374258;
+    color: white;
+    border: none;
+}
+
+.sm-icon {
+    color: #f74464;
+    font-size: 1.5rem;
+    padding-right: 10px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background-image: url("@/assets/images/icons8-calendar-96.png");
+    background-position: end;
+    background-size: 20px 20px, 20px 20px;
+    background-repeat: no-repeat;
+}
+
+.addon {
+    background-color: #f74464;
+    border-radius: 0 95px 95px 0;
+    font-size: 22pt;
+    padding-top: 0;
+    border: 2px solid #374258;
+    width: 40px;
+}
+
+.selector-lg {
+    border-radius: 95px;
+    height: 50px;
+    background-color: #374258;
+    color: white;
+    border: none;
+    padding-left: 30px;
+    background-image: url("@/assets/images/icons8-chevron-down-96.png");
+    background-position: calc(100% - 25px) calc(0.6em + 0.5px),
+        calc(100% - 19.8px) calc(0.6em + 5px);
+    background-size: 30px 30px, 30px 30px;
+    background-repeat: no-repeat;
+}
+
+.selector-lg>option {
+    background-color: #f74464;
+    color: #374258;
+    border: none;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.selector-lg>option:hover {
+    background-color: white;
+    color: #374258;
+}
+
+.text-success {
+    color: #02b902;
+}
+
+.text-danger {
+    color: #fd1d1d;
+}
+
+.text-warning {
+    color: #faaa17;
+}
