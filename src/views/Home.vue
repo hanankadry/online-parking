@@ -2,74 +2,157 @@
   <!-- Start Header -->
   <header class="header">
     <nav class="navbar navbar-expand-lg navbar-dark">
-      <div class="container-fluid justify-content-between">
+      <div class="container-fluid">
         <a class="nav-brand" href="/">
           <img src="@/assets/images/logo.jpg" class="logo" />
         </a>
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link mt-2" href="#about-sec">About</a>
-          </li>
-          <li class="nav-item">
-            <router-link to="/login" class="nav-link">
-              <button class="button-sm-fill">Login</button>
-            </router-link>
-          </li>
-        </ul>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#.navbar-collapse"
+          aria-controls="navbar-collapse"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon" />
+        </button>
+        <div class="collapse navbar-collapse justify-content-end">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link mt-2">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link mt-2">Contact</a>
+            </li>
+            <li class="nav-item">
+              <router-link to="/login" class="nav-link">
+                <button class="button-sm-fill">Login</button>
+              </router-link>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
   </header>
   <!-- End Header -->
 
-  <!-- Start Center Section -->
-  <section>
-    <div class="container-fluid">
-      <div class="image-container">
-        <img class="bg-img" src="@/assets/images/landingpage-bg.svg" alt="" />
-        <div class="image-content">
-          <p class="text">Park anywhere</p>
-          <p class="text">only one click</p>
-          <a class="btn btn-google ms-3" href="#" title="Google Play"
-            >Google Play</a
-          >
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- End Center Section -->
+  <!-- Start Main Section -->
 
-  <!-- Start About Section -->
-  <section class="about-sec pad-50" id="about-sec">
+  <section class="main-sec">
     <div class="container">
-      <div class="row mb-50">
-        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-          <div class="about-black-div">
-            <div>
-              <img src="" alt="" class="smart-logo mb-3" />
-              <p>About Us</p>
+      <div class="main">
+        <p class="head">Parking Made Easy</p>
+        <p class="body">With just three clicks, you're booked.</p>
+      </div>
+      <div class="explain my-5">
+        <div class="row g-3 justify-content-center">
+          <div class="col-md">
+            <p class="title">Create Account</p>
+            <img class="mobile" src="@/assets/images/signup-user.png" alt="" />
+          </div>
+          <div class="col-md">
+            <p class="title">Search</p>
+            <img class="mobile" src="@/assets/images/search.png" alt="" />
+          </div>
+          <div class="col-md">
+            <p class="title">Register</p>
+            <img class="mobile" src="@/assets/images/register.png" alt="" />
+          </div>
+        </div>
+        <div class="main">
+          <p class="head">Or</p>
+          <p class="body">
+            You can add your parking space, and manage it here.
+          </p>
+        </div>
+        <div class="explain my-2">
+          <div class="row g-3 justify-content-center">
+            <div class="col-md">
+              <p class="title">Create Account</p>
+              <img
+                class="website mt-5"
+                src="@/assets/images/signup-admin.png"
+                alt=""
+              />
+            </div>
+            <div class="col-md">
+              <p class="title">Add Parking Space Data</p>
+              <img
+                class="website"
+                src="@/assets/images/parking-space.png"
+                alt=""
+              />
+            </div>
+            <div class="col-md">
+              <p class="title">Get Daily Reports, and more.</p>
+              <img class="website" src="@/assets/images/reports.png" alt="" />
             </div>
           </div>
         </div>
+        <p class="head text-center mb-3">And You're Done.</p>
       </div>
-      <div class="row">
-        <div class="col-lg-7 col-md-7 col-sm-12 col-12 align-self-center">
-          <div class="image-container">
-            <h2 class="mb-3">Best Choice</h2>
-            <p>About Text 2</p>
-          </div>
+    </div>
+  </section>
+  <!-- End Main Section -->
+
+  <hr />
+  <!-- Start Paces Section -->
+  <section class="places-sec">
+    <div class="container-fluid">
+      <div class="content">
+        <p class="head text-center mb-3">Where to find us</p>
+        <div class="row g-3 mx-5 my-1 justify-content-start">
+          <p class="content-title">Malls</p>
+          <p class="content-body">
+            Green Plaza <br />
+            City Centre
+          </p>
         </div>
-        <div class="col-lg-5 col-md-5 col-sm-12 col-12">
-          <img src="" alt="" />
+        <div class="row g-3 mx-5 my-1 justify-content-start">
+          <p class="content-title">Sport Clubs</p>
+          <p class="content-body">
+            Sporting Sports Clubs <br />
+            Al Ittihad Alexandria Club, Sporting <br />
+            Horses Owners Club Alexandria <br />
+            Smouha SC
+          </p>
+        </div>
+        <div class="row g-3 mx-5 my-1 justify-content-start">
+          <p class="content-title">Public Parking</p>
+          <p class="content-body">
+            Beshaghous Public Parking <br />
+            Trust Car Egypt Garage <br />
+            Sidi Gaber Station Parking <br />
+            Alex Garden Car Park <br />
+            University Garage
+          </p>
         </div>
       </div>
     </div>
   </section>
   <!-- End About Section -->
-
+  <!-- Start Download Section -->
+  <section class="download-sec mb-0">
+    <div class="container-fluid">
+      <div class="image-container">
+        <img class="bg-img" alt="" />
+        <div class="image-content">
+          <p class="head">Book when you want</p>
+          <p class="body">Download our app</p>
+          <a target="_blank" class="market-btn google-btn" role="button">
+            <span class="market-button-subtitle">Download on the</span>
+            <span class="market-button-title">Google Play</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Download Section -->
   <!-- Start Footer -->
-  <footer class="footer">
+  <footer class="footer mt-0">
     <div class="container">
-      <div class="row">
+      <div class="row justify-content-between">
         <div
           class="
             col-lg-6 col-md-8 col-sm-12 col-12
@@ -77,10 +160,18 @@
             align-self-center
           "
         >
-          <p class="copyright">&copy;2022 GoNPark All Rights Reserved</p>
+          <p class="copyright">&copy;2022 Go'N'Park, All Rights Reserved</p>
         </div>
         <div class="col-lg-6 col-md-4 col-sm-12 col-12 text-end text-left">
-          <a href="#" class="smart-logo"><img src="" /></a>
+          <a href="facebook.com">
+            <i class="bi bi-facebook footer-icon mx-2"
+          /></a>
+          <a href="twitter.com">
+            <i class="bi bi-twitter footer-icon mx-2"
+          /></a>
+          <a href="instagram.com">
+            <i class="bi bi-instagram footer-icon mx-2"
+          /></a>
         </div>
       </div>
     </div>
@@ -89,114 +180,164 @@
 </template>
 
 <style scoped>
-.logo {
-  background-color: #f74464;
+body {
+  overflow: hidden;
 }
 .header {
   background-color: #374258;
 }
-.bg-img {
+.logo {
+  border: 3px solid #f74464;
+}
+.nav-link {
+  cursor: pointer;
+}
+.main-sec {
+  margin-top: 2rem;
+}
+.main {
+  text-align: center;
+}
+.content {
+  background-color: #f74464;
   position: relative;
-  height: 70%;
+  margin: 60px;
+  border-radius: 25px;
+  padding: 20px;
+}
+.content-title {
+  color: white;
+  font-size: calc(15px + 1.5vw);
+  text-transform: capitalize;
+}
+.content-body {
+  color: black;
+  text-transform: capitalize;
+  margin-top: -1px;
+  font-size: calc(5px + 1.5vw);
+}
+.mobile {
+  width: 30%;
+  position: relative;
+  align-content: center;
+}
+.website {
+  width: 50%;
+}
+.bg-img {
+  content: url("@/assets/images/landingpage-bg-light.svg");
+  position: relative;
+  padding: 0;
+  right: -0.75rem;
   width: 100%;
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
 }
-
 .image-content {
   position: absolute;
-  top: 200px;
-  left: 3rem;
+  left: 3.5rem;
+  bottom: calc(-98rem + 30vh);
   color: white;
 }
-
-.image-content .text {
-  margin: -1px;
-  padding: -1px;
-  font-size: 40pt;
-  font-weight: lighter;
+.head {
+  color: black;
+  font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: 3px;
-  font-family: 'TT Firs Neue Medium';
+  margin: -1px;
+  font-size: calc(0.2rem + 3vw);
+  top: 10px;
+}
+.body {
+  color: black;
+  text-transform: capitalize;
+  margin-top: -1px;
+  font-size: calc(5px + 1.5vw);
+  top: 10px;
 }
 
-a.btn-google {
-  color: #fff;
+.title {
+  text-align: start;
+  font-size: calc(15px + 1.5vw);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #f74464;
 }
-.btn {
-  padding: 10px 16px;
-  margin: 5px;
-  font-size: 32px;
-  line-height: 1.3333333;
-  border-radius: 6px;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  -ms-touch-action: manipulation;
-  touch-action: manipulation;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  border: 1px solid transparent;
-  font-weight: 500;
-  text-decoration: none;
+
+.market-btn {
   display: inline-block;
-}
-.btn:active:focus,
-.btn:focus {
-  outline: 0;
-}
-.btn:focus,
-.btn:hover {
-  color: #333;
-  text-decoration: none;
-  outline: 0;
-}
-.btn:active {
-  outline: 0;
-  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-}
-.btn-google {
-  color: #fff;
-  background-color: #111;
-  border-color: #000;
-  padding: 15px 16px 5px 40px;
-  position: relative;
-  font-weight: 600;
-}
-.btn-google:focus {
-  color: #fff;
-  background-color: #555;
-  border-color: #000;
-}
-.btn-google:active,
-.btn-google:hover {
-  color: #fff;
-  background-color: #555;
-  border-color: #000;
-}
-.btn-google:before {
-  content: "";
-  background-image: url(https://4.bp.blogspot.com/-52U3eP2JDM4/WSkIT1vbUxI/AAAAAAAArQA/iF1BeARv2To-2FGQU7V6UbNPivuv_lccACLcB/s30/nexus2cee_ic_launcher_play_store_new-1.png);
-  background-size: cover;
+  padding: 0.3125rem 0.875rem;
+  padding-left: 2.8125rem;
+  -webkit-transition: border-color 0.25s ease-in-out,
+    background-color 0.25s ease-in-out;
+  transition: border-color 0.25s ease-in-out, background-color 0.25s ease-in-out;
+  border: 1px solid #374258;
+  background-position: center left 0.75rem;
+  background-color: #374258;
+  background-size: 1.5rem 1.5rem;
   background-repeat: no-repeat;
-  width: 40px;
-  height: 40px;
-  position: absolute;
-  left: 5px;
-  top: 40%;
-  margin-top: -15px;
+  text-decoration: none;
+  border-radius: 5px;
 }
-.btn-google:after {
-  content: "GET IT ON";
-  position: absolute;
-  top: 5px;
-  left: 45px;
-  font-size: 15px;
-  font-weight: 400;
+
+.market-btn .market-button-title {
+  display: block;
+  color: white;
+  font-size: 1.125rem;
+}
+
+.market-btn .market-button-subtitle {
+  display: block;
+  margin-bottom: -0.25rem;
+  color: white;
+  font-size: 0.75rem;
+}
+
+.market-btn:hover {
+  background-color: #2b3344;
+  text-decoration: none;
+}
+
+.google-btn {
+  background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIgNTEyOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgd2lkdGg9IjUxMnB4IiBoZWlnaHQ9IjUxMnB4Ij4KPHBvbHlnb24gc3R5bGU9ImZpbGw6IzVDREFERDsiIHBvaW50cz0iMjkuNTMsMCAyOS41MywyNTEuNTA5IDI5LjUzLDUxMiAyOTkuMDA0LDI1MS41MDkgIi8+Cjxwb2x5Z29uIHN0eWxlPSJmaWxsOiNCREVDQzQ7IiBwb2ludHM9IjM2OS4wNjcsMTgwLjU0NyAyNjIuMTc1LDExOS40NjcgMjkuNTMsMCAyOTkuMDA0LDI1MS41MDkgIi8+Cjxwb2x5Z29uIHN0eWxlPSJmaWxsOiNEQzY4QTE7IiBwb2ludHM9IjI5LjUzLDUxMiAyOS41Myw1MTIgMjYyLjE3NSwzODMuNTUxIDM2OS4wNjcsMzIyLjQ3IDI5OS4wMDQsMjUxLjUwOSAiLz4KPHBhdGggc3R5bGU9ImZpbGw6I0ZGQ0E5NjsiIGQ9Ik0zNjkuMDY3LDE4MC41NDdsLTcwLjA2Myw3MC45NjFsNzAuMDYzLDcwLjk2MWwxMDguNjg4LTYyLjg3N2M2LjI4OC0zLjU5Myw2LjI4OC0xMS42NzcsMC0xNS4yNyAgTDM2OS4wNjcsMTgwLjU0N3oiLz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg==);
+}
+
+.footer {
+  background-color: #374258;
+  color: white;
+  height: 4rem;
+  padding-top: 17px;
+}
+
+.footer a {
+  text-decoration: none;
+}
+
+.footer-icon {
+  color: white;
+  font-size: 18pt;
+}
+
+.footer-icon:hover {
+  color: #f74464;
+}
+@media (min-width: 1200px) {
+  .image-content {
+    bottom: -115rem;
+  }
+  .head {
+    font-size: 2.7rem;
+  }
+  .body {
+    font-size: 25px;
+  }
+  .title {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 650px) {
+  .image-content {
+    left: 2.5rem;
+  }
 }
 </style>
