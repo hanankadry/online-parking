@@ -1,3 +1,4 @@
+/* Over all */
 body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -18,6 +19,21 @@ body {
     background: #555;
 }
 
+
+.logo {
+    background-color: #374258;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    width: 25%;
+}
+
+.background {
+    padding: 10px 50px 50px 50px;
+}
+
+/* icons */
+
 .input-icons {
     width: 100%;
     margin-bottom: 10px;
@@ -30,6 +46,14 @@ body {
     min-width: 40px;
     color: #f74464;
 }
+
+.sm-icon {
+    color: #f74464;
+    font-size: 1.5rem;
+    padding-right: 10px;
+}
+
+/* inputs */
 
 .input-lg {
     border-radius: 95px;
@@ -46,6 +70,77 @@ body {
     padding-left: 2.5rem;
     padding-bottom: 3px;
     border: 3px solid #374258;
+}
+
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background-image: url("@/assets/images/icons8-calendar-96.png");
+    background-position: end;
+    background-size: 20px 20px, 20px 20px;
+    background-repeat: no-repeat;
+}
+
+
+.addon {
+    background-color: #f74464;
+    border-radius: 0 95px 95px 0;
+    font-size: 22pt;
+    padding-top: 0;
+    border: 2px solid #374258;
+    width: 40px;
+}
+
+.selector-lg {
+    border-radius: 95px;
+    height: 50px;
+    background-color: #374258;
+    color: white;
+    border: none;
+    padding-left: 30px;
+    background-image: url("@/assets/images/icons8-chevron-down-96.png");
+    background-position: calc(100% - 25px) calc(0.6em + 0.5px),
+        calc(100% - 19.8px) calc(0.6em + 5px);
+    background-size: 30px 30px, 30px 30px;
+    background-repeat: no-repeat;
+}
+
+.selector-lg>option {
+    background-color: #f74464;
+    color: #374258;
+    border: none;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.selector-lg>option:hover {
+    background-color: white;
+    color: #374258;
+}
+
+
+/* buttons */
+
+.button-xl-fill {
+    background-color: #f74464;
+    border-radius: 95px;
+    height: 60px;
+    color: white;
+    position: relative;
+    border: none;
+    font-weight: bold;
+    font-size: larger;
+}
+
+.button-xl-unfill {
+    border: 3px solid #f74464;
+    background-color: transparent;
+    border-radius: 95px;
+    height: 60px;
+    color: white;
+    position: relative;
+    border: none;
+    font-weight: bold;
+    font-size: larger;
 }
 
 .button-lg-fill {
@@ -72,6 +167,31 @@ body {
     font-weight: bold;
     color: white;
     text-align: center;
+}
+
+.button-sm-fill {
+    background-color: #f74464;
+    border-radius: 95px;
+    height: 40px;
+    width: 8rem;
+    color: white;
+    position: relative;
+    border: none;
+    font-weight: bold;
+    padding: 5px;
+}
+
+.button-sm-unfill {
+    border: 3px solid #f74464;
+    border-radius: 95px;
+    height: 40px;
+    width: 8rem;
+    background-color: transparent;
+    color: white;
+    position: relative;
+    border: none;
+    font-weight: bold;
+    padding: 5px;
 }
 
 .button-xs-fill {
@@ -126,46 +246,14 @@ body {
     text-align: center;
 }
 
-.button-xl-fill {
-    background-color: #f74464;
-    border-radius: 95px;
-    height: 60px;
-    color: white;
-    position: relative;
-    border: none;
-    font-weight: bold;
-    font-size: larger;
-}
-
-.button-sm-fill {
-    background-color: #f74464;
-    border-radius: 95px;
-    height: 40px;
-    width: 8rem;
-    color: white;
-    position: relative;
-    border: none;
-    font-weight: bold;
-    padding: 5px;
-}
-
-.button-sm-unfill {
-    border: 3px solid #f74464;
-    border-radius: 95px;
-    height: 40px;
-    width: 8rem;
-    background-color: transparent;
-    color: white;
-    position: relative;
-    border: none;
-    font-weight: bold;
-    padding: 5px;
-}
+/* extra */
 
 .separator {
     margin-bottom: 10px;
     border: 2px solid;
 }
+
+/* table + content */
 
 .table-style {
     box-shadow: 5px 10px #374258;
@@ -195,23 +283,11 @@ body {
     padding: 7px;
 }
 
-.background {
-    padding: 10px 50px 50px 50px;
-}
-
 .table-icon {
     margin: 6px;
     min-width: 40px;
     font-size: 14pt;
     color: #374258;
-}
-
-.logo {
-    background-color: #374258;
-    border: none;
-    border-radius: 50%;
-    color: white;
-    width: 25%;
 }
 
 .modal-content {
@@ -227,63 +303,6 @@ body {
 
 .modal-content>.modal-body {
     background-color: white;
-}
-
-.input-lg {
-    border-radius: 95px;
-    height: 50px;
-    background-color: #374258;
-    color: white;
-    border: none;
-}
-
-.sm-icon {
-    color: #f74464;
-    font-size: 1.5rem;
-    padding-right: 10px;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-    background-image: url("@/assets/images/icons8-calendar-96.png");
-    background-position: end;
-    background-size: 20px 20px, 20px 20px;
-    background-repeat: no-repeat;
-}
-
-.addon {
-    background-color: #f74464;
-    border-radius: 0 95px 95px 0;
-    font-size: 22pt;
-    padding-top: 0;
-    border: 2px solid #374258;
-    width: 40px;
-}
-
-.selector-lg {
-    border-radius: 95px;
-    height: 50px;
-    background-color: #374258;
-    color: white;
-    border: none;
-    padding-left: 30px;
-    background-image: url("@/assets/images/icons8-chevron-down-96.png");
-    background-position: calc(100% - 25px) calc(0.6em + 0.5px),
-        calc(100% - 19.8px) calc(0.6em + 5px);
-    background-size: 30px 30px, 30px 30px;
-    background-repeat: no-repeat;
-}
-
-.selector-lg>option {
-    background-color: #f74464;
-    color: #374258;
-    border: none;
-    font-weight: bold;
-    padding: 10px;
-}
-
-.selector-lg>option:hover {
-    background-color: white;
-    color: #374258;
 }
 
 .text-success {
