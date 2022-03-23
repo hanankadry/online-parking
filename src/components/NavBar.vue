@@ -154,6 +154,9 @@ a .nav-link:hover {
   border: none;
   margin-bottom: 5px;
 }
+.navbar-toggler:focus {
+  outline: none;
+}
 
 .nav-icon {
   font-size: 24pt;

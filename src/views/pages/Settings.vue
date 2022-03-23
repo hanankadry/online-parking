@@ -3,7 +3,6 @@
     <div class="d-flex align-items-start">
       <div
         class="nav flex-column nav-pills me-3"
-        id="v-pills-tab"
         role="tablist"
         aria-orientation="vertical"
       >
@@ -15,48 +14,202 @@
             <i class="col bi bi-gear-fill nav-icon me-1" />Settings
           </p>
         </div>
-
         <button
-          class="nav-link active mb-3"
-          id="v-pills-home-tab"
+          class="nav-link mb-3 active"
           data-bs-toggle="pill"
-          data-bs-target="#v-pills-home"
+          data-bs-target="#general-settings"
           type="button"
           role="tab"
-          aria-controls="v-pills-home"
           aria-selected="true"
         >
-          Change Personal Info
+          General Settings
         </button>
         <button
           class="nav-link"
-          id="v-pills-profile-tab"
           data-bs-toggle="pill"
-          data-bs-target="#v-pills-profile"
+          data-bs-target="#change-password"
           type="button"
           role="tab"
-          aria-controls="v-pills-profile"
           aria-selected="false"
         >
           Change Password
         </button>
       </div>
-      <div class="tab-content" id="v-pills-tabContent">
-        <div
-          class="tab-pane fade show active"
-          id="v-pills-home"
-          role="tabpanel"
-          aria-labelledby="v-pills-home-tab"
-        >
-          <div class="contianer"></div>
+      <div class="tab-content">
+        <div class="tab-pane fade active" id="general-settings" role="tabpanel">
+          <div class="container">
+            <div class="body">
+              <p class="header">General Settings</p>
+              <form class="mt-5">
+                <div class="row pb-3 px-5">
+                  <div class="col-md-4">
+                    <i class="bi bi-person sm-icon" />
+                    <label for="name" class="form-label">Name</label>
+                    <input
+                      type="text"
+                      v-model="user.name"
+                      class="form-control input-lg"
+                      id="name"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <i class="bi bi-envelope sm-icon" />
+                    <label for="email" class="form-label">Email</label>
+                    <input
+                      type="email"
+                      v-model="user.email"
+                      class="form-control input-lg"
+                      id="email"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <i class="bi bi-person-lines-fill sm-icon" />
+                    <label for="nationalID" class="form-label"
+                      >National ID</label
+                    >
+                    <input
+                      type="text"
+                      v-model="user.nationalID"
+                      class="form-control input-lg"
+                      id="nationalID"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row pb-3 px-5">
+                  <div class="col-lg-4 col-md-6">
+                    <i class="bi bi-lock sm-icon" />
+                    <label for="password" class="form-label">Password</label>
+                    <input
+                      type="password"
+                      v-model="user.password"
+                      class="form-control input-lg"
+                      id="password"
+                      required
+                    />
+                  </div>
+                  <div class="col-lg-4 col-md-6">
+                    <i class="bi bi-lock sm-icon" />
+                    <label for="confirmPassword" class="form-label"
+                      >Confirm Password</label
+                    >
+                    <input
+                      type="password"
+                      v-model="user.confirmPassword"
+                      class="form-control input-lg"
+                      id="confirmPassword"
+                      required
+                    />
+                  </div>
+                  <div class="col-lg-4">
+                    <i class="bi bi-gender-ambiguous sm-icon" />
+                    <label for="gender" class="form-label">Gender</label>
+                    <select
+                      class="form-select selector-lg"
+                      v-model="user.gender"
+                      id="gender"
+                      required
+                    >
+                      <option selected>Choose Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row pb-3 px-5">
+                  <div class="col-lg-8">
+                    <i class="bi bi-geo-alt sm-icon" />
+                    <label for="address" class="form-label">Address</label>
+                    <input
+                      type="text"
+                      v-model="user.address"
+                      class="form-control input-lg"
+                      id="address"
+                      required
+                    />
+                  </div>
+                  <div class="col-lg-4">
+                    <i class="bi bi-calendar2-week sm-icon" />
+                    <label for="dateOfBirth" class="form-label"
+                      >Date of Birth</label
+                    >
+                    <input
+                      type="date"
+                      v-model="user.dateOfBirth"
+                      class="form-control input-lg date"
+                      id="dateOfBirth"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row pb-3 px-5">
+                  <div
+                    class="col-lg-4 col-md-4"
+                    v-for="(input, index) in user.phoneNumbers"
+                    :key="`phoneInput-${index}`"
+                  >
+                    <i class="bi bi-telephone sm-icon" />
+                    <label for="phone1" class="form-label">Phone</label>
+                    <div class="input-group mb-3">
+                      <input
+                        type="text"
+                        v-model="input.phone"
+                        class="form-control input-lg"
+                        id="phone1"
+                        required
+                      />
+                      <button
+                        class="addon"
+                        type="button"
+                        v-show="user.phoneNumbers.length < 3"
+                        @click="addPhone(input, user.phoneNumbers)"
+                      >
+                        +
+                      </button>
+                      <button
+                        class="addon"
+                        type="button"
+                        v-show="user.phoneNumbers.length > 1"
+                        @click="removePhone(index, user.phoneNumbers)"
+                      >
+                        -
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="row pb-3 px-5">
+                  <button
+                    class="button-md-fill col offset-md-9 me-4"
+                    @click="editting = true"
+                    v-if="editting == false"
+                  >
+                    Edit
+                  </button>
+                  <div class="buttons col offset-md-6" v-else>
+                    <button
+                      class="button-md-unfill me-2"
+                      type="button"
+                      @click="editting = false"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      class="button-md-fill"
+                      type="button"
+                      @click="editting = false"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-        <div
-          class="tab-pane fade"
-          id="v-pills-profile"
-          role="tabpanel"
-          aria-labelledby="v-pills-profile-tab"
-        >
-          <div class="container"></div>
+        <div class="tab-pane fade" id="change-password" role="tabpanel">
+          <div class="container">Change Password</div>
         </div>
       </div>
     </div>
@@ -64,7 +217,34 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      user: {
+        name: "",
+        nationalID: 0,
+        email: "",
+        address: "",
+        password: "",
+        confirmPassword: "",
+        gender: ["male", "female"],
+        phoneNumbers: [{ phone: "" }],
+        dateOfBirth: "",
+      },
+      editting: false,
+    };
+  },
+  methods: {
+    addPhone(value, array) {
+      array.push({ value: "" });
+      console.log(array);
+    },
+    removePhone(index, array) {
+      array.splice(index, 1);
+      console.log(array);
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -72,12 +252,12 @@ export default {};
   top: 0;
   background-color: #374258;
   padding: 0;
-  height: 100rem;
+  height: inherit;
 }
 
 .nav {
   background-color: #f74464;
-  height: 100rem;
+  height: 100vh;
   width: 20%;
   padding: 10px;
   align-content: center;
@@ -86,54 +266,117 @@ export default {};
 .nav-icon {
   position: relative;
   color: #374258;
-  font-size: 20pt;
+  font-size: 24pt;
 }
 
 .title {
-  font-size: 20pt;
-}
-
-.nav-link .active {
-  background-color: #f74464;
-  border-radius: 95px;
-  height: 40px;
-  color: white;
-  position: relative;
-  border: none;
-  font-weight: bold;
-  font-size: large;
+  font-size: 20px;
 }
 
 .nav-link {
-  border: 3px solid #f74464;
+  border: 3px solid #374258;
   background-color: transparent;
   border-radius: 95px;
-  height: 60px;
+  height: 55px;
   color: white;
+  padding-bottom: 15px;
   position: relative;
-  border: none;
   font-weight: bold;
   font-size: larger;
 }
 
+.nav-link:active {
+  background-color: #374258;
+  border: none;
+}
+
+.nav-link:focus {
+  background-color: #374258;
+  border: none;
+}
+
+.body {
+  padding: 20px;
+  color: white;
+}
+
+.header {
+  letter-spacing: 10px;
+  font-size: 40px;
+  color: #f74464;
+  text-transform: uppercase;
+  font-weight: lighter;
+  text-align: start;
+  padding-left: 50px;
+}
+
+.input-lg {
+  border-radius: 95px;
+  height: 50px;
+  background-color: white;
+  border: none;
+  padding-left: 30px;
+}
+
+.addon {
+  background-color: #f74464;
+  border-radius: 0 95px 95px 0;
+  font-size: 22pt;
+  padding-top: 0;
+  border: 2px solid white;
+  width: 40px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  background-image: url("@/assets/images/icons8-calendar-96-pink.png");
+  background-position: end;
+  background-size: 20px 20px, 20px 20px;
+  background-repeat: no-repeat;
+}
+.selector-lg {
+  border-radius: 95px;
+  height: 50px;
+  background-color: white;
+  border: none;
+  padding-left: 30px;
+  background-image: url("@/assets/images/icons8-chevron-down-96-pink.png");
+  background-position: calc(100% - 25px) calc(0.6em + 0.5px),
+    calc(100% - 19.8px) calc(0.6em + 5px);
+  background-size: 30px 30px, 30px 30px;
+  background-repeat: no-repeat;
+}
+
+.selector-lg > option {
+  background-color: #f74464;
+  color: #374258;
+  border: none;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.selector-lg > option:hover {
+  background-color: white;
+  color: #374258;
+}
+
 @media (max-width: 1255px) {
-    .nav{
-        width: 25%;
-    }
+  .nav {
+    width: 25%;
+  }
 }
 @media (max-width: 986px) {
-    .nav{
-        width: 30%;
-    }
+  .nav {
+    width: 30%;
+  }
 }
 @media (max-width: 816px) {
-    .nav{
-        width: 35%;
-    }
+  .nav {
+    width: 35%;
+  }
 }
 @media (max-width: 692px) {
-    .nav{
-        width: 40%;
-    }
+  .nav {
+    width: 40%;
+  }
 }
 </style>

@@ -16,10 +16,43 @@
               required
             />
           </div>
+          <!-- <div class="input-group" v-if="!showPassword">
+            <div class="input-icons">
+              <i class="bi bi-lock icon" />
+              <input
+                type="password"
+                v-model="user.password"
+                class="form-control input-lg"
+                placeholder="Enter Password"
+                id="password"
+                required
+              />
+              <button class="addon" type="button" @click.prevent="toggleShow">
+                <i class="bi bi-eye-fill icon" />
+              </button>
+            </div>
+          </div>
+          <div class="input-group" v-else>
+            <div class="input-icons">
+              <i class="bi bi-lock" />
+              <input
+                type="password"
+                v-model="user.password"
+                class="form-control input-lg"
+                placeholder="Enter Password"
+                id="password"
+                required
+              />
+              <button class="addon" type="button" @click.prevent="toggleShow">
+                <i class="bi bi-eye-slash-fill" />
+              </button>
+            </div>
+          </div> -->
           <div class="input-icons">
             <i class="bi bi-lock icon" />
             <input
               type="password"
+              v-model="user.password"
               class="form-control input-lg"
               placeholder="Enter Password"
               required
@@ -59,12 +92,29 @@
 
 <script>
 export default {
+  data() {
+    return {
+      showPassword: false,
+      user: {
+        email: "",
+        password: "",
+      },
+    };
+  },
   methods: {
     signIn() {
       this.$router.push("/dashboard");
     },
     signUp() {
       this.$router.push("/signUp");
+    },
+    toggleShow() {
+      this.showPassword = !this.showPassword;
+    },
+  },
+  computed: {
+    buttonLabel() {
+      return this.showPassword ? "Hide" : "Show";
     },
   },
 };
@@ -101,6 +151,15 @@ h4 {
   padding-left: 1rem;
   min-width: 40px;
   color: #f74464;
+}
+
+.addon {
+  background-color: #f74464;
+  border-radius: 0 95px 95px 0;
+  font-size: 22pt;
+  padding-top: 0;
+  border: 2px solid #374258;
+  width: 40px;
 }
 
 @media screen and (max-width: 1140px) {

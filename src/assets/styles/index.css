@@ -117,6 +117,33 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     color: #374258;
 }
 
+.selector-xl {
+    border-radius: 95px;
+    height: 60px;
+    background-color: #374258;
+    color: white;
+    border: none;
+    padding-left: 30px;
+    background-image: url("@/assets/images/icons8-chevron-down-96.png");
+    background-position: calc(100% - 25px) calc(1em + 0.5px),
+        calc(100% - 19.8px) calc(1em + 5px);
+    background-size: 30px 30px, 30px 30px;
+    background-repeat: no-repeat;
+}
+
+.selector-xl>option {
+    background-color: #f74464;
+    color: #374258;
+    border: none;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.selector-xl>option:hover {
+    background-color: white;
+    color: #374258;
+}
+
 
 /* buttons */
 
@@ -167,6 +194,30 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-weight: bold;
     color: white;
     text-align: center;
+}
+
+.button-md-fill {
+    background-color: #f74464;
+    border-radius: 95px;
+    height: 50px;
+    width: 10rem;
+    color: white;
+    position: relative;
+    border: none;
+    font-weight: bold;
+    padding: 5px;
+}
+
+.button-md-unfill {
+    border: 3px solid #f74464;
+    border-radius: 95px;
+    height: 50px;
+    width: 10rem;
+    color: white;
+    background-color: transparent;
+    position: relative;
+    font-weight: bold;
+    padding: 5px;
 }
 
 .button-sm-fill {
