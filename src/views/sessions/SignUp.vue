@@ -128,18 +128,18 @@
                 <button
                   class="addon"
                   type="button"
-                  v-show="user.phoneNumbers.length < 3"
-                  @click="addPhone(input, user.phoneNumbers)"
-                >
-                  +
-                </button>
-                <button
-                  class="addon"
-                  type="button"
                   v-show="user.phoneNumbers.length > 1"
                   @click="removePhone(index, user.phoneNumbers)"
                 >
                   -
+                </button>
+                <button
+                  class="addon"
+                  type="button"
+                  v-show="user.phoneNumbers.length < 3"
+                  @click="addPhone(input, user.phoneNumbers)"
+                >
+                  +
                 </button>
               </div>
             </div>

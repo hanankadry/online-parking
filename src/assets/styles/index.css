@@ -47,6 +47,11 @@ body {
     color: #f74464;
 }
 
+.md-icon {
+    color: #f74464;
+    font-size: 2rem;
+    padding-right: 10px;
+}
 .sm-icon {
     color: #f74464;
     font-size: 1.5rem;

@@ -210,18 +210,18 @@
                       <button
                         class="addon"
                         type="button"
-                        v-show="current_user.phoneNumbers.length < 2"
-                        @click="addPhone(input, current_user.phoneNumbers)"
-                      >
-                        +
-                      </button>
-                      <button
-                        class="addon"
-                        type="button"
                         v-show="current_user.phoneNumbers.length > 1"
                         @click="removePhone(index, current_user.phoneNumbers)"
                       >
                         -
+                      </button>
+                      <button
+                        class="addon"
+                        type="button"
+                        v-show="current_user.phoneNumbers.length < 2"
+                        @click="addPhone(input, current_user.phoneNumbers)"
+                      >
+                        +
                       </button>
                     </div>
                   </div>
@@ -584,18 +584,18 @@
                       <button
                         class="addon"
                         type="button"
-                        v-show="new_user.phoneNumbers.length < 2"
-                        @click="addPhone(input, new_user.phoneNumbers)"
-                      >
-                        +
-                      </button>
-                      <button
-                        class="addon"
-                        type="button"
                         v-show="new_user.phoneNumbers.length > 1"
                         @click="removePhone(index, new_user.phoneNumbers)"
                       >
                         -
+                      </button>
+                      <button
+                        class="addon"
+                        type="button"
+                        v-show="new_user.phoneNumbers.length < 2"
+                        @click="addPhone(input, new_user.phoneNumbers)"
+                      >
+                        +
                       </button>
                     </div>
                   </div>
@@ -793,5 +793,81 @@ span > a {
   font-weight: normal;
   font-size: 16pt;
   margin-bottom: 0px;
+}
+
+.input-lg {
+  border-radius: 95px;
+  height: 50px;
+  background-color: #374258;
+  color: white;
+  border: none;
+}
+
+.sm-icon {
+  color: #f74464;
+  font-size: 1.5rem;
+  padding-right: 10px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  background-image: url("@/assets/images/icons8-calendar-96.png");
+  background-position: end;
+  background-size: 20px 20px, 20px 20px;
+  background-repeat: no-repeat;
+}
+
+.addon {
+  background-color: #f74464;
+  border-radius: 0 95px 95px 0;
+  font-size: 22pt;
+  padding-top: 0;
+  border: 2px solid #374258;
+  width: 40px;
+}
+
+.selector-lg {
+  border-radius: 95px;
+  height: 50px;
+  background-color: #374258;
+  color: white;
+  border: none;
+  padding-left: 30px;
+  background-image: url("@/assets/images/icons8-chevron-down-96.png");
+  background-position: calc(100% - 25px) calc(0.6em + 0.5px),
+    calc(100% - 19.8px) calc(0.6em + 5px);
+  background-size: 30px 30px, 30px 30px;
+  background-repeat: no-repeat;
+}
+.selector-lg > option {
+  background-color: #f74464;
+  color: #374258;
+  border: none;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.selector-lg > option:hover {
+  background-color: white;
+  color: #374258;
+}
+
+.icon {
+  padding-left: 20px;
+  padding-top: 10px;
+  font-size: 14pt;
+}
+
+span > a {
+  text-decoration: none;
+}
+
+.text-success {
+  color: #02b902;
+}
+.text-danger {
+  color: #fd1d1d;
+}
+.text-warning {
+  color: #faaa17;
 }
 </style>

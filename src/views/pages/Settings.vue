@@ -42,20 +42,19 @@
               <p class="header">General Settings</p>
               <form class="mt-5">
                 <div class="row pb-3 px-5">
-                  <div class="col-md-4">
-                    <i class="bi bi-person sm-icon" />
-                    <label for="name" class="form-label">Name</label>
+                  <div class="col-md-6">
+                    <i class="bi bi-image md-icon" />
+                    <label for="name" class="form-label">Profile Picture</label>
                     <input
-                      type="text"
-                      v-model="user.name"
+                      type="file"
                       class="form-control input-lg"
                       id="name"
                       required
                     />
                   </div>
-                  <div class="col-md-4">
-                    <i class="bi bi-envelope sm-icon" />
-                    <label for="email" class="form-label">Email</label>
+                  <div class="col-md-6">
+                    <i class="bi bi-person md-icon" />
+                    <label for="email" class="form-label">Name</label>
                     <input
                       type="email"
                       v-model="user.email"
@@ -64,8 +63,10 @@
                       required
                     />
                   </div>
-                  <div class="col-md-4">
-                    <i class="bi bi-person-lines-fill sm-icon" />
+                </div>
+                <div class="row pb-3 px-5">
+                  <div class="col-md-6">
+                    <i class="bi bi-person-lines-fill md-icon" />
                     <label for="nationalID" class="form-label"
                       >National ID</label
                     >
@@ -77,61 +78,8 @@
                       required
                     />
                   </div>
-                </div>
-                <div class="row pb-3 px-5">
-                  <div class="col-lg-4 col-md-6">
-                    <i class="bi bi-lock sm-icon" />
-                    <label for="password" class="form-label">Password</label>
-                    <input
-                      type="password"
-                      v-model="user.password"
-                      class="form-control input-lg"
-                      id="password"
-                      required
-                    />
-                  </div>
-                  <div class="col-lg-4 col-md-6">
-                    <i class="bi bi-lock sm-icon" />
-                    <label for="confirmPassword" class="form-label"
-                      >Confirm Password</label
-                    >
-                    <input
-                      type="password"
-                      v-model="user.confirmPassword"
-                      class="form-control input-lg"
-                      id="confirmPassword"
-                      required
-                    />
-                  </div>
-                  <div class="col-lg-4">
-                    <i class="bi bi-gender-ambiguous sm-icon" />
-                    <label for="gender" class="form-label">Gender</label>
-                    <select
-                      class="form-select selector-lg"
-                      v-model="user.gender"
-                      id="gender"
-                      required
-                    >
-                      <option selected>Choose Gender</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="row pb-3 px-5">
-                  <div class="col-lg-8">
-                    <i class="bi bi-geo-alt sm-icon" />
-                    <label for="address" class="form-label">Address</label>
-                    <input
-                      type="text"
-                      v-model="user.address"
-                      class="form-control input-lg"
-                      id="address"
-                      required
-                    />
-                  </div>
-                  <div class="col-lg-4">
-                    <i class="bi bi-calendar2-week sm-icon" />
+                  <div class="col-lg-6">
+                    <i class="bi bi-calendar2-week md-icon" />
                     <label for="dateOfBirth" class="form-label"
                       >Date of Birth</label
                     >
@@ -145,12 +93,25 @@
                   </div>
                 </div>
                 <div class="row pb-3 px-5">
+                  <div class="col-lg-12">
+                    <i class="bi bi-geo-alt md-icon" />
+                    <label for="address" class="form-label">Address</label>
+                    <input
+                      type="text"
+                      v-model="user.address"
+                      class="form-control input-lg"
+                      id="address"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row pb-3 px-5">
                   <div
                     class="col-lg-4 col-md-4"
                     v-for="(input, index) in user.phoneNumbers"
                     :key="`phoneInput-${index}`"
                   >
-                    <i class="bi bi-telephone sm-icon" />
+                    <i class="bi bi-telephone md-icon" />
                     <label for="phone1" class="form-label">Phone</label>
                     <div class="input-group mb-3">
                       <input
@@ -163,31 +124,31 @@
                       <button
                         class="addon"
                         type="button"
-                        v-show="user.phoneNumbers.length < 3"
-                        @click="addPhone(input, user.phoneNumbers)"
-                      >
-                        +
-                      </button>
-                      <button
-                        class="addon"
-                        type="button"
                         v-show="user.phoneNumbers.length > 1"
                         @click="removePhone(index, user.phoneNumbers)"
                       >
                         -
+                      </button>
+                      <button
+                        class="addon"
+                        type="button"
+                        v-show="user.phoneNumbers.length < 3"
+                        @click="addPhone(input, user.phoneNumbers)"
+                      >
+                        +
                       </button>
                     </div>
                   </div>
                 </div>
                 <div class="row pb-3 px-5">
                   <button
-                    class="button-md-fill col offset-md-9 me-4"
+                    class="button-md-fill col offset-md-9 me-5"
                     @click="editting = true"
                     v-if="editting == false"
                   >
                     Edit
                   </button>
-                  <div class="buttons col offset-md-6" v-else>
+                  <div class="buttons col offset-md-7" v-else>
                     <button
                       class="button-md-unfill me-2"
                       type="button"
@@ -209,7 +170,72 @@
           </div>
         </div>
         <div class="tab-pane fade" id="change-password" role="tabpanel">
-          <div class="container">Change Password</div>
+          <div class="container">
+            <div class="body">
+              <p class="header">Change Password</p>
+              <form class="mt-5">
+                <div class="row pb-3 px-5">
+                  <div class="col-lg-5">
+                    <i class="bi bi-lock md-icon" />
+                    <label for="oldPassword" class="form-label"
+                      >Old Password</label
+                    >
+                    <input
+                      type="password"
+                      v-model="update.oldPass"
+                      class="form-control input-lg"
+                      id="oldPassword"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row pb-3 px-5">
+                  <div class="col-lg-5">
+                    <i class="bi bi-lock md-icon" />
+                    <label for="newPassword" class="form-label"
+                      >New Password</label
+                    >
+                    <input
+                      type="password"
+                      v-model="update.newPass"
+                      class="form-control input-lg"
+                      id="newPassword"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row pb-3 px-5">
+                  <div class="col-lg-5">
+                    <i class="bi bi-lock md-icon" />
+                    <label for="confirmPassword" class="form-label"
+                      >Confirm New Password</label
+                    >
+                    <input
+                      type="password"
+                      v-model="update.confirmNewPass"
+                      class="form-control input-lg"
+                      id="confirmPassword"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row pb-3 px-5">
+                  <div class="buttons col offset-md-7">
+                    <button class="button-md-unfill me-2" type="button">
+                      Cancel
+                    </button>
+                    <button
+                      class="button-md-fill"
+                      type="button"
+                      @click.prevent="updatePass"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -226,10 +252,14 @@ export default {
         email: "",
         address: "",
         password: "",
-        confirmPassword: "",
         gender: ["male", "female"],
         phoneNumbers: [{ phone: "" }],
         dateOfBirth: "",
+      },
+      update: {
+        oldPass: "",
+        newPass: "",
+        confirmNewPass: "",
       },
       editting: false,
     };
@@ -242,6 +272,9 @@ export default {
     removePhone(index, array) {
       array.splice(index, 1);
       console.log(array);
+    },
+    updateUser() {
+      this.user.password = this.update.newPass;
     },
   },
 };
@@ -270,7 +303,7 @@ export default {
 }
 
 .title {
-  font-size: 20px;
+  font-size: 30px;
 }
 
 .nav-link {
@@ -285,11 +318,6 @@ export default {
   font-size: larger;
 }
 
-.nav-link:active {
-  background-color: #374258;
-  border: none;
-}
-
 .nav-link:focus {
   background-color: #374258;
   border: none;
@@ -298,6 +326,7 @@ export default {
 .body {
   padding: 20px;
   color: white;
+  width: 70vw;
 }
 
 .header {
@@ -308,6 +337,10 @@ export default {
   font-weight: lighter;
   text-align: start;
   padding-left: 50px;
+}
+
+.form-label {
+  font-size: 20pt;
 }
 
 .input-lg {

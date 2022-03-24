@@ -20,57 +20,41 @@
         <div class="row">
           <ul class="nav">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#"
+              <router-link class="nav-link active" aria-current="page" to="/dashboard"
                 ><i class="bi bi-house-door nav-icon"></i>
-              </a>
+              </router-link>
             </li>
             <li class="nav-item dropdown">
               <a
-                class="nav-link dropdown-toggle notification-ui_icon"
+                class="nav-link dropdown-toggle"
+                data-bs-toggle="dropdown"
                 href="#"
-                id="navbarDropdown"
                 role="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
                 aria-expanded="false"
-                @click="
-                  notification ? (notification = true) : (notification = false)
-                "
               >
-                <i class="bi bi-bell nav-icon"></i>
-                <span class="unread-notification"></span>
-              </a>
-              <div
-                class="dropdown-menu notification-ui_dd show"
-                aria-labelledby="navbarDropdown"
-                v-if="notification == true"
-              >
-                <div class="notification-ui_dd-header">
-                  <h3 class="text-center">Notification</h3>
+                <i class="bi bi-bell nav-icon"></i
+              ></a>
+              <ul class="dropdown-menu">
+                <div class="container">
+                  <p>Notification</p>
                 </div>
-                <div class="notification-ui_dd-footer">
-                  <a href="#!" class="btn btn-success btn-block">View All</a>
-                </div>
-              </div>
+              </ul>
             </li>
             <li class="nav-item dropdown">
               <a
-                class="nav-link dropdown-toggle notification-ui_icon"
+                class="nav-link dropdown-toggle"
                 href="#"
-                id="navbarDropdown"
                 role="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
+                data-bs-toggle="dropdown"
                 aria-expanded="false"
-                @click="profile ? (profile = true) : (profile = false)"
               >
                 <i class="bi bi-person-circle nav-icon"></i>
               </a>
-              <div
-                class="dropdown-menu notification-ui_dd show"
-                aria-labelledby="navbarDropdown"
-                v-if="profile == true"
-              ></div>
+              <ul class="dropdown-menu">
+                <div class="container">
+                  <p>Notification</p>
+                </div>
+              </ul>
             </li>
           </ul>
         </div>
@@ -211,117 +195,5 @@ a .nav-link:hover {
   text-decoration: none;
   color: white;
   margin-bottom: 0.7rem;
-}
-
-.notification-ui a:after {
-  display: none;
-}
-
-.notification-ui_icon {
-  position: relative;
-}
-
-.notification-ui_icon .unread-notification {
-  display: inline-block;
-  height: 7px;
-  width: 7px;
-  border-radius: 7px;
-  background-color: #66bb6a;
-  position: absolute;
-  top: 7px;
-  left: 12px;
-}
-
-@media (min-width: 900px) {
-  .notification-ui_icon .unread-notification {
-    left: 20px;
-  }
-}
-
-.notification-ui_dd {
-  padding: 0;
-  border-radius: 10px;
-  -webkit-box-shadow: 0 5px 20px -3px rgba(0, 0, 0, 0.16);
-  box-shadow: 0 5px 20px -3px rgba(0, 0, 0, 0.16);
-  border: 0;
-  max-width: 400px;
-}
-
-@media (min-width: 900px) {
-  .notification-ui_dd {
-    min-width: 400px;
-    position: absolute;
-    left: -192px;
-    top: 70px;
-  }
-}
-
-.notification-ui_dd:after {
-  content: "";
-  position: absolute;
-  top: -30px;
-  left: calc(50% - 7px);
-  border-top: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-bottom: 15px solid #fff;
-  border-left: 15px solid transparent;
-}
-
-.notification-ui_dd .notification-ui_dd-header {
-  border-bottom: 1px solid #ddd;
-  padding: 15px;
-}
-
-.notification-ui_dd .notification-ui_dd-header h3 {
-  margin-bottom: 0;
-}
-
-.notification-ui_dd .notification-ui_dd-content {
-  max-height: 500px;
-  overflow: auto;
-}
-
-.notification-list {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  padding: 20px 0;
-  margin: 0 25px;
-  border-bottom: 1px solid #ddd;
-}
-
-.notification-list--unread {
-  position: relative;
-}
-
-.notification-list--unread:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -25px;
-  height: calc(100% + 1px);
-  border-left: 2px solid #29b6f6;
-}
-
-.notification-list .notification-list_img img {
-  height: 48px;
-  width: 48px;
-  border-radius: 50px;
-  margin-right: 20px;
-}
-
-.notification-list .notification-list_detail p {
-  margin-bottom: 5px;
-  line-height: 1.2;
-}
-
-.notification-list .notification-list_feature-img img {
-  height: 48px;
-  width: 48px;
-  border-radius: 5px;
-  margin-left: 20px;
 }
 </style>
