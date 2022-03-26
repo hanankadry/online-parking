@@ -3,6 +3,7 @@
     <div class="d-flex align-items-start">
       <div
         class="nav flex-column nav-pills me-3"
+        id="v-pills-tab"
         role="tablist"
         aria-orientation="vertical"
       >
@@ -16,27 +17,36 @@
         </div>
         <button
           class="nav-link mb-3 active"
+          id="v-pills-settings-tab"
           data-bs-toggle="pill"
           data-bs-target="#general-settings"
           type="button"
           role="tab"
+          aria-controls="v-pills-settings"
           aria-selected="true"
         >
           General Settings
         </button>
         <button
           class="nav-link"
+          id="v-pills-password-tab"
           data-bs-toggle="pill"
           data-bs-target="#change-password"
           type="button"
           role="tab"
+          aria-controls="v-pills-password"
           aria-selected="false"
         >
           Change Password
         </button>
       </div>
-      <div class="tab-content">
-        <div class="tab-pane fade active" id="general-settings" role="tabpanel">
+      <div class="tab-content" id="v-pills-tabContent">
+        <div
+          class="tab-pane fade show active"
+          id="general-settings"
+          role="tabpanel"
+          aria-labelledby="v-pills-settings-tab"
+        >
           <div class="container">
             <div class="body">
               <p class="header">General Settings</p>
@@ -47,7 +57,7 @@
                     <label for="name" class="form-label">Profile Picture</label>
                     <input
                       type="file"
-                      class="form-control input-lg"
+                      class="form-control form-control-lg upload-input"
                       id="name"
                       required
                     />
@@ -169,7 +179,12 @@
             </div>
           </div>
         </div>
-        <div class="tab-pane fade" id="change-password" role="tabpanel">
+        <div
+          class="tab-pane fade"
+          id="change-password"
+          role="tabpanel"
+          aria-labelledby="v-pills-password-tab"
+        >
           <div class="container">
             <div class="body">
               <p class="header">Change Password</p>
@@ -180,9 +195,22 @@
                     <label for="oldPassword" class="form-label"
                       >Old Password</label
                     >
+                    <span
+                      class="badge bg-success float-end"
+                      v-show="show == true"
+                      v-if="oldPass == true"
+                      ><i class="bi bi-check-circle-fill badge-icon"
+                    /></span>
+                    <span
+                      class="badge bg-warning float-end"
+                      v-else
+                      v-show="show == true"
+                      ><i class="bi bi-x-circle-fill badge-icon"
+                    /></span>
                     <input
                       type="password"
                       v-model="update.oldPass"
+                      @change="checkPass"
                       class="form-control input-lg"
                       id="oldPassword"
                       required
@@ -195,6 +223,18 @@
                     <label for="newPassword" class="form-label"
                       >New Password</label
                     >
+                    <span
+                      class="badge bg-success float-end"
+                      v-show="showCheck == true"
+                      v-if="newPass == true"
+                      ><i class="bi bi-check-circle-fill badge-icon"
+                    /></span>
+                    <span
+                      class="badge bg-warning float-end"
+                      v-else
+                      v-show="showCheck == true"
+                      ><i class="bi bi-x-circle-fill badge-icon"
+                    /></span>
                     <input
                       type="password"
                       v-model="update.newPass"
@@ -210,6 +250,18 @@
                     <label for="confirmPassword" class="form-label"
                       >Confirm New Password</label
                     >
+                    <span
+                      class="badge bg-success float-end"
+                      v-show="showCheck == true"
+                      v-if="confirm == true"
+                      ><i class="bi bi-check-circle-fill badge-icon"
+                    /></span>
+                    <span
+                      class="badge bg-warning float-end"
+                      v-else
+                      v-show="showCheck == true"
+                      ><i class="bi bi-x-circle-fill badge-icon"
+                    /></span>
                     <input
                       type="password"
                       v-model="update.confirmNewPass"
@@ -246,6 +298,11 @@
 export default {
   data() {
     return {
+      show: false,
+      showCheck: false,
+      confirm: false,
+      oldPass: false,
+      newPass: false,
       user: {
         name: "",
         nationalID: 0,
@@ -276,6 +333,33 @@ export default {
     updateUser() {
       this.user.password = this.update.newPass;
     },
+    checkPass() {
+      this.show = true;
+      if (this.update.oldPass == this.user.password) {
+        this.oldPass = true;
+      } else {
+        this.oldPass = false;
+      }
+    },
+    updatePass() {
+      this.showCheck = true;
+      if (this.update.newPass == this.update.oldPass) {
+        this.newPass = false;
+      } else {
+        this.newPass = true;
+        if (this.update.confirmNewPass != this.update.newPass) {
+          this.confirm = false;
+        } else {
+          this.confirm = true;
+          this.showCheck = false;
+          this.user.password = this.update.newPass;
+          this.show = false;
+          this.update.oldPass = "";
+          this.update.newPass = "";
+          this.update.confirmNewPass = "";
+        }
+      }
+    },
   },
 };
 </script>
@@ -302,6 +386,11 @@ export default {
   font-size: 24pt;
 }
 
+.badge-icon {
+  color: #374258;
+  font-size: 20pt;
+}
+
 .title {
   font-size: 30px;
 }
@@ -319,6 +408,11 @@ export default {
 }
 
 .nav-link:focus {
+  background-color: #374258;
+  border: none;
+}
+
+.nav-link:active {
   background-color: #374258;
   border: none;
 }
@@ -346,6 +440,13 @@ export default {
 .input-lg {
   border-radius: 95px;
   height: 50px;
+  background-color: white;
+  border: none;
+  padding-left: 30px;
+}
+
+.upload-input {
+  border-radius: 95px;
   background-color: white;
   border: none;
   padding-left: 30px;

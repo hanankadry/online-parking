@@ -5,7 +5,7 @@
         <a :href="href">{{ label }}</a>
       </li>
     </ol>
-    <p class="date">{{ this.date }}</p>
+    <p class="date">{{ date }}</p>
   </nav>
 </template>
 

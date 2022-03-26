@@ -20,11 +20,14 @@
         <div class="row">
           <ul class="nav">
             <li class="nav-item">
-              <router-link class="nav-link active" aria-current="page" to="/dashboard"
+              <router-link
+                class="nav-link active"
+                aria-current="page"
+                to="/dashboard"
                 ><i class="bi bi-house-door nav-icon"></i>
               </router-link>
             </li>
-            <li class="nav-item dropdown">
+            <li class="nav-item notifications dropdown">
               <a
                 class="nav-link dropdown-toggle"
                 data-bs-toggle="dropdown"
@@ -32,15 +35,58 @@
                 role="button"
                 aria-expanded="false"
               >
-                <i class="bi bi-bell nav-icon"></i
+                <i class="bi bi-bell nav-icon"
+                  ><span
+                    class="
+                      alert
+                      top-0
+                      start-100
+                      translate-middle
+                      p-2
+                      rounded-circle
+                    "
+                    v-if="this.newNotifications.length > 0"
+                  >
+                    <span class="visually-hidden" /></span></i
               ></a>
-              <ul class="dropdown-menu">
-                <div class="container">
-                  <p>Notification</p>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <div
+                  class="notification-container"
+                  v-if="this.newNotifications.length > 0"
+                >
+                  <p class="title">
+                    New Notifications<span class="badge float-end">{{
+                      this.newNotifications.length
+                    }}</span>
+                  </p>
+                  <div class="notification-container">
+                    <notification-container
+                      v-for="notification in newNotifications"
+                      :key="notification.id"
+                      :imageSrc="notification.imageSrc"
+                      :name="notification.name"
+                      :msg="notification.body"
+                    >
+                    </notification-container>
+                  </div>
+                  <li><hr class="dropdown-divider" /></li>
+                </div>
+                <div class="notification-container">
+                  <p class="title">Old Notification</p>
+                  <div class="old-notification-container">
+                    <notification-container
+                      v-for="notification in oldNotifications"
+                      :key="notification.id"
+                      :imageSrc="notification.imageSrc"
+                      :name="notification.name"
+                      :msg="notification.body"
+                    >
+                    </notification-container>
+                  </div>
                 </div>
               </ul>
             </li>
-            <li class="nav-item dropdown">
+            <li class="nav-item profile dropdown">
               <a
                 class="nav-link dropdown-toggle"
                 href="#"
@@ -50,9 +96,42 @@
               >
                 <i class="bi bi-person-circle nav-icon"></i>
               </a>
-              <ul class="dropdown-menu">
-                <div class="container">
-                  <p>Notification</p>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <div class="profile-container">
+                  <img
+                    class="profile-image mx-auto d-block"
+                    src="@/assets/images/person-circle.svg"
+                    alt="profile-picture"
+                  />
+                  <li class="text mt-2">
+                    <i class="bi bi-person sm-icon" />{{ user.name }}
+                  </li>
+                  <li class="text">
+                    <i class="bi bi-geo-alt-fill sm-icon" />{{ user.address }}
+                  </li>
+                  <li class="text">
+                    <i class="bi bi-envelope sm-icon" />{{ user.email }}
+                  </li>
+                  <li class="text" v-for="phone in user.phones" :key="phone.id">
+                    <i class="bi bi-telephone sm-icon" />
+                    {{ phone }}
+                  </li>
+                  <div class="text-center mt-2">
+                    <button
+                      class="button-xs-unfill"
+                      type="button"
+                      @click="edit"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      class="button-sm-fill"
+                      type="button"
+                      @click="signOut"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
                 </div>
               </ul>
             </li>
@@ -109,11 +188,57 @@ export default {
       showMenu: false,
       notification: false,
       profile: false,
+      user: {
+        name: "John Doe",
+        email: "john.doe@mail.com",
+        address: "123 Main Street, New York, NY 10030",
+        phones: ["+90 1234567890", "+90 1234567890"],
+      },
+      newNotifications: [
+        {
+          imageSrc: "@/assets/images/logo.jpg",
+          name: "User",
+          body: "a slot had been registered",
+        },
+        {
+          imageSrc: "@/assets/images/logo.jpg",
+          name: "User",
+          body: "a slot had been registered",
+        },
+        {
+          imageSrc: "@/assets/images/logo.jpg",
+          name: "User",
+          body: "a slot had been registered",
+        },
+      ],
+      oldNotifications: [
+        {
+          imageSrc: "@/assets/images/logo.jpg",
+          name: "User",
+          body: "a slot had been registered",
+        },
+        {
+          imageSrc: "@/assets/images/logo.jpg",
+          name: "User",
+          body: "a slot had been registered",
+        },
+        {
+          imageSrc: "@/assets/images/logo.jpg",
+          name: "User",
+          body: "a slot had been registered",
+        },
+      ],
     };
   },
   methods: {
     showOffcanvasMenu() {
       this.showMenu ? (this.showMenu = false) : (this.showMenu = true);
+    },
+    edit() {
+      this.$router.push("/settings");
+    },
+    signOut() {
+      this.$router.push("/");
     },
   },
 };
@@ -195,5 +320,69 @@ a .nav-link:hover {
   text-decoration: none;
   color: white;
   margin-bottom: 0.7rem;
+}
+
+.alert {
+  position: absolute;
+  background-color: #02b902;
+  font-size: 10px;
+}
+.badge {
+  background-color: #f74464;
+  margin-right: 1.3rem;
+  margin-top: 0.3rem;
+}
+
+.dropdown-menu {
+  background-color: #374258;
+  border: none;
+  overflow-x: hidden;
+}
+
+.notifications .dropdown-menu {
+  min-height: 10rem;
+  max-height: 22rem;
+  width: 20rem;
+  overflow-y: scroll;
+  border-radius: 25px 0 0 0;
+}
+
+.notifications .dropdown-menu p {
+  margin-left: 1rem;
+  color: white;
+  font-size: 18pt;
+}
+
+.profile .dropdown-menu {
+  height: 27.5rem;
+  width: 15rem;
+}
+
+.profile-image {
+  height: 10rem;
+  width: 10rem;
+  border-radius: 50%;
+  margin-top: 1rem;
+}
+
+.sm-icon {
+  color: #f74464;
+  font-size: 14pt;
+}
+
+.text {
+  margin-left: 1.5rem;
+  color: white;
+  font-size: 14pt;
+}
+
+.dropdown-divider {
+  background-color: white;
+  height: 2px;
+  opacity: 100%;
+}
+
+.old-notification-container {
+  opacity: 75%;
 }
 </style>
