@@ -75,6 +75,7 @@ const routes = [
     name: 'securityMen',
     component: () => import('@/views/dashboard/SecurityMen')
   },
+  // change into parking slots 
   {
     path: '/users',
     name: 'users',

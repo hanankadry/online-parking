@@ -72,7 +72,7 @@
                   <li><hr class="dropdown-divider" /></li>
                 </div>
                 <div class="notification-container">
-                  <p class="title">Old Notification</p>
+                  <p class="title">Old Notifications</p>
                   <div class="old-notification-container">
                     <notification-container
                       v-for="notification in oldNotifications"

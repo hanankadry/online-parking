@@ -10,7 +10,7 @@
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
-          data-bs-target=".navbar-collapse"
+          data-bs-target="#.navbar-collapse"
           aria-controls="navbar-collapse"
           aria-expanded="false"
           aria-label="Toggle navigation"
@@ -48,16 +48,22 @@
       <div class="explain my-5">
         <div class="row g-3 justify-content-center">
           <div class="col-md">
-            <p class="title">Create Account</p>
-            <img class="mobile" src="@/assets/images/signup-user.png" alt="" />
+            <div class="title-container">
+              <p class="title">Create Account</p>
+            </div>
+            <!-- <img class="mobile" src="@/assets/images/signup-user.png" alt="" /> -->
           </div>
           <div class="col-md">
-            <p class="title">Search</p>
-            <img class="mobile" src="@/assets/images/search.png" alt="" />
+            <div class="title-container">
+              <p class="title">Search</p>
+            </div>
+            <!-- <img class="mobile" src="@/assets/images/search.png" alt="" /> -->
           </div>
           <div class="col-md">
-            <p class="title">Register</p>
-            <img class="mobile" src="@/assets/images/register.png" alt="" />
+            <div class="title-container">
+              <p class="title">Register</p>
+            </div>
+            <!-- <img class="mobile" src="@/assets/images/register.png" alt="" /> -->
           </div>
         </div>
         <div class="main">
@@ -69,24 +75,30 @@
         <div class="explain my-2">
           <div class="row g-3 justify-content-center">
             <div class="col-md">
-              <p class="title">Create Account</p>
-              <img
+              <div class="title-container">
+                <p class="title">Create Account</p>
+              </div>
+              <!-- <img
                 class="website mt-5"
                 src="@/assets/images/signup-admin.png"
                 alt=""
-              />
+              /> -->
             </div>
             <div class="col-md">
-              <p class="title">Add Parking Space Data</p>
-              <img
+              <div class="title-container">
+                <p class="title">Add Parking Space Data</p>
+              </div>
+              <!-- <img
                 class="website"
                 src="@/assets/images/parking-space.png"
                 alt=""
-              />
+              /> -->
             </div>
             <div class="col-md">
-              <p class="title">Get Daily Reports, and more.</p>
-              <img class="website" src="@/assets/images/reports.png" alt="" />
+              <div class="title-container">
+                <p class="title">Get Daily Reports, and more.</p>
+              </div>
+              <!-- <img class="website" src="@/assets/images/reports.png" alt="" /> -->
             </div>
           </div>
         </div>
@@ -256,7 +268,6 @@ body {
 }
 
 .title {
-  text-align: start;
   font-size: calc(15px + 1.5vw);
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -319,6 +330,14 @@ body {
 
 .footer-icon:hover {
   color: #f74464;
+}
+
+.title-container {
+  background-color: transparent;
+  border-radius: 50px;
+  border: 2px solid #374258;
+  padding: 20px;
+  text-align: center;
 }
 @media (min-width: 1200px) {
   .image-content {
