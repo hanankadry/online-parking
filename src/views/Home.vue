@@ -10,7 +10,7 @@
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
-          data-bs-target="#.navbar-collapse"
+          data-bs-target=".navbar-collapse"
           aria-controls="navbar-collapse"
           aria-expanded="false"
           aria-label="Toggle navigation"
