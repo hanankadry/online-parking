@@ -20,7 +20,7 @@
         <div class="collapse navbar-collapse justify-content-end">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link mt-2">About</a>
+              <a class="nav-link mt-1">About</a>
             </li>
             <li class="nav-item">
               <a class="nav-link mt-2">Contact</a>
