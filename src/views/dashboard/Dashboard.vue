@@ -40,31 +40,6 @@
     </div>
     <div class="container-fluid">
       <div class="row g-4 mx-5">
-        <div class="col-xl-8">
-          <p class="label">Registrations</p>
-          <vue-good-table
-            :columns="registrationColumns"
-            :rows="registrationRows"
-            styleClass="vgt-table"
-            class="table-style"
-            ><template #table-row="props">
-              <span v-if="props.column.field == 'status'">
-                <span
-                  class="status-success"
-                  v-if="props.row.status == 'checked in'"
-                  >{{ props.row.status }}</span
-                >
-                <span
-                  class="status-danger"
-                  v-else-if="props.row.status == 'missed'"
-                  >{{ props.row.status }}</span
-                ><span class="status-warning" v-else>{{
-                  props.row.status
-                }}</span>
-              </span>
-            </template></vue-good-table
-          >
-        </div>
         <div class="col-xl-4">
           <p class="label">Parking Slots</p>
           <vue-good-table
@@ -80,8 +55,33 @@
                   >{{ props.row.status }}</span
                 >
                 <span
-                  class="status-danger"
+                  class="status-warning"
                   v-else-if="props.row.status == 'out of order'"
+                  >{{ props.row.status }}</span
+                ><span class="status-danger" v-else>{{
+                  props.row.status
+                }}</span>
+              </span>
+            </template></vue-good-table
+          >
+        </div>
+        <div class="col-xl-8">
+          <p class="label">Registrations</p>
+          <vue-good-table
+            :columns="registrationColumns"
+            :rows="registrationRows"
+            styleClass="vgt-table"
+            class="table-style"
+            ><template #table-row="props">
+              <span v-if="props.column.field == 'status'">
+                <span
+                  class="status-success"
+                  v-if="props.row.status == 'checkin' || props.row.status == 'completed'"
+                  >{{ props.row.status }}</span
+                >
+                <span
+                  class="status-danger"
+                  v-else-if="props.row.status == 'cancelled'"
                   >{{ props.row.status }}</span
                 ><span class="status-warning" v-else>{{
                   props.row.status
@@ -97,12 +97,14 @@
 
 <script>
 import Chart from "@/components/Chart.vue";
+import axios from "axios";
 export default {
   components: {
     Chart,
   },
   data() {
     return {
+      parking_id: 1,
       label: "Dashboard",
       href: "/dashboard",
       search: false,
@@ -120,12 +122,12 @@ export default {
         },
         {
           label: "Slot Name",
-          field: "slotName",
+          field: "slot_name",
           sortable: false,
         },
         {
           label: "Car Id",
-          field: "carId",
+          field: "car_id",
           sortable: false,
         },
         {
@@ -136,12 +138,12 @@ export default {
         },
         {
           label: "Leave Time",
-          field: "leaveTime",
+          field: "leave_time",
           sortable: false,
         },
         {
           label: "Check-In Time",
-          field: "checkInTime",
+          field: "checkin_time",
           sortable: false,
         },
       ],
@@ -153,7 +155,7 @@ export default {
         },
         {
           label: "Slot Name",
-          field: "slotName",
+          field: "name",
           sortable: false,
         },
         {
@@ -163,75 +165,41 @@ export default {
           width: "165px",
         },
       ],
-      registrationRows: [
-        {
-          id: 1,
-          name: "John",
-          slotName: "A1",
-          carId: "sal1234",
-          status: "checked in",
-          leaveTime: "00:00",
-          checkInTime: "00:00",
-        },
-        {
-          id: 2,
-          name: "Jane",
-          slotName: "B24",
-          carId: "sal1234",
-          status: "checked in",
-          leaveTime: "00:00",
-          checkInTime: "00:00",
-        },
-        {
-          id: 3,
-          name: "Mike",
-          slotName: "A31",
-          carId: "sal1234",
-          status: "missed",
-          leaveTime: "00:00",
-          checkInTime: "-",
-        },
-        {
-          id: 4,
-          name: "Jenna",
-          slotName: "C4",
-          carId: "sal1234",
-          status: "pending",
-          leaveTime: "00:00",
-          checkInTime: "00:23",
-        },
-      ],
-      slotRows: [
-        {
-          id: 1,
-          slotName: "A1",
-          name: "John",
-          status: "available",
-          time: "00:00",
-        },
-        {
-          id: 2,
-          slotName: "B24",
-          name: "Jane",
-          status: "available",
-          time: "00:00",
-        },
-        {
-          id: 3,
-          slotName: "A31",
-          name: "Mike",
-          status: "out of order",
-          time: "-",
-        },
-        {
-          id: 4,
-          slotName: "C4",
-          name: "Jenna",
-          status: "reserved",
-          time: "00:23",
-        },
-      ],
+      registrationRows: [],
+      slotRows: [],
     };
+  },
+  mounted() {
+    this.showRegistrations();
+    this.showSlots();
+  },
+  methods: {
+    showSlots() {
+      axios
+        .get(`/parkingslot/parking/${this.parking_id}`)
+        .then((response) => {
+          this.slotRows = response.data.map((item) => ({
+            ...item,
+          }));
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
+    showRegistrations() {
+      axios
+        .get(`/registration/parking/${this.parking_id}`)
+        .then((response) => {
+          this.registrationRows = response.data.registration.map((item) => ({
+            ...item,
+          }));
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
   },
 };
 </script>

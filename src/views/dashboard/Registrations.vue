@@ -40,25 +40,42 @@
           <span v-if="props.column.field == 'status'">
             <span
               class="status-success"
-              v-if="props.row.status == 'checked in'"
+              v-if="
+                props.row.status == 'checkin' || props.row.status == 'completed'
+              "
               >{{ props.row.status }}</span
             >
             <span
               class="status-danger"
-              v-else-if="props.row.status == 'missed'"
+              v-else-if="props.row.status == 'cancelled'"
               >{{ props.row.status }}</span
             ><span class="status-warning" v-else>{{ props.row.status }}</span>
           </span>
           <span v-if="props.column.field == 'button'">
-            <a href="" data-bs-toggle="modal" data-bs-target=".edit-modal">
+            <a
+              href=""
+              data-bs-toggle="modal"
+              data-bs-target=".edit-modal"
+              @click="this.current_registration = props.row"
+            >
               <i class="bi bi-pencil-square table-icon"></i>
               {{ props.row.button }}</a
             >
-            <a href="" data-bs-toggle="modal" data-bs-target=".info-modal">
+            <a
+              href=""
+              data-bs-toggle="modal"
+              data-bs-target=".info-modal"
+              @click="this.current_registration = props.row"
+            >
               <i class="bi bi-info-circle table-icon text-success"></i>
               {{ props.row.button }}</a
             >
-            <a href="" data-bs-toggle="modal" data-bs-target=".delete-modal">
+            <a
+              href=""
+              data-bs-toggle="modal"
+              data-bs-target=".delete-modal"
+              @click="this.current_registration = props.row"
+            >
               <i class="bi bi-x-lg table-icon text-danger"></i>
               {{ props.row.button }}</a
             >
@@ -77,51 +94,67 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">More Infromation</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
           </div>
           <div class="modal-body">
             <div class="container">
               <div class="row">
-                <div class="col-md-6">
-                  <h3>ID:</h3>
-                  <p>{{ current_registration.id }}</p>
+                <div class="col-md-4">
+                  <p>
+                    <strong>ID:</strong>
+                    {{ current_registration.id }}
+                  </p>
                 </div>
-                <div class="col-md-6">
-                  <h3>Created At:</h3>
-                  <p>{{ current_registration.createdAt }}</p>
+                <div class="col-md-4">
+                  <p>
+                    <strong>Day:</strong>
+                    {{ current_registration.day }}
+                  </p>
+                </div>
+                <div class="col-md-4">
+                  <p>
+                    <strong>Created At:</strong>
+                    {{ current_registration.date }}
+                  </p>
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-4">
-                  <h3>User ID:</h3>
-                  <p>{{ current_registration.userId }}</p>
+                  <p>
+                    <strong>User ID:</strong>
+                    {{ current_registration.user_id }}
+                  </p>
                 </div>
                 <div class="col-md-4">
-                  <h3>Car ID:</h3>
-                  <p>{{ current_registration.carId }}</p>
+                  <p>
+                    <strong>Car ID:</strong>
+                    {{ current_registration.car_id }}
+                  </p>
                 </div>
                 <div class="col-md-4">
-                  <h3>Status:</h3>
-                  <p>{{ current_registration.status }}</p>
+                  <p>
+                    <strong>Status:</strong>
+                    {{ current_registration.status }}
+                  </p>
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-4">
-                  <h3>Slot Name:</h3>
-                  <p>{{ current_registration.slotName }}</p>
+                  <p>
+                    <strong>Slot Name:</strong>
+                    {{ current_registration.slot_name }}
+                  </p>
                 </div>
                 <div class="col-md-4">
-                  <h3>Leave Time:</h3>
-                  <p>{{ current_registration.leaveTime }}</p>
+                  <p>
+                    <strong>Leave Time:</strong>
+                    {{ current_registration.leave_time }}
+                  </p>
                 </div>
                 <div class="col-md-4">
-                  <h3>Check In Time:</h3>
-                  <p>{{ current_registration.checkInTime }}</p>
+                  <p>
+                    <strong>Check In Time:</strong>
+                    {{ current_registration.checkin_time }}
+                  </p>
                 </div>
               </div>
             </div>
@@ -131,7 +164,6 @@
               type="button"
               class="button-xs-unfill"
               data-bs-dismiss="modal"
-              @click="infoRegistraction(this)"
             >
               Close
             </button>
@@ -165,14 +197,19 @@
             <form>
               <div class="row form-box justify-content-center">
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-3">
                     <label for="id" class="form-label"
                       >ID: {{ current_registration.id }}</label
                     >
                   </div>
+                  <div class="col-md-3">
+                    <label for="day" class="form-label"
+                      >Day: {{ current_registration.day }}</label
+                    >
+                  </div>
                   <div class="col-md-6">
                     <label for="createdAt" class="form-label"
-                      >Created At: {{ current_registration.createdAt }}</label
+                      >Created At: {{ current_registration.date }}</label
                     >
                   </div>
                 </div>
@@ -191,7 +228,7 @@
                     <label for="slotName" class="form-label">Slot Name</label>
                     <input
                       type="text"
-                      v-model="current_registration.slotName"
+                      v-model="current_registration.slot_name"
                       class="form-control input-lg"
                       id="slotName"
                       required
@@ -203,7 +240,7 @@
                     <label for="leaveTime" class="form-label">Leave Time</label>
                     <input
                       type="text"
-                      v-model="current_registration.leaveTime"
+                      v-model="current_registration.leave_time"
                       class="form-control input-lg"
                       id="leaveTime"
                       required
@@ -215,7 +252,7 @@
                     >
                     <input
                       type="text"
-                      v-model="current_registration.checkInTime"
+                      v-model="current_registration.checkin_time"
                       class="form-control input-lg"
                       id="checkIn"
                       required
@@ -237,7 +274,7 @@
               type="button"
               class="button-xs-fill"
               data-bs-dismiss="modal"
-              @click="updateRegistration(this)"
+              @click="updateRegistration(current_registration.id)"
             >
               Update
             </button>
@@ -278,7 +315,7 @@
             <button
               type="button"
               data-bs-dismiss="modal"
-              @click="deleteRegistration(this)"
+              @click="deleteRegistration(current_registration.id)"
               class="button-xs-danger"
             >
               Delete
@@ -291,29 +328,30 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-  methods: {
-    infoRegistration(index) {
-      console.log("registration info");
-    },
-    updateRegistration(index) {
-      console.log("registration updated");
-    },
-    deleteRegistration(index) {
-      console.log("registration deleted");
-    },
-  },
   data() {
     return {
+      totalRecords: 0,
+      from: 1,
+      to: 15,
+      headers: {
+        // "Authorization": "Bearer " + localStorage.getItem("token"),
+        "Accept-Language": "en",
+        Accept: "application/json",
+      },
       current_registration: {
-        id: 0,
-        userId: 1,
-        carId: 1,
+        parking_id: 1,
+        id: "",
+        user_id: "",
+        car_id: "",
         status: "",
-        slotName: "",
-        leaveTime: 0,
-        checkInTime: "",
-        createdAt: "",
+        slot_name: "",
+        leave_time: "",
+        checkin_time: "",
+        date: "",
+        day: "",
       },
       searchInput: "",
       label: "Registrations",
@@ -326,17 +364,17 @@ export default {
         },
         {
           label: "Slot Name",
-          field: "slotName",
+          field: "slot_name",
           sortable: false,
         },
         {
           label: "User Car ID",
-          field: "userCar",
+          field: "car_id",
           sortable: false,
         },
         {
           label: "Leave Time",
-          field: "leaveTime",
+          field: "leave_time",
           sortable: false,
         },
         {
@@ -347,7 +385,7 @@ export default {
         },
         {
           label: "Created At",
-          field: "createdAt",
+          field: "date",
           sortable: false,
           dateInputFormat: "yyyy-MM-dd",
           dateOutputFormat: "MMM do yyyy",
@@ -358,33 +396,68 @@ export default {
           sortable: false,
         },
       ],
-      rows: [
-        {
-          id: 1,
-          slotName: "A1",
-          userCar: "rex1234",
-          leaveTime: "2:00",
-          status: "pending",
-          createdAt: "2020-12-03",
-        },
-        {
-          id: 2,
-          slotName: "A3",
-          userCar: "rex1234",
-          leaveTime: "7:00",
-          status: "checked in",
-          createdAt: "2019-02-03",
-        },
-        {
-          id: 3,
-          slotName: "A3",
-          userCar: "rex1234",
-          leaveTime: "12:00",
-          status: "missed",
-          createdAt: "2009-12-13",
-        },
-      ],
+      rows: [],
     };
+  },
+  mounted() {
+    this.show();
+  },
+  methods: {
+    makeToast(msg, type) {
+      this.$toast.show(msg, { type: type });
+    },
+    updateRegistration(registrationId) {
+      axios
+        .post(`registration/update/${registrationId}`, {
+          parking_id: this.current_registration.parking_id,
+          id: this.current_registration.id,
+          user_id: this.current_registration.user_id,
+          car_id: this.current_registration.car_id,
+          status: this.current_registration.status,
+          slot_name: this.current_registration.slot_name,
+          leave_time: this.current_registration.leave_time,
+          checkin_time: this.current_registration.checkin_time,
+          date: this.current_registration.date,
+          day: this.current_registration.day,
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.show();
+          this.makeToast("update succesful", "success");
+          console.log("registration updated");
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+          this.makeToast("update failed", "error");
+          console.log("resgistration wasn't updated");
+        });
+    },
+    deleteRegistration(registrationId) {
+      axios
+        .post(`/registration/delete/${registrationId}`)
+        .then((response) => {
+          this.show();
+          this.makeToast("deleted successfully", "success");
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          this.makeToast("delete failed", "error");
+          console.log(errors.data);
+        });
+    },
+    show() {
+      axios
+        .get(`/registration/parking/${this.current_registration.parking_id}`)
+        .then((response) => {
+          this.rows = response.data.registration.map((item) => ({
+            ...item,
+          }));
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
   },
 };
 </script>

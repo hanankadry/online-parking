@@ -8,7 +8,18 @@ import Breadcrumb from "@/components/Breadcrumb.vue"
 import NavBar from "@/components/NavBar.vue"
 import NotificationContainer from "@/components/NotificationContainer.vue"
 import VueGoodTablePlugin from 'vue-good-table-next'
+import axios from 'axios'
+import Toaster from "@meforma/vue-toaster"
 
+axios.defaults.baseURL = "http://localhost:8000/api/"
+axios.defaults.withCredentials = false;
+axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*"
+axios.defaults.headers.common["Accept"] = "application/json"
+axios.defaults.headers = {
+  'Cache-Control': 'no-cache',
+  'Pragma': 'no-cache',
+  'Expires': '0',
+};
 
 const firebaseConfig = {
   apiKey: "AIzaSyBB8YSbamKhUF4D5cMhPlbrfZyJ3gkYdpA",
@@ -28,7 +39,10 @@ import "vue-good-table-next/dist/vue-good-table-next.css"
 const app = createApp(App)
 
 initializeApp(firebaseConfig);
-app.use(router).use(VueApexCharts).use(VueGoodTablePlugin).mount('#app');
+app.use(router).use(VueApexCharts).use(VueGoodTablePlugin).use(Toaster, {
+  position: "top-right",
+  max: 5
+}).mount('#app');
 
 app.component("breadcrumb", Breadcrumb)
 app.component("background", Background)

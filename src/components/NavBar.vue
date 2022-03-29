@@ -11,8 +11,7 @@
             <i class="bi bi-list nav-icon" />
           </button>
           <div class="input-icons mt-1 col-auto">
-            <i class="bi bi-search icon" />
-            <input type="text" class="m-1 input-md" placeholder="Search" />
+            <p class="name">Go N Park</p>
           </div>
         </div>
       </span>
@@ -245,6 +244,14 @@ export default {
 </script>
 
 <style scoped>
+.name {
+  font-size: 18pt;
+  margin-bottom: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #374258;
+}
+
 a .nav-link {
   text-decoration: none;
   color: #374258;
