@@ -337,9 +337,9 @@ export default {
       from: 1,
       to: 15,
       headers: {
-        // "Authorization": "Bearer " + localStorage.getItem("token"),
+        "Authorization": "Bearer " + localStorage.getItem("token"),
         "Accept-Language": "en",
-        Accept: "application/json",
+        "Accept": "application/json",
       },
       current_registration: {
         parking_id: 1,
@@ -449,6 +449,7 @@ export default {
       axios
         .get(`/registration/parking/${this.current_registration.parking_id}`)
         .then((response) => {
+          this.totalRecords = response.data.registration.length;
           this.rows = response.data.registration.map((item) => ({
             ...item,
           }));

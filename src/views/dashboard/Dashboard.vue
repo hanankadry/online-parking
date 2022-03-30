@@ -4,34 +4,12 @@
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-4">
-          <div class="card-counter">
-            <div class="icon-bg">
-              <i class="bi bi-card-checklist lg-icon"></i>
-            </div>
-            <p class="count-numbers">12</p>
-            <p class="count-name">New Registrations</p>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="card-counter">
-            <div class="icon-bg">
-              <i class="bi bi-check-lg lg-icon"></i>
-            </div>
-            <p class="count-numbers">4</p>
-            <p class="count-name">Available Slots</p>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="card-counter">
-            <div class="icon-bg">
-              <i class="bi bi-x lg-icon"></i>
-            </div>
-            <p class="count-numbers">0</p>
-            <p class="count-name">Out of Order Slots</p>
-          </div>
+        <div class="col-md-4" v-for="card in cards" :key="card.index">
+          <statistics-card
+            :cardIcon="card.icon"
+            :cardLabel="card.label"
+            :cardValue="card.value"
+          />
         </div>
       </div>
 
@@ -76,7 +54,10 @@
               <span v-if="props.column.field == 'status'">
                 <span
                   class="status-success"
-                  v-if="props.row.status == 'checkin' || props.row.status == 'completed'"
+                  v-if="
+                    props.row.status == 'checkin' ||
+                    props.row.status == 'completed'
+                  "
                   >{{ props.row.status }}</span
                 >
                 <span
@@ -98,12 +79,35 @@
 <script>
 import Chart from "@/components/Chart.vue";
 import axios from "axios";
+import StatisticsCard from "@/components/StatisticsCard.vue";
+
 export default {
   components: {
-    Chart,
+    chart: Chart,
+    "statistics-card": StatisticsCard,
   },
   data() {
     return {
+      cards: [
+        {
+          id: 1,
+          label: "New Registrations",
+          value: "0",
+          icon: "bi bi-card-checklist lg-icon",
+        },
+        {
+          id: 2,
+          label: "Available Slots",
+          value: "0",
+          icon: "bi bi-check-lg lg-icon",
+        },
+        {
+          id: 3,
+          label: "Out of Order Slots",
+          value: "0",
+          icon: "bi bi-x lg-icon",
+        },
+      ],
       parking_id: 1,
       label: "Dashboard",
       href: "/dashboard",
@@ -167,6 +171,7 @@ export default {
       ],
       registrationRows: [],
       slotRows: [],
+      length: null,
     };
   },
   mounted() {
@@ -194,6 +199,7 @@ export default {
           this.registrationRows = response.data.registration.map((item) => ({
             ...item,
           }));
+          this.length = response.data.registration.length;
           console.log(response.data);
         })
         .catch((errors) => {
@@ -209,48 +215,6 @@ export default {
   padding: 50px;
 }
 
-.card-counter {
-  margin: 10px;
-  padding: 20px 10px;
-  background-color: #e5e7eb;
-  height: 100px;
-  border-radius: 5px;
-  box-shadow: 5px 10px #374258;
-}
-
-.icon-bg {
-  background-color: #f74464;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  position: absolute;
-}
-
-.lg-icon {
-  left: 8.5px;
-  font-size: 5em;
-  color: white;
-  font-size: 2rem;
-  position: relative;
-}
-
-.count-numbers {
-  font-size: 32px;
-  text-align: end;
-  color: #374258;
-  margin: 0;
-}
-
-.count-name {
-  text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-align: end;
-  display: block;
-  font-size: 16pt;
-  color: #374258;
-}
-
 .label {
   color: #f74464;
   font-size: 16pt;
@@ -259,24 +223,9 @@ export default {
   margin-left: 20px;
 }
 
-@media screen and (max-width: 1140px) {
-  .count-name {
-    font-size: 14pt;
-  }
-}
 @media screen and (max-width: 990px) {
-  .count-name {
-    font-size: 10pt;
-    margin-top: 5px;
-  }
   .slots {
     width: 100%;
-  }
-}
-@media screen and (max-width: 767.2px) {
-  .count-name {
-    font-size: 16pt;
-    margin-top: 0px;
   }
 }
 </style>

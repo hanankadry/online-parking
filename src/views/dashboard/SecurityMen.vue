@@ -54,19 +54,39 @@
             ><span class="status-danger" v-else>{{ props.row.status }}</span>
           </span>
           <span v-if="props.column.field == 'button'">
-            <a href="" data-bs-toggle="modal" data-bs-target=".edit-modal">
+            <a
+              href=""
+              data-bs-toggle="modal"
+              data-bs-target=".edit-modal"
+              @click="this.current_user = props.row"
+            >
               <i class="bi bi-pencil-square table-icon"></i>
               {{ props.row.button }}</a
             >
-            <a href="" data-bs-toggle="modal" data-bs-target=".info-modal">
+            <a
+              href=""
+              data-bs-toggle="modal"
+              data-bs-target=".info-modal"
+              @click="this.current_user = props.row"
+            >
               <i class="bi bi-info-circle table-icon text-success"></i>
               {{ props.row.button }}</a
             >
-            <a href="" data-bs-toggle="modal" data-bs-target=".activate-modal">
+            <a
+              href=""
+              data-bs-toggle="modal"
+              data-bs-target=".activate-modal"
+              @click="this.current_user = props.row"
+            >
               <i class="bi bi-clock table-icon text-warning"></i>
               {{ props.row.button }}</a
             >
-            <a href="" data-bs-toggle="modal" data-bs-target=".delete-modal">
+            <a
+              href=""
+              data-bs-toggle="modal"
+              data-bs-target=".delete-modal"
+              @click="this.current_user = props.row"
+            >
               <i class="bi bi-x-lg table-icon text-danger"></i>
               {{ props.row.button }}</a
             >
@@ -130,7 +150,7 @@
                     >
                     <input
                       type="number"
-                      v-model="current_user.nationalID"
+                      v-model="current_user.security_id"
                       class="form-control input-lg"
                       id="nationalId"
                       required
@@ -173,7 +193,7 @@
                     >
                     <input
                       type="date"
-                      v-model="current_user.dateOfBirth"
+                      v-model="current_user.dob"
                       class="form-control input-lg date"
                       id="dateOfBirth"
                       required
@@ -184,7 +204,7 @@
                     <label for="workHours" class="form-label">Work Hours</label>
                     <input
                       type="text"
-                      v-model="current_user.workHours"
+                      v-model="current_user.work_hours"
                       class="form-control input-lg"
                       id="workHours"
                       required
@@ -274,39 +294,63 @@
           <div class="modal-body">
             <div class="container">
               <div class="row">
-                <div class="col-md-6">
-                  <h3>Name:</h3>
-                  <p>{{ current_user.name }}</p>
+                <div class="col-md-4">
+                  <p>
+                    <strong>Name:</strong>
+                    {{ current_user.name }}
+                  </p>
                 </div>
-                <div class="col-md-6">
-                  <h3>Email:</h3>
-                  <p>{{ current_user.email }}</p>
+                <div class="col-md-4">
+                  <p>
+                    <strong>Email:</strong>
+                    {{ current_user.email }}
+                  </p>
+                </div>
+                <div class="col-md-4">
+                  <p>
+                    <strong>National ID:</strong>
+                    {{ current_user.security_id }}
+                  </p>
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-6">
-                  <h3>National ID:</h3>
-                  <p>{{ current_user.nationalID }}</p>
+                <div class="col-md-4">
+                  <p>
+                    <strong>Gender:</strong>
+                    {{ current_user.gender }}
+                  </p>
                 </div>
                 <div class="col-md-6">
-                  <h3>Gender:</h3>
-                  <p>{{ current_user.gender }}</p>
+                  <p>
+                    <strong>Address:</strong>
+                    {{ current_user.address }}
+                  </p>
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-12">
-                  <h3>Address:</h3>
-                  <p>{{ current_user.address }}</p>
+                <div class="col-md-4">
+                  <p>
+                    <strong>Status:</strong>
+                    {{ current_user.status }}
+                  </p>
+                </div>
+                <div class="col-md-4">
+                  <p>
+                    <strong>Work Hours:</strong>
+                    {{ current_user.work_hours }}
+                  </p>
                 </div>
               </div>
               <div class="row">
                 <div
-                  class="col-md-6"
-                  v-for="id in current_user.phoneNumbers"
+                  class="col-md-4"
+                  v-for="(phone, id) in current_user.phoneNumbers"
                   :key="id"
                 >
-                  <h3>Phone:</h3>
-                  <p>{{ current_user.phoneNumbers.phone }}</p>
+                  <p>
+                    <strong>Phone:</strong>
+                    {{ phone }}
+                  </p>
                 </div>
               </div>
             </div>
@@ -627,21 +671,35 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
+  mounted() {
+    this.show();
+  },
   methods: {
+    show() {
+      axios
+        .get(`/security/${this.parking_id}`)
+        .then((response) => {
+          this.rows = response.data.map((item) => ({
+            ...item,
+          }));
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
     addSecurity() {
       console.log(this.new_user);
     },
-    updateSecurity(index) {
-      this.current_user = index;
+    updateSecurity(id) {
       console.log("updated");
     },
-    infoSecurity(index) {
-      this.current_user = index;
+    infoSecurity(id) {
       console.log("security info");
     },
-    activateSecurity(index) {
-      this.current_user = index;
+    activateSecurity(id) {
       if (this.status == true) {
         this.status = false;
         console.log("disactivated");
@@ -650,8 +708,7 @@ export default {
         console.log("activated");
       }
     },
-    deleteSecurity(index) {
-      this.current_user = index;
+    deleteSecurity(id) {
       console.log(
         "Security Man " +
           `${this.current_user.name}` +
@@ -667,31 +724,35 @@ export default {
       array.splice(index, 1);
       console.log(array);
     },
-    makeToast() {
-      Array.from(document.querySelectorAll(".toast")).forEach(
-        (toastNode) => new Toast(toastNode)
-      );
-    },
   },
   data() {
     return {
+      parking_id: 1,
       current_user: {
+        id: "",
         name: "",
-        nationalID: 0,
+        security_id: "",
         email: "",
         address: "",
-        gender: ["male", "female"],
+        gender: "",
         phoneNumbers: [{ phone: "" }],
-        dateOfBirth: "",
+        dob: "",
+        date: "",
+        work_hours: "",
+        status: "",
       },
       new_user: {
+        id: "",
         name: "",
-        nationalID: 0,
+        security_id: "",
         email: "",
         address: "",
-        gender: ["male", "female"],
+        gender: "",
         phoneNumbers: [{ phone: "" }],
-        dateOfBirth: "",
+        dob: "",
+        date: "",
+        work_hours: "",
+        status: "",
       },
       phone: false,
       status: true,
@@ -711,7 +772,7 @@ export default {
         },
         {
           label: "Work Hours",
-          field: "hours",
+          field: "work_hours",
           sortable: false,
         },
         {
@@ -734,29 +795,7 @@ export default {
           width: "200px",
         },
       ],
-      rows: [
-        {
-          id: 1,
-          name: "John",
-          hours: "7:00 - 2:00",
-          date: "2009-12-03",
-          status: "active",
-        },
-        {
-          id: 2,
-          name: "Jane",
-          hours: "2:00 - 12:00",
-          date: "2009-12-03",
-          status: "active",
-        },
-        {
-          id: 3,
-          name: "Mike",
-          hours: "12:00 - 7:00",
-          date: "2009-12-03",
-          status: "inactive",
-        },
-      ],
+      rows: [],
     };
   },
 };
