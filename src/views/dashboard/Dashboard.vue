@@ -90,19 +90,16 @@ export default {
     return {
       cards: [
         {
-          id: 1,
           label: "New Registrations",
           value: "0",
           icon: "bi bi-card-checklist lg-icon",
         },
         {
-          id: 2,
           label: "Available Slots",
           value: "0",
           icon: "bi bi-check-lg lg-icon",
         },
         {
-          id: 3,
           label: "Out of Order Slots",
           value: "0",
           icon: "bi bi-x lg-icon",

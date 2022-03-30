@@ -41,7 +41,7 @@
 
   <section class="main-sec">
     <div class="container-fluid">
-      <landing-page style="position: relative; right: -0.75rem;" />
+      <landing-page style="position: relative; right: -0.75rem" />
     </div>
   </section>
   <!-- End Main Section -->
@@ -83,19 +83,13 @@
   </section>
   <!-- End About Section -->
   <!-- Start Footer -->
-  <footer class="footer mt-0">
+  <footer class="footer my-0">
     <div class="container">
       <div class="row justify-content-between">
-        <div
-          class="
-            col-lg-6 col-md-8 col-sm-12 col-12
-            text-start
-            align-self-center
-          "
-        >
+        <div class="col-sm-6 text-start align-self-center">
           <p class="copyright">&copy;2022 Go'N'Park, All Rights Reserved</p>
         </div>
-        <div class="col-lg-6 col-md-4 col-sm-12 col-12 text-end text-left">
+        <div class="col-sm-6 text-end text-left">
           <a href="facebook.com">
             <i class="bi bi-facebook footer-icon mx-2"
           /></a>
@@ -187,7 +181,6 @@ body {
 .footer {
   background-color: #374258;
   color: white;
-  height: 4rem;
   padding-top: 17px;
 }
 
@@ -220,6 +213,11 @@ body {
   }
   .title {
     font-size: 30px;
+  }
+}
+@media (max-width: 768px) {
+  .footer .copyright {
+    font-size: calc(2pt + 3.3vw)
   }
 }
 </style>
