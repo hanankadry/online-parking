@@ -360,7 +360,6 @@
               type="button"
               class="button-xs-unfill"
               data-bs-dismiss="modal"
-              @click="infoSecurity"
             >
               Close
             </button>
@@ -681,7 +680,7 @@ export default {
       axios
         .get(`/security/${this.parking_id}`)
         .then((response) => {
-          this.rows = response.data.map((item) => ({
+          this.rows = response.data.parking.map((item) => ({
             ...item,
           }));
           console.log(response.data);
@@ -695,9 +694,6 @@ export default {
     },
     updateSecurity(id) {
       console.log("updated");
-    },
-    infoSecurity(id) {
-      console.log("security info");
     },
     activateSecurity(id) {
       if (this.status == true) {
