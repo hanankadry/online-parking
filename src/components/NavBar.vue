@@ -22,7 +22,7 @@
               <router-link
                 class="nav-link active"
                 aria-current="page"
-                to="/dashboard"
+                to="/"
                 ><i class="bi bi-house-door nav-icon"></i>
               </router-link>
             </li>
@@ -181,9 +181,13 @@
 </template>
 
 <script>
+import { getAuth, signOut } from "firebase/auth";
+import { getMessaging, getToken } from "firebase/messaging";
+
 export default {
   data() {
     return {
+      myVapidKey: this.vapidKey,
       showMenu: false,
       notification: false,
       profile: false,
@@ -230,6 +234,28 @@ export default {
     };
   },
   methods: {
+    updateNotifications() {
+      const messaging = getMessaging();
+      getToken(messaging, {
+        vapidKey: this.myVapidKey,
+      })
+        .then((currentToken) => {
+          if (currentToken) {
+            // Send the token to your server and update the UI if necessary
+            // ...
+          } else {
+            // Show permission request UI
+            console.log(
+              "No registration token available. Request permission to generate one."
+            );
+            // ...
+          }
+        })
+        .catch((err) => {
+          console.log("An error occurred while retrieving token. ", err);
+          // ...
+        });
+    },
     showOffcanvasMenu() {
       this.showMenu ? (this.showMenu = false) : (this.showMenu = true);
     },
@@ -237,7 +263,14 @@ export default {
       this.$router.push("/settings");
     },
     signOut() {
-      this.$router.push("/");
+      const auth = getAuth();
+      signOut(auth)
+        .then(() => {
+          this.$router.push("/login");
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
     },
   },
 };

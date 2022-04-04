@@ -241,7 +241,7 @@
                 id="slotNaming"
                 required
               >
-                <option selected>Choose</option>
+                <option selected value="default">Choose</option>
                 <option value="alpha">Alphanumerical</option>
                 <option value="numerical">Numerical</option>
               </select>
@@ -280,7 +280,9 @@
           <button
             class="button-xl-fill"
             type="submit"
-            @click.prevent="createAccount(numOfAlpha, numPerAlpha)"
+            @click.prevent="
+              createAccount(numOfAlpha, numPerAlpha, parkingSpace.capacity)
+            "
           >
             Create Account
           </button>
@@ -291,82 +293,102 @@
 </template>
 
 <script>
-import { ref } from "@vue/reactivity";
-import router from "@/router";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
 export default {
-  setup() {
-    const parkingSpace = ref({
-      location: "",
-      category: ["mall", "club", "public"],
-      description: "",
-      levels: 0,
-      fees: false,
-      fee: 0,
-      capacity: 0,
-      name: "",
-      slotNaming: ["alpha", "numerical"],
-      slotLevel: 0,
-    });
-    const user = ref({
-      name: "",
-      nationalID: 0,
-      email: "",
-      address: "",
-      password: "",
-      confirmPassword: "",
-      gender: ["male", "female"],
-      phoneNumbers: [{ phone: "" }],
-      dateOfBirth: "",
-    });
-    const numOfAlpha = ref(0);
-    const numPerAlpha = ref(0);
-    var slots = [];
-    const Alphabets = Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-
-    const goBack = () => {
-      router.push("/login");
+  data() {
+    return {
+      parkingSpace: {
+        location: "",
+        category: "",
+        description: "",
+        levels: "",
+        fees: false,
+        fee: "",
+        capacity: "",
+        name: "",
+        slotNaming: ["default", "alpha", "numerical"],
+        slotLevel: "",
+      },
+      user: {
+        name: "",
+        nationalID: "",
+        email: "",
+        address: "",
+        password: "",
+        confirmPassword: "",
+        gender: "",
+        phoneNumbers: "",
+        dateOfBirth: "",
+      },
+      numOfAlpha: 0,
+      numPerAlpha: 0,
+      slots: [],
+      Alphabets: Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
     };
-    const createAccount = (val1, val2) => {
-      getSlots(val1, val2);
-      console.log(user.value, parkingSpace.value);
-      router.push("/login");
-    };
-
-    const addPhone = (value, array) => {
+  },
+  beforeMount() {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.$router.replace("/dashboard");
+      }
+    });
+  },
+  methods: {
+    goBack() {
+      this.$router.push("/login");
+    },
+    createAccount(endValue, numValue, capacity) {
+      console.log(capacity);
+      console.log(this.slots);
+      this.getSlots(endValue, numValue, capacity);
+      this.register();
+    },
+    register() {
+      const auth = getAuth();
+      createUserWithEmailAndPassword(auth, this.user.email, this.user.password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          this.$router.push("/login");
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    },
+    getSlots(endValue, numValue, capacity) {
+      this.slots = [];
+      if (this.parkingSpace.slotNaming == "alpha") {
+        const letters = this.Alphabets.slice(0, endValue);
+        const numOfSlots = [...Array(numValue - 1 + 1).keys()].map(
+          (x) => x + 1
+        );
+        for (let i = 0; i < letters.length; i++) {
+          for (let j = 0; j < numOfSlots.length; j++) {
+            const slotName = letters[i] + numOfSlots[j];
+            this.slots.push(slotName);
+          }
+        }
+        console.log(this.slots);
+        return this.slots;
+      } else if (this.parkingSpace.slotNaming == "numerical") {
+        for (let i = 1; i <= parseInt(capacity); i++) {
+          this.slots.push(i);
+        }
+        return this.slots;
+      }
+    },
+    addPhone(value, array) {
       array.push({ value: "" });
       console.log(array);
-    };
-
-    const removePhone = (index, array) => {
+    },
+    removePhone(index, array) {
       array.splice(index, 1);
       console.log(array);
-    };
-
-    const getSlots = (endValue, numValue) => {
-      slots = [];
-      const letters = Alphabets.slice(0, endValue);
-      const numOfSlots = [...Array(numValue - 1 + 1).keys()].map((x) => x + 1);
-
-      for (let i = 0; i < letters.length; i++) {
-        for (let j = 0; j < numOfSlots.length; j++) {
-          const slotName = letters[i] + numOfSlots[j];
-          slots.push(slotName);
-        }
-      }
-      return slots;
-    };
-
-    return {
-      user,
-      parkingSpace,
-      numOfAlpha,
-      numPerAlpha,
-      addPhone,
-      removePhone,
-      goBack,
-      getSlots,
-      createAccount,
-    };
+    },
   },
 };
 </script>

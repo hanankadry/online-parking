@@ -212,38 +212,16 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div
-                    class="col-md-6"
-                    v-for="(input, index) in current_user.phoneNumbers"
-                    :key="`phoneInput-${index}`"
-                  >
+                  <div class="col-md-6">
                     <i class="bi bi-telephone sm-icon" />
                     <label for="phone" class="form-label">Phone</label>
-                    <div class="input-group mb-3">
-                      <input
-                        type="text"
-                        v-model="input.phone"
-                        class="form-control input-lg"
-                        id="phone"
-                        required
-                      />
-                      <button
-                        class="addon"
-                        type="button"
-                        v-show="current_user.phoneNumbers.length > 1"
-                        @click="removePhone(index, current_user.phoneNumbers)"
-                      >
-                        -
-                      </button>
-                      <button
-                        class="addon"
-                        type="button"
-                        v-show="current_user.phoneNumbers.length < 2"
-                        @click="addPhone(input, current_user.phoneNumbers)"
-                      >
-                        +
-                      </button>
-                    </div>
+                    <input
+                      type="text"
+                      v-model="current_user.phone"
+                      class="form-control input-lg"
+                      id="phone"
+                      required
+                    />
                   </div>
                 </div>
               </div>
@@ -261,7 +239,7 @@
               type="button"
               class="button-xs-fill"
               data-bs-dismiss="modal"
-              @click="updateSecurity(this)"
+              @click="updateSecurity(current_user.id)"
             >
               Update
             </button>
@@ -284,12 +262,6 @@
             <h5 class="modal-title" id="staticBackdropLabel">
               More Infromation
             </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
           </div>
           <div class="modal-body">
             <div class="container">
@@ -342,14 +314,10 @@
                 </div>
               </div>
               <div class="row">
-                <div
-                  class="col-md-4"
-                  v-for="(phone, id) in current_user.phoneNumbers"
-                  :key="id"
-                >
+                <div class="col-md-4">
                   <p>
                     <strong>Phone:</strong>
-                    {{ phone }}
+                    {{ current_user.phone }}
                   </p>
                 </div>
               </div>
@@ -376,7 +344,7 @@
       aria-labelledby="staticBackdropLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog" v-if="status == true">
+      <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="staticBackdropLabel">
@@ -389,8 +357,11 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body" v-if="status == true">
             Are you sure you want to disactivate this {{ current_user.name }}?
+          </div>
+          <div class="modal-body" v-else>
+            Are you sure you want to activate this {{ current_user.name }}?
           </div>
           <div class="modal-footer">
             <button
@@ -404,43 +375,18 @@
               type="button"
               class="button-xs-danger"
               style="width: 6rem"
+              v-if="status == true"
               data-bs-dismiss="modal"
-              @click="activateSecurity(this)"
+              @click="activateSecurity(current_user.id)"
             >
               Disactivate
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="modal-dialog" v-else>
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="staticBackdropLabel">
-              Activate Security Man
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            Are you sure you want to activate this {{ current_user.name }}?
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="button-xs-unfill"
-              data-bs-dismiss="modal"
-            >
-              Cancel
             </button>
             <button
               type="button"
               class="button-xs-success"
+              v-else
               data-bs-dismiss="modal"
-              @click="activateSecurity(this)"
+              @click="activateSecurity(current_user.id)"
             >
               Activate
             </button>
@@ -484,7 +430,7 @@
             <button
               type="button"
               data-bs-dismiss="modal"
-              @click="deleteSecurity(this)"
+              @click="deleteSecurity(current_user.id)"
               class="button-xs-danger"
             >
               Delete
@@ -547,7 +493,7 @@
                     >
                     <input
                       type="number"
-                      v-model="new_user.nationalID"
+                      v-model="new_user.security_id"
                       class="form-control input-lg"
                       id="nationalId"
                       required
@@ -590,7 +536,7 @@
                     >
                     <input
                       type="date"
-                      v-model="new_user.dateOfBirth"
+                      v-model="new_user.dob"
                       class="form-control input-lg date"
                       id="dateOfBirth"
                       required
@@ -601,7 +547,7 @@
                     <label for="workHours" class="form-label">Work Hours</label>
                     <input
                       type="text"
-                      v-model="new_user.workHours"
+                      v-model="new_user.work_hours"
                       class="form-control input-lg"
                       id="workHours"
                       required
@@ -609,38 +555,16 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div
-                    class="col-md-6"
-                    v-for="(input, index) in new_user.phoneNumbers"
-                    :key="`phoneInput-${index}`"
-                  >
+                  <div class="col-md-6">
                     <i class="bi bi-telephone sm-icon" />
                     <label for="phone" class="form-label">Phone</label>
-                    <div class="input-group mb-3">
-                      <input
-                        type="text"
-                        v-model="input.phone"
-                        class="form-control input-lg"
-                        id="phone"
-                        required
-                      />
-                      <button
-                        class="addon"
-                        type="button"
-                        v-show="new_user.phoneNumbers.length > 1"
-                        @click="removePhone(index, new_user.phoneNumbers)"
-                      >
-                        -
-                      </button>
-                      <button
-                        class="addon"
-                        type="button"
-                        v-show="new_user.phoneNumbers.length < 2"
-                        @click="addPhone(input, new_user.phoneNumbers)"
-                      >
-                        +
-                      </button>
-                    </div>
+                    <input
+                      type="text"
+                      v-model="new_user.phone"
+                      class="form-control input-lg"
+                      id="phone"
+                      required
+                    />
                   </div>
                 </div>
               </div>
@@ -693,32 +617,57 @@ export default {
       console.log(this.new_user);
     },
     updateSecurity(id) {
+      axios
+        .post(`/security/update/${id}`, {
+          id: this.current_user.security_id,
+          name: this.current_user.name,
+          email: this.current_user.email,
+          address: this.current_user.address,
+          gender: this.current_user.gender,
+          dob: this.current_user.dob,
+          phone: this.current_user.phone,
+          status: this.current_user.status,
+          work_hours: this.current_user.work_hours,
+          date: this.current_user.date,
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.show();
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
       console.log("updated");
     },
     activateSecurity(id) {
-      if (this.status == true) {
-        this.status = false;
-        console.log("disactivated");
-      } else {
-        this.status = true;
-        console.log("activated");
-      }
+      axios
+        .post(`/security/${id}`, {
+          status: this.current_user.status,
+        })
+        .then((response) => {
+          if (this.status == true) {
+            this.status = false;
+            console.log("disactivated");
+          } else {
+            this.status = true;
+            console.log("activated");
+          }
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
     },
     deleteSecurity(id) {
-      console.log(
-        "Security Man " +
-          `${this.current_user.name}` +
-          " has been deleted successfully"
-      );
-    },
-    addPhone(value, array) {
-      array.push({ value: "" });
-      console.log(array);
-    },
-
-    removePhone(index, array) {
-      array.splice(index, 1);
-      console.log(array);
+      axios
+        .delete(`/security/delete/${id}`)
+        .then((response) => {
+          console.log("Security Man has been deleted successfully");
+          this.show();
+        })
+        .catch((errors) => {
+          console.log(errors);
+        });
     },
   },
   data() {
@@ -731,7 +680,7 @@ export default {
         email: "",
         address: "",
         gender: "",
-        phoneNumbers: [{ phone: "" }],
+        phone: "",
         dob: "",
         date: "",
         work_hours: "",
@@ -744,13 +693,12 @@ export default {
         email: "",
         address: "",
         gender: "",
-        phoneNumbers: [{ phone: "" }],
+        phone: "",
         dob: "",
         date: "",
         work_hours: "",
         status: "",
       },
-      phone: false,
       status: true,
       searchInput: "",
       label: "Security Men",

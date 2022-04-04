@@ -11,43 +11,12 @@
             <i class="bi bi-envelope icon" />
             <input
               class="form-control input-lg"
+              v-model="user.email"
               type="email"
               placeholder="Enter Email"
               required
             />
           </div>
-          <!-- <div class="input-group" v-if="!showPassword">
-            <div class="input-icons">
-              <i class="bi bi-lock icon" />
-              <input
-                type="password"
-                v-model="user.password"
-                class="form-control input-lg"
-                placeholder="Enter Password"
-                id="password"
-                required
-              />
-              <button class="addon" type="button" @click.prevent="toggleShow">
-                <i class="bi bi-eye-fill icon" />
-              </button>
-            </div>
-          </div>
-          <div class="input-group" v-else>
-            <div class="input-icons">
-              <i class="bi bi-lock" />
-              <input
-                type="password"
-                v-model="user.password"
-                class="form-control input-lg"
-                placeholder="Enter Password"
-                id="password"
-                required
-              />
-              <button class="addon" type="button" @click.prevent="toggleShow">
-                <i class="bi bi-eye-slash-fill" />
-              </button>
-            </div>
-          </div> -->
           <div class="input-icons">
             <i class="bi bi-lock icon" />
             <input
@@ -77,7 +46,11 @@
           </div>
 
           <div class="btn-group-vertical mt-5">
-            <button type="submit" class="button-lg-fill" @click="signIn">
+            <button
+              type="submit"
+              class="button-lg-fill"
+              @click.prevent="signIn"
+            >
               Sign In
             </button>
             <button type="button" class="button-lg-unfill" @click="signUp">
@@ -91,30 +64,49 @@
 </template>
 
 <script>
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
+
 export default {
   data() {
     return {
-      showPassword: false,
       user: {
         email: "",
         password: "",
       },
     };
   },
+  beforeMount() {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.$router.replace("/dashboard");
+      }
+    });
+  },
   methods: {
-    signIn() {
-      this.$router.push("/dashboard");
+    async signIn() {
+      const auth = getAuth();
+      await signInWithEmailAndPassword(
+        auth,
+        this.user.email,
+        this.user.password
+      )
+        .then((userCredential) => {
+          const user = userCredential.user;
+          this.$router.push("/dashboard");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          alert(errorMessage);
+        });
     },
     signUp() {
-      this.$router.push("/signUp");
-    },
-    toggleShow() {
-      this.showPassword = !this.showPassword;
-    },
-  },
-  computed: {
-    buttonLabel() {
-      return this.showPassword ? "Hide" : "Show";
+      this.$router.push("/signup");
     },
   },
 };

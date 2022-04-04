@@ -26,8 +26,15 @@
               <a class="nav-link mt-2">Contact</a>
             </li>
             <li class="nav-item">
-              <router-link to="/login" class="nav-link">
+              <router-link
+                to="/login"
+                class="nav-link"
+                v-if="loggedIn == false"
+              >
                 <button class="button-sm-fill">Login</button>
+              </router-link>
+              <router-link to="/dashboard" class="nav-link" v-else>
+                <button class="button-sm-fill">Dashboard</button>
               </router-link>
             </li>
           </ul>
@@ -87,7 +94,7 @@
     <div class="container">
       <div class="row justify-content-between">
         <div class="col-sm-6 text-start align-self-center">
-          <p class="copyright">&copy;2022 Go'N'Park, All Rights Reserved</p>
+          <p class="copyright">&copy;2022 Go N Park, All Rights Reserved</p>
         </div>
         <div class="col-sm-6 text-end text-left">
           <a href="facebook.com">
@@ -107,8 +114,24 @@
 </template>
 
 <script>
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import LandingPage from "@/components/LandingPage.vue";
 export default {
+  data() {
+    return {
+      loggedIn: true,
+    };
+  },
+  beforeMount() {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.loggedIn = true;
+      } else {
+        this.loggedIn = false;
+      }
+    });
+  },
   components: {
     "landing-page": LandingPage,
   },
@@ -217,7 +240,7 @@ body {
 }
 @media (max-width: 768px) {
   .footer .copyright {
-    font-size: calc(2pt + 3.3vw)
+    font-size: calc(2pt + 3.3vw);
   }
 }
 </style>

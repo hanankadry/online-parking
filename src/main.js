@@ -4,6 +4,7 @@ import router from './router'
 import Background from '@/components/Background'
 import VueApexCharts from "vue3-apexcharts"
 import { initializeApp } from "firebase/app"
+import { getMessaging } from 'firebase/messaging/sw'
 import Breadcrumb from "@/components/Breadcrumb.vue"
 import NavBar from "@/components/NavBar.vue"
 import NotificationContainer from "@/components/NotificationContainer.vue"
@@ -38,11 +39,16 @@ import "vue-good-table-next/dist/vue-good-table-next.css"
 
 const app = createApp(App)
 
-initializeApp(firebaseConfig);
+
+const firebaseApp = initializeApp(firebaseConfig);
+getMessaging(firebaseApp);
+
 app.use(router).use(VueApexCharts).use(VueGoodTablePlugin).use(Toaster, {
   position: "top-right",
   max: 5
 }).mount('#app');
+
+app.config.globalProperties.$vapidKey = "BGF_T3MOOtpyY1hB7Vo9ipZb0nQb9D8QxsTwDMoM8ZK5lkYCmsaVPQQWDjz1fdzyjeqV1DaTg_t1pqLPcwhT4xI";
 
 app.component("breadcrumb", Breadcrumb)
 app.component("background", Background)
