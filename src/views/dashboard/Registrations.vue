@@ -437,7 +437,7 @@ export default {
         .post(`/registration/delete/${registrationId}`)
         .then((response) => {
           this.show();
-          this.makeToast("deleted successfully", "success");
+          this.makeToast("delete successful", "success");
           console.log(response.data);
         })
         .catch((errors) => {

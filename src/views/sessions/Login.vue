@@ -83,7 +83,7 @@ export default {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        this.$router.replace("/dashboard");
+        this.$router.replace({path: "/dashboard", params: {user_email: this.user.email}});
       }
     });
   },

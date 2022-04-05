@@ -86,6 +86,7 @@ export default {
     chart: Chart,
     "statistics-card": StatisticsCard,
   },
+  props: ["user_email"],
   data() {
     return {
       cards: [
@@ -169,13 +170,43 @@ export default {
       registrationRows: [],
       slotRows: [],
       length: null,
+      user: {
+        email: this.user_email,
+        id: null,
+      },
     };
   },
+  // beforeMount() {
+  //   this.getID();
+  //   this.getParkingID();
+  // },
   mounted() {
     this.showRegistrations();
     this.showSlots();
   },
   methods: {
+    getParkingID() {
+      axios
+        .get(`/admin/${this.user.id}`)
+        .then((response) => {
+          this.parking_id = response.data.parking.id;
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
+    getID() {
+      axios
+        .get(`/admin/${this.user.email}`)
+        .then((response) => {
+          this.user.id = response.data.user.id;
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
     showSlots() {
       axios
         .get(`/parkingslot/parking/${this.parking_id}`)

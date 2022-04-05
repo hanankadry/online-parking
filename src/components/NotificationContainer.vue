@@ -2,7 +2,11 @@
   <div class="container">
     <p class="name">
       {{ title }}
-      <img class="image float-end" src="@/assets/images/person-circle.svg" alt="profile-image" />
+      <img
+        class="image float-end"
+        src="@/assets/images/person-circle.svg"
+        alt="profile-image"
+      />
     </p>
     <p class="body">
       {{ body }}
@@ -17,7 +21,7 @@ export default {
     return {
       title: this.name,
       body: this.msg,
-      image: "@/assets/images/person-circle.svg",
+      image: { type: String, default: "@/assets/images/person-circle.svg" },
     };
   },
 };

@@ -10,7 +10,7 @@ const routes = [
     name: 'home',
     component: () => import('@/views/Home.vue'),
   },
-  
+
   //sessions
   {
     path: '/login',
@@ -53,7 +53,8 @@ const routes = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: () => import('@/views/dashboard/Dashboard')
+    component: () => import('@/views/dashboard/Dashboard'),
+    props: true
   },
   {
     path: '/registrations',

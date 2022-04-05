@@ -9,6 +9,37 @@
       <form>
         <!-- personal info -->
         <section>
+          <div class="error-box">
+            <ul>
+              <li v-if="v$.user.name.$error">
+                {{ v$.user.name.$errors[0].$message }}
+              </li>
+              <li v-if="v$.user.email.$error">
+                {{ v$.user.email.$errors[0].$message }}
+              </li>
+              <li v-if="v$.user.national_id.$error">
+                {{ v$.user.national_id.$errors[0].$message }}
+              </li>
+              <li v-if="v$.user.password.$error">
+                {{ v$.user.password.$errors[0].$message }}
+              </li>
+              <li v-if="v$.user.confirm_password.$error">
+                {{ v$.user.confirm_password.$errors[0].$message }}
+              </li>
+              <li v-if="v$.user.gender.$error">
+                {{ v$.user.gender.$errors[0].$message }}
+              </li>
+              <li v-if="v$.user.address.$error">
+                {{ v$.user.address.$errors[0].$message }}
+              </li>
+              <li v-if="v$.user.dob.$error">
+                {{ v$.user.dob.$errors[0].$message }}
+              </li>
+              <li v-if="v$.user.phone.$error">
+                {{ v$.user.phone.$errors[0].$message }}
+              </li>
+            </ul>
+          </div>
           <p class="heading mt-5">Personal Information</p>
           <div class="row pb-3 px-5">
             <div class="col-md-4">
@@ -38,7 +69,7 @@
               <label for="nationalID" class="form-label">National ID</label>
               <input
                 type="text"
-                v-model="user.nationalID"
+                v-model="user.national_id"
                 class="form-control input-xl"
                 id="nationalID"
                 required
@@ -64,7 +95,7 @@
               >
               <input
                 type="password"
-                v-model="user.confirmPassword"
+                v-model="user.confirm_password"
                 class="form-control input-xl"
                 id="confirmPassword"
                 required
@@ -86,7 +117,7 @@
             </div>
           </div>
           <div class="row pb-3 px-5">
-            <div class="col-lg-8">
+            <div class="col-lg-4">
               <i class="bi bi-geo-alt sm-icon" />
               <label for="address" class="form-label">Address</label>
               <input
@@ -98,50 +129,27 @@
               />
             </div>
             <div class="col-lg-4">
+              <i class="bi bi-telephone sm-icon" />
+              <label for="phone1" class="form-label">Phone</label>
+              <input
+                type="text"
+                v-model="user.phone"
+                class="form-control input-xl"
+                id="phone1"
+                required
+              />
+            </div>
+            <div class="col-lg-4">
               <i class="bi bi-calendar2-week sm-icon" />
               <label for="dateOfBirth" class="form-label">Date of Birth</label>
               <input
                 type="date"
-                v-model="user.dateOfBirth"
+                v-model="user.dob"
+                @change="getAge"
                 class="form-control input-xl date"
                 id="dateOfBirth"
                 required
               />
-            </div>
-          </div>
-          <div class="row pb-3 px-5">
-            <div
-              class="col-lg-4 col-md-4"
-              v-for="(input, index) in user.phoneNumbers"
-              :key="`phoneInput-${index}`"
-            >
-              <i class="bi bi-telephone sm-icon" />
-              <label for="phone1" class="form-label">Phone</label>
-              <div class="input-group mb-3">
-                <input
-                  type="text"
-                  v-model="input.phone"
-                  class="form-control input-xl"
-                  id="phone1"
-                  required
-                />
-                <button
-                  class="addon"
-                  type="button"
-                  v-show="user.phoneNumbers.length > 1"
-                  @click="removePhone(index, user.phoneNumbers)"
-                >
-                  -
-                </button>
-                <button
-                  class="addon"
-                  type="button"
-                  v-show="user.phoneNumbers.length < 3"
-                  @click="addPhone(input, user.phoneNumbers)"
-                >
-                  +
-                </button>
-              </div>
             </div>
           </div>
         </section>
@@ -149,9 +157,34 @@
 
         <!-- parking space info -->
         <section>
+          <div class="error-box">
+            <ul>
+              <li v-if="v$.parkingSpace.location.$error">
+                {{ v$.parkingSpace.location.$errors[0].$message }}
+              </li>
+              <li v-if="v$.parkingSpace.name.$error">
+                {{ v$.parkingSpace.name.$errors[0].$message }}
+              </li>
+              <li v-if="v$.parkingSpace.category.$error">
+                {{ v$.parkingSpace.category.$errors[0].$message }}
+              </li>
+              <li v-if="v$.parkingSpace.description.$error">
+                {{ v$.parkingSpace.description.$errors[0].$message }}
+              </li>
+              <li v-if="v$.parkingSpace.levels.$error">
+                {{ v$.parkingSpace.levels.$errors[0].$message }}
+              </li>
+              <li v-if="v$.parkingSpace.capacity.$error">
+                {{ v$.parkingSpace.capacity.$errors[0].$message }}
+              </li>
+              <!-- <li v-if="v$.parkingSpace.slotNaming.$error">
+                {{ v$.parkingSpace.slotNaming.$errors[0].$message }}
+              </li> -->
+            </ul>
+          </div>
           <p class="heading mt-5">Parking Space Information</p>
           <div class="row pb-3 px-5">
-            <div class="col-lg-8">
+            <div class="col-lg-4">
               <i class="bi bi-geo-alt sm-icon" />
               <label for="location" class="form-label">Location</label>
               <input
@@ -159,6 +192,17 @@
                 v-model="parkingSpace.location"
                 class="form-control input-xl"
                 id="loaction"
+                required
+              />
+            </div>
+            <div class="col-lg-4">
+              <i class="bi bi-house sm-icon" />
+              <label for="parkingName" class="form-label">Name</label>
+              <input
+                type="text"
+                v-model="parkingSpace.name"
+                class="form-control input-xl"
+                id="parkingName"
                 required
               />
             </div>
@@ -171,10 +215,10 @@
                 id="category"
                 required
               >
-                <option selected>Choose Category</option>
+                <option selected value="default">Choose Category</option>
                 <option value="mall">Mall</option>
                 <option value="club">Sports Club</option>
-                <option value="publicParking">Public Parking</option>
+                <option value="public">Public Parking</option>
               </select>
             </div>
           </div>
@@ -231,7 +275,7 @@
                 required
               />
             </div>
-            <div class="col-lg-3 col-md-4">
+            <!-- <div class="col-lg-3 col-md-4">
               <label for="slotNaming" class="form-label ms-4"
                 >Slot Naming</label
               >
@@ -273,17 +317,19 @@
                 id="numberPerAlphabet"
                 required
               />
-            </div>
+            </div> -->
           </div>
         </section>
         <div class="row col-md-3 offset-md-5 py-5">
           <button
             class="button-xl-fill"
             type="submit"
-            @click.prevent="
+            @click.prevent="createAccount"
+          >
+            <!-- @click.prevent="
               createAccount(numOfAlpha, numPerAlpha, parkingSpace.capacity)
             "
-          >
+          > -->
             Create Account
           </button>
         </div>
@@ -293,15 +339,32 @@
 </template>
 
 <script>
+import useValidate from "@vuelidate/core";
+import {
+  required,
+  email,
+  minLength,
+  maxLength,
+  sameAs,
+  numeric,
+  between,
+  helpers,
+  maxValue,
+} from "@vuelidate/validators";
 import {
   getAuth,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
+import axios from "axios";
 export default {
   data() {
     return {
+      slotStatus: "available",
+      role: "admin",
+      v$: useValidate(),
       parkingSpace: {
+        id: "",
         location: "",
         category: "",
         description: "",
@@ -310,90 +373,279 @@ export default {
         fee: "",
         capacity: "",
         name: "",
-        slotNaming: ["default", "alpha", "numerical"],
-        slotLevel: "",
+        // slotNaming: ["default", "alpha", "numerical"],
+        // slotLevel: "",
       },
       user: {
         name: "",
-        nationalID: "",
+        national_id: "",
         email: "",
         address: "",
         password: "",
-        confirmPassword: "",
+        confirm_password: "",
         gender: "",
-        phoneNumbers: "",
-        dateOfBirth: "",
+        phone: "",
+        dob: "",
       },
-      numOfAlpha: 0,
-      numPerAlpha: 0,
-      slots: [],
-      Alphabets: Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
+      // numOfAlpha: 0,
+      // numPerAlpha: 0,
+      thisYear: new Date().toLocaleDateString("en-us", {
+        year: "numeric",
+      }),
+      minValue: null,
+      // slots: [],
+      // levels: [],
+      // Alphabets: Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
     };
   },
   beforeMount() {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        this.$router.replace("/dashboard");
+        this.$router.replace({
+          path: "/dashboard",
+          params: { user_email: this.user.email },
+        });
       }
     });
   },
   methods: {
+    getAge() {
+      const year = this.user.dob.split("-", 1);
+      this.minValue = this.thisYear - year;
+      return this.minValue;
+    },
     goBack() {
       this.$router.push("/login");
     },
-    createAccount(endValue, numValue, capacity) {
-      console.log(capacity);
-      console.log(this.slots);
-      this.getSlots(endValue, numValue, capacity);
-      this.register();
+    // createAccount(endValue, numValue, capacity) {
+    createAccount() {
+      this.v$.$validate();
+      if (!this.v$.$error) {
+        this.register();
+        this.addUser();
+        // this.addParkingSlot(endValue, numValue, capacity);
+        this.addParkingSpace();
+      }
     },
     register() {
       const auth = getAuth();
       createUserWithEmailAndPassword(auth, this.user.email, this.user.password)
         .then((userCredential) => {
           const user = userCredential.user;
-          this.$router.push("/login");
+          this.$router.push("/dashboard");
         })
         .catch((error) => {
-          alert(error.message);
+          console.log(error.message);
         });
     },
-    getSlots(endValue, numValue, capacity) {
-      this.slots = [];
-      if (this.parkingSpace.slotNaming == "alpha") {
-        const letters = this.Alphabets.slice(0, endValue);
-        const numOfSlots = [...Array(numValue - 1 + 1).keys()].map(
-          (x) => x + 1
-        );
-        for (let i = 0; i < letters.length; i++) {
-          for (let j = 0; j < numOfSlots.length; j++) {
-            const slotName = letters[i] + numOfSlots[j];
-            this.slots.push(slotName);
-          }
-        }
-        console.log(this.slots);
-        return this.slots;
-      } else if (this.parkingSpace.slotNaming == "numerical") {
-        for (let i = 1; i <= parseInt(capacity); i++) {
-          this.slots.push(i);
-        }
-        return this.slots;
-      }
+    addUser() {
+      axios
+        .post("/user/insert", {
+          id: this.user.national_id,
+          username: this.user.name,
+          address: this.user.address,
+          email: this.user.email,
+          gender: this.user.gender,
+          phone: this.user.phone,
+          role: this.role,
+          dob: this.user.dob,
+          password: this.user.password,
+        })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
     },
-    addPhone(value, array) {
-      array.push({ value: "" });
-      console.log(array);
+    addParkingSpace() {
+      axios
+        .post("/parkingspace/insert", {
+          location: this.parkingSpace.location,
+          description: this.parkingSpace.description,
+          capacity: this.parkingSpace.capacity,
+          name: this.parkingSpace.name,
+          admin_id: this.user.national_id,
+          fees: this.parkingSpace.fee,
+          category: this.parkingSpace.category,
+          levels: this.parkingSpace.levels,
+        })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
     },
-    removePhone(index, array) {
-      array.splice(index, 1);
-      console.log(array);
-    },
+    // addParkingSlot(endValue, numValue, capacity) {
+    //   this.slots = this.getSlots(endValue, numValue, capacity);
+    //   this.levels = this.getLevels();
+    //   for (let i = 0; i < this.slots.length; i++) {
+    //     axios
+    //       .post("/parkingslot/insert", {
+    //         name: this.slots[i],
+    //         level: this.levels[i],
+    //         parking_id: this.parkingSpace.id,
+    //         status: this.slotStatus,
+    //       })
+    //       .then((response) => {
+    //         console.log(response.data);
+    //       })
+    //       .catch((errors) => {
+    //         console.log(errors.data);
+    //       });
+    //   }
+    // },
+    // getLevels() {
+    //   this.levels = [];
+    //   const slotPerLevel =
+    //     this.parkingSpace.capacity / this.parkingSpace.levels;
+    //   for (let j = 0; j < this.parkingSpace.levels; j++) {
+    //     for (let k = 0; k < slotPerLevel; k++) {
+    //       this.levels.push(j + 1);
+    //     }
+    //   }
+    //   console.log(this.levels);
+    //   return this.levels;
+    // },
+    // getSlots(endValue, numValue, capacity) {
+    //   this.slots = [];
+    //   if (this.parkingSpace.slotNaming == "alpha") {
+    //     const letters = this.Alphabets.slice(0, endValue);
+    //     const numOfSlots = [...Array(numValue - 1 + 1).keys()].map(
+    //       (x) => x + 1
+    //     );
+    //     for (let i = 0; i < letters.length; i++) {
+    //       for (let j = 0; j < numOfSlots.length; j++) {
+    //         const slotName = letters[i] + numOfSlots[j];
+    //         this.slots.push(slotName);
+    //       }
+    //     }
+    //     console.log(this.slots);
+    //     return this.slots;
+    //   } else if (this.parkingSpace.slotNaming == "numerical") {
+    //     for (let i = 1; i <= parseInt(capacity); i++) {
+    //       this.slots.push(i);
+    //     }
+    //     console.log(this.slots);
+    //     return this.slots;
+    //   }
+    // },
+  },
+  validations() {
+    return {
+      parkingSpace: {
+        location: {
+          required: helpers.withMessage("Location is required", required),
+        },
+        category: {
+          required: helpers.withMessage("Category is required", required),
+        },
+        description: {
+          required: helpers.withMessage("Description is required", required),
+        },
+        levels: {
+          required: helpers.withMessage("Levels is required", required),
+          maxValue: helpers.withMessage(
+            "Levels must be less than 10",
+            maxValue(10)
+          ),
+        },
+        capacity: {
+          required: helpers.withMessage("Capacity is required", required),
+        },
+        name: {
+          required: helpers.withMessage(
+            "Parking Space name is required",
+            required
+          ),
+        },
+        // slotNaming: {
+        //   required: helpers.withMessage(
+        //     "Slot Naming convention is required",
+        //     required
+        //   ),
+        // },
+      },
+      user: {
+        name: { required: helpers.withMessage("Name is required", required) },
+        national_id: {
+          required: helpers.withMessage("National ID is required", required),
+          numeric: helpers.withMessage("National ID must be numeric", numeric),
+          maxLength: helpers.withMessage(
+            "National ID must be 14 digits long",
+            maxLength(14)
+          ),
+          minLength: helpers.withMessage(
+            "National ID must be 14 digits long",
+            maxLength(14)
+          ),
+        },
+        email: {
+          required: helpers.withMessage("Email is required", required),
+          email,
+        },
+        address: {
+          required: helpers.withMessage("Address is required", required),
+        },
+        password: {
+          required: helpers.withMessage("Password is required", required),
+          minLength: helpers.withMessage(
+            "Password must be at least 8 characters long",
+            minLength(8)
+          ),
+          containsPasswordRequirement: helpers.withMessage(
+            () =>
+              `The password requires an uppercase, lowercase, number and special character`,
+            (value) =>
+              /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/.test(value)
+          ),
+        },
+        confirm_password: {
+          required: helpers.withMessage(
+            "Password Confirmation is required",
+            required
+          ),
+          sameAsPassword: helpers.withMessage(
+            "Password and Password Confirmation must be match",
+            sameAs(this.user.password)
+          ),
+        },
+        gender: {
+          required: helpers.withMessage("Gender is required", required),
+        },
+        phone: {
+          required: helpers.withMessage("Phone Number is required", required),
+          numeric: helpers.withMessage("Phone Number must be numeric", numeric),
+          maxLength: helpers.withMessage(
+            "Phone Number must be 11 digits long",
+            maxLength(11)
+          ),
+          minLength: helpers.withMessage(
+            "Phone Number must be 11 digits long",
+            minLength(11)
+          ),
+        },
+        dob: {
+          required: helpers.withMessage("Date of Birth is required", required),
+          checkAge: helpers.withMessage(
+            () => "Age must be greater than 21",
+            () => this.minValue >= 21
+          ),
+        },
+      },
+    };
   },
 };
 </script>
 
 <style scoped>
+.error-box {
+  background-color: rgba(255, 0, 0, 0.4);
+  margin: 10px;
+  border-radius: 3px;
+}
 .container-fluid {
   background-color: #374258;
   color: #f74464;

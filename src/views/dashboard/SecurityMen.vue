@@ -266,6 +266,20 @@
           <div class="modal-body">
             <div class="container">
               <div class="row">
+                <div class="col-md-6">
+                  <p>
+                    <strong>Created At:</strong>
+                    {{ current_user.created_at }}
+                  </p>
+                </div>
+                <div class="col-md-6">
+                  <p>
+                    <strong>ID:</strong>
+                    {{ current_user.id }}
+                  </p>
+                </div>
+              </div>
+              <div class="row">
                 <div class="col-md-4">
                   <p>
                     <strong>Name:</strong>
@@ -312,8 +326,6 @@
                     {{ current_user.work_hours }}
                   </p>
                 </div>
-              </div>
-              <div class="row">
                 <div class="col-md-4">
                   <p>
                     <strong>Phone:</strong>
@@ -357,7 +369,7 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body" v-if="status == true">
+          <div class="modal-body" v-if="current_user.status == 'active'">
             Are you sure you want to disactivate this {{ current_user.name }}?
           </div>
           <div class="modal-body" v-else>
@@ -375,7 +387,7 @@
               type="button"
               class="button-xs-danger"
               style="width: 6rem"
-              v-if="status == true"
+              v-if="current_user.status == 'active'"
               data-bs-dismiss="modal"
               @click="activateSecurity(current_user.id)"
             >
@@ -566,6 +578,20 @@
                       required
                     />
                   </div>
+                  <div class="col-md-6">
+                    <i class="bi bi-clock sm-icon" />
+                    <label for="status" class="form-label">Status</label>
+                    <select
+                      class="form-select selector-lg"
+                      id="status"
+                      v-model="new_user.status"
+                      required
+                    >
+                      <option selected>Choose Status</option>
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </form>
@@ -600,11 +626,14 @@ export default {
     this.show();
   },
   methods: {
+    makeToast(msg, type) {
+      this.$toast.show(msg, { type: type });
+    },
     show() {
       axios
         .get(`/security/${this.parking_id}`)
         .then((response) => {
-          this.rows = response.data.parking.map((item) => ({
+          this.rows = response.data.security.map((item) => ({
             ...item,
           }));
           console.log(response.data);
@@ -614,12 +643,34 @@ export default {
         });
     },
     addSecurity() {
+      axios
+        .post("/security/insert", {
+          security_id: this.new_user.security_id,
+          name: this.new_user.name,
+          email: this.new_user.email,
+          address: this.new_user.address,
+          gender: this.new_user.gender,
+          phone: this.new_user.phone,
+          dob: this.new_user.dob,
+          status: this.new_user.status,
+          work_hours: this.new_user.work_hours,
+          created_at: this.new_user.created_at,
+          parking_id: this.parking_id,
+        })
+        .then((response) => {
+          this.makeToast("insert successful", "success");
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          this.makeToast("insert failed", "error");
+          console.log(errors.data);
+        });
       console.log(this.new_user);
     },
     updateSecurity(id) {
       axios
         .post(`/security/update/${id}`, {
-          id: this.current_user.security_id,
+          securtiy_id: this.current_user.security_id,
           name: this.current_user.name,
           email: this.current_user.email,
           address: this.current_user.address,
@@ -628,33 +679,38 @@ export default {
           phone: this.current_user.phone,
           status: this.current_user.status,
           work_hours: this.current_user.work_hours,
-          date: this.current_user.date,
+          created_at: this.current_user.created_at,
         })
         .then((response) => {
           console.log(response.data);
+          this.makeToast("update succesful", "success");
           this.show();
         })
         .catch((errors) => {
+          this.makeToast("update failed", "error");
           console.log(errors.data);
         });
       console.log("updated");
     },
     activateSecurity(id) {
+      if ((this.current_user.status = "active")) {
+        this.current_user.status = "inactive";
+        console.log("disactivated");
+      } else {
+        this.current_user.status = "active";
+        console.log("activated");
+      }
       axios
         .post(`/security/${id}`, {
           status: this.current_user.status,
         })
         .then((response) => {
-          if (this.status == true) {
-            this.status = false;
-            console.log("disactivated");
-          } else {
-            this.status = true;
-            console.log("activated");
-          }
+          this.show();
+          this.makeToast("status change succesful", "success");
           console.log(response.data);
         })
         .catch((errors) => {
+          this.makeToast("status change failed", "error");
           console.log(errors.data);
         });
     },
@@ -662,11 +718,13 @@ export default {
       axios
         .delete(`/security/delete/${id}`)
         .then((response) => {
-          console.log("Security Man has been deleted successfully");
+          this.makeToast("delete successful", "success");
+          console.log(response.data);
           this.show();
         })
         .catch((errors) => {
-          console.log(errors);
+          this.makeToast("delete failed", "error");
+          console.log(errors.data);
         });
     },
   },
@@ -682,7 +740,7 @@ export default {
         gender: "",
         phone: "",
         dob: "",
-        date: "",
+        created_at: "",
         work_hours: "",
         status: "",
       },
@@ -695,11 +753,10 @@ export default {
         gender: "",
         phone: "",
         dob: "",
-        date: "",
+        created_at: "",
         work_hours: "",
         status: "",
       },
-      status: true,
       searchInput: "",
       label: "Security Men",
       href: "/securityMen",
@@ -721,7 +778,7 @@ export default {
         },
         {
           label: "Date of Employment",
-          field: "date",
+          field: "created_at",
           sortable: false,
           dateInputFormat: "yyyy-MM-dd",
           dateOutputFormat: "MMM do yyyy",
