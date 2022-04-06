@@ -71,16 +71,23 @@ export default {
       this.timer();
     },
     timer() {
-      var seconds = 60;
+      var seconds = 59;
       function myFunction() {
+        if(isChecked==true){
+          alert("here");
+        }
         if (seconds < 60) {
           document.getElementById("timer").innerHTML = "00:" + seconds;
         }
         if (seconds > 0) {
+          
+          document.getElementById("timer").innerHTML = "00:" + seconds;
           seconds--;
           if (seconds < 10) {
             document.getElementById("timer").innerHTML = "00:0" + seconds;
           }
+        
+          
         } else {
           document.getElementById("link").style.pointerEvents = "auto";
           document.getElementById("link").style.cursor = "pointer";
