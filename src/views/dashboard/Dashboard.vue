@@ -1,5 +1,5 @@
 <template>
-  <nav-bar />
+  <nav-bar :id="user.id" />
   <div class="container-fluid background">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
     <div class="container-fluid">
@@ -86,27 +86,11 @@ export default {
     chart: Chart,
     "statistics-card": StatisticsCard,
   },
-  props: ["user_email"],
+  props: ["id"],
   data() {
     return {
-      cards: [
-        {
-          label: "New Registrations",
-          value: "0",
-          icon: "bi bi-card-checklist lg-icon",
-        },
-        {
-          label: "Available Slots",
-          value: "0",
-          icon: "bi bi-check-lg lg-icon",
-        },
-        {
-          label: "Out of Order Slots",
-          value: "0",
-          icon: "bi bi-x lg-icon",
-        },
-      ],
-      parking_id: 1,
+      cards: [],
+      parking_id: null,
       label: "Dashboard",
       href: "/dashboard",
       search: false,
@@ -169,47 +153,66 @@ export default {
       ],
       registrationRows: [],
       slotRows: [],
-      length: null,
       user: {
-        email: this.user_email,
-        id: null,
+        id: this.id,
       },
     };
   },
-  // beforeMount() {
-  //   this.getID();
-  //   this.getParkingID();
-  // },
   mounted() {
-    this.showRegistrations();
-    this.showSlots();
+    this.getParkingID();
   },
   methods: {
+    getStatistics(id) {
+      const labels = ["Registrations", "Available Slots", "Out of Order Slots"];
+      const icons = [
+        "bi bi-card-checklist lg-icon",
+        "bi bi-check-lg lg-icon",
+        "bi bi-x lg-icon",
+      ];
+      const values = [];
+      axios
+        .get(`/admin/dashboard/${id}`)
+        .then((response) => {
+          const posts = response.data;
+          console.log(posts);
+          values.push(
+            posts.registrations.length,
+            posts.available_slots.length,
+            posts.out_slots.length
+          );
+          // const cards = [labels, values, icons];
+          for (let i = 0; i < 3; i++) {
+            this.cards.push({
+              label: labels[i],
+              value: values[i],
+              icon: icons[i],
+            });
+          }
+          console.log(this.cards);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
     getParkingID() {
       axios
-        .get(`/admin/${this.user.id}`)
+        .get(`/parking/${this.user.id}`)
         .then((response) => {
-          this.parking_id = response.data.parking.id;
+          response.data.parking.map((item) => {
+            this.parking_id = item.id;
+          });
           console.log(response.data);
+          this.getStatistics(this.parking_id);
+          this.showRegistrations(this.parking_id);
+          this.showSlots(this.parking_id);
         })
         .catch((errors) => {
           console.log(errors.data);
         });
     },
-    getID() {
+    showSlots(id) {
       axios
-        .get(`/admin/${this.user.email}`)
-        .then((response) => {
-          this.user.id = response.data.user.id;
-          console.log(response.data);
-        })
-        .catch((errors) => {
-          console.log(errors.data);
-        });
-    },
-    showSlots() {
-      axios
-        .get(`/parkingslot/parking/${this.parking_id}`)
+        .get(`/parkingslot/parking/${id}`)
         .then((response) => {
           this.slotRows = response.data.map((item) => ({
             ...item,
@@ -220,14 +223,14 @@ export default {
           console.log(errors.data);
         });
     },
-    showRegistrations() {
+    showRegistrations(id) {
       axios
-        .get(`/registration/parking/${this.parking_id}`)
+        .get(`/registration/parking/${id}`)
         .then((response) => {
           this.registrationRows = response.data.registration.map((item) => ({
             ...item,
           }));
-          this.length = response.data.registration.length;
+
           console.log(response.data);
         })
         .catch((errors) => {

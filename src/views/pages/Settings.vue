@@ -53,12 +53,13 @@
               <form class="mt-5">
                 <div class="row pb-3 px-5">
                   <div class="col-md-6">
-                    <i class="bi bi-image md-icon" />
-                    <label for="name" class="form-label">Profile Picture</label>
+                    <i class="bi bi-telephone md-icon" />
+                    <label for="phone1" class="form-label">Phone</label>
                     <input
-                      type="file"
-                      class="form-control form-control-lg upload-input"
-                      id="name"
+                      type="text"
+                      v-model="user.phone"
+                      class="form-control input-lg"
+                      id="phone1"
                       required
                     />
                   </div>
@@ -82,7 +83,7 @@
                     >
                     <input
                       type="text"
-                      v-model="user.nationalID"
+                      v-model="user.national_id"
                       class="form-control input-lg"
                       id="nationalID"
                       required
@@ -95,7 +96,7 @@
                     >
                     <input
                       type="date"
-                      v-model="user.dateOfBirth"
+                      v-model="user.dob"
                       class="form-control input-lg date"
                       id="dateOfBirth"
                       required
@@ -115,59 +116,25 @@
                     />
                   </div>
                 </div>
-                <div class="row pb-3 px-5">
-                  <div
-                    class="col-lg-4 col-md-4"
-                    v-for="(input, index) in user.phoneNumbers"
-                    :key="`phoneInput-${index}`"
-                  >
-                    <i class="bi bi-telephone md-icon" />
-                    <label for="phone1" class="form-label">Phone</label>
-                    <div class="input-group mb-3">
-                      <input
-                        type="text"
-                        v-model="input.phone"
-                        class="form-control input-lg"
-                        id="phone1"
-                        required
-                      />
-                      <button
-                        class="addon"
-                        type="button"
-                        v-show="user.phoneNumbers.length > 1"
-                        @click="removePhone(index, user.phoneNumbers)"
-                      >
-                        -
-                      </button>
-                      <button
-                        class="addon"
-                        type="button"
-                        v-show="user.phoneNumbers.length < 3"
-                        @click="addPhone(input, user.phoneNumbers)"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div class="row pb-3 px-5">
+                <div class="row pt-4 pb-3 px-5" v-if="editting == false">
                   <button
-                    class="button-md-fill col offset-md-9 me-5"
+                    class="button-md-fill col-3 offset-lg-9 offset-sm-8"
                     @click="editting = true"
-                    v-if="editting == false"
                   >
                     Edit
                   </button>
-                  <div class="buttons col offset-md-7" v-else>
+                </div>
+                <div class="row pt-4 pb-3 px-5" v-else>
+                  <div class="buttons offset-sm-5 offset-lg-7">
                     <button
-                      class="button-md-unfill me-2"
+                      class="button-md-unfill col me-2"
                       type="button"
                       @click="editting = false"
                     >
                       Cancel
                     </button>
                     <button
-                      class="button-md-fill"
+                      class="button-md-fill col"
                       type="button"
                       @click="editting = false"
                     >
@@ -305,13 +272,13 @@ export default {
       newPass: false,
       user: {
         name: "",
-        nationalID: 0,
+        national_id: "",
         email: "",
         address: "",
         password: "",
-        gender: ["male", "female"],
-        phoneNumbers: [{ phone: "" }],
-        dateOfBirth: "",
+        gender: "",
+        phone: "",
+        dob: "",
       },
       update: {
         oldPass: "",
@@ -322,14 +289,6 @@ export default {
     };
   },
   methods: {
-    addPhone(value, array) {
-      array.push({ value: "" });
-      console.log(array);
-    },
-    removePhone(index, array) {
-      array.splice(index, 1);
-      console.log(array);
-    },
     updateUser() {
       this.user.password = this.update.newPass;
     },
@@ -491,6 +450,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .selector-lg > option:hover {
   background-color: white;
   color: #374258;
+}
+
+#general-settings {
+  overflow-x: hidden;
 }
 
 @media (max-width: 1255px) {

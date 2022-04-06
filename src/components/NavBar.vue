@@ -19,10 +19,7 @@
         <div class="row">
           <ul class="nav">
             <li class="nav-item">
-              <router-link
-                class="nav-link active"
-                aria-current="page"
-                to="/"
+              <router-link class="nav-link active" aria-current="page" to="/"
                 ><i class="bi bi-house-door nav-icon"></i>
               </router-link>
             </li>
@@ -102,7 +99,7 @@
                     src="@/assets/images/person-circle.svg"
                     alt="profile-picture"
                   />
-                  <li class="text mt-2">
+                  <li class="text mt-5">
                     <i class="bi bi-person sm-icon" />{{ user.name }}
                   </li>
                   <li class="text">
@@ -111,11 +108,11 @@
                   <li class="text">
                     <i class="bi bi-envelope sm-icon" />{{ user.email }}
                   </li>
-                  <li class="text" v-for="phone in user.phones" :key="phone.id">
+                  <li class="text">
                     <i class="bi bi-telephone sm-icon" />
-                    {{ phone }}
+                    {{ user.phone }}
                   </li>
-                  <div class="text-center mt-2">
+                  <div class="text-center mt-3">
                     <button
                       class="button-xs-unfill"
                       type="button"
@@ -157,22 +154,22 @@
         ></button>
       </div>
       <div class="offcanvas-body container mt-5">
-        <router-link to="/dashboard" class="nav"
+        <router-link :to="{ path: `/dashboard/${user.id}` }" class="nav"
           ><i class="bi bi-columns nav-icon" />Dashboard</router-link
         >
-        <router-link to="/parkingSettings" class="nav">
+        <router-link :to="{ path: `/parkingSettings/${user.id}` }" class="nav">
           <img class="sp-icon" />Parking Settings
         </router-link>
-        <router-link to="/securityMen" class="nav"
+        <router-link :to="{ path: `/securityMen/${user.id}` }" class="nav"
           ><i class="bi bi-person nav-icon" />Security Men</router-link
         >
-        <router-link to="/users" class="nav"
+        <router-link :to="{ path: `/users/${user.id}` }" class="nav"
           ><i class="bi bi-person nav-icon" />Users</router-link
         >
-        <router-link to="/reports" class="nav"
+        <router-link :to="{ path: `/reports/${user.id}` }" class="nav"
           ><i class="bi bi-exclamation-octagon nav-icon" />Reports</router-link
         >
-        <router-link to="/registrations" class="nav"
+        <router-link :to="{ path: `/registrations/${user.id}` }" class="nav"
           ><i class="bi bi-list-ul nav-icon" />Registrations</router-link
         >
       </div>
@@ -183,8 +180,11 @@
 <script>
 import { getAuth, signOut } from "firebase/auth";
 import { getMessaging, getToken } from "firebase/messaging";
+import axios from "axios";
+import { use } from "chai";
 
 export default {
+  props: ["id"],
   data() {
     return {
       myVapidKey: this.vapidKey,
@@ -192,11 +192,13 @@ export default {
       notification: false,
       profile: false,
       user: {
-        name: "John Doe",
-        email: "john.doe@mail.com",
-        address: "123 Main Street, New York, NY 10030",
-        phones: ["+90 1234567890", "+90 1234567890"],
+        id: this.id,
+        name: "",
+        email: "",
+        address: "",
+        phone: "",
       },
+      parking_id: null,
       newNotifications: [
         {
           imageSrc: "@/assets/images/logo.jpg",
@@ -233,7 +235,29 @@ export default {
       ],
     };
   },
+  mounted() {
+    this.getParkingID();
+  },
   methods: {
+    getParkingID() {
+      axios
+        .get(`/parking/${this.user.id}`)
+        .then((response) => {
+          response.data.user.map((user) => {
+            this.user.name = user.username;
+            this.user.email = user.email;
+            this.user.address = user.address;
+            this.user.phone = user.phone;
+          });
+          response.data.parking.map((item) => {
+            this.parking_id = item.id;
+          });
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
     updateNotifications() {
       const messaging = getMessaging();
       getToken(messaging, {
@@ -395,7 +419,7 @@ a .nav-link:hover {
 
 .profile .dropdown-menu {
   height: 27.5rem;
-  width: 15rem;
+  width: 17rem;
 }
 
 .profile-image {

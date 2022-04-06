@@ -51,36 +51,46 @@ const routes = [
 
   //dashboard
   {
-    path: '/dashboard',
+    path: '/dashboard/:id',
     name: 'dashboard',
     component: () => import('@/views/dashboard/Dashboard'),
     props: true
   },
   {
-    path: '/registrations',
+    path: '/registrations/:id',
     name: 'registrations',
-    component: () => import('@/views/dashboard/Registrations')
+    component: () => import('@/views/dashboard/Registrations'),
+    props: true
+
   },
   {
-    path: '/parkingSettings',
+    path: '/parkingSettings/:id',
     name: 'parkingSettings',
-    component: () => import('@/views/dashboard/ParkingSettings')
+    component: () => import('@/views/dashboard/ParkingSettings'),
+    props: true
+
   },
   {
-    path: '/reports',
+    path: '/reports/:id',
     name: 'reports',
-    component: () => import('@/views/dashboard/Reports')
+    component: () => import('@/views/dashboard/Reports'),
+    props: true
+
   },
   {
-    path: '/securityMen',
+    path: '/securityMen/:id',
     name: 'securityMen',
-    component: () => import('@/views/dashboard/SecurityMen')
+    component: () => import('@/views/dashboard/SecurityMen'),
+    props: true
+
   },
   // change into parking slots 
   {
-    path: '/users',
+    path: '/users/:id',
     name: 'users',
-    component: () => import('@/views/dashboard/Users')
+    component: () => import('@/views/dashboard/Users'),
+    props: true
+
   }
 
 ]
