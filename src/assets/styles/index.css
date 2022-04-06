@@ -61,6 +61,7 @@ body {
 /* inputs */
 
 .input-lg {
+    padding-left: 2rem;
     border-radius: 95px;
     height: 40px;
     width: 20rem;
@@ -69,6 +70,7 @@ body {
 }
 
 .input-md {
+    padding-left: 1rem;
     border-radius: 95px;
     height: 40px;
     width: 15rem;

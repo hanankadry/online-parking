@@ -1,5 +1,5 @@
 <template>
-  <nav-bar />
+  <nav-bar :id="user_id" />
   <div class="container-fluid background">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
     <div class="container-fluid p-3">
@@ -331,18 +331,12 @@
 import axios from "axios";
 
 export default {
+  props: ["id"],
   data() {
     return {
-      totalRecords: 0,
-      from: 1,
-      to: 15,
-      headers: {
-        "Authorization": "Bearer " + localStorage.getItem("token"),
-        "Accept-Language": "en",
-        "Accept": "application/json",
-      },
+      user_id: this.id,
       current_registration: {
-        parking_id: 1,
+        parking_id: null,
         id: "",
         user_id: "",
         car_id: "",
@@ -400,15 +394,29 @@ export default {
     };
   },
   mounted() {
-    this.show();
+    this.getParkingID();
   },
   methods: {
+    getParkingID() {
+      axios
+        .get(`/parking/${this.user_id}`)
+        .then((response) => {
+          response.data.parking.map((item) => {
+            this.parking_id = item.id;
+          });
+          console.log(response.data);
+          this.show(this.parking_id);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
     makeToast(msg, type) {
       this.$toast.show(msg, { type: type });
     },
-    updateRegistration(registrationId) {
+    updateRegistration(id) {
       axios
-        .post(`registration/update/${registrationId}`, {
+        .post(`registration/update/${id}`, {
           parking_id: this.current_registration.parking_id,
           id: this.current_registration.id,
           user_id: this.current_registration.user_id,
@@ -422,21 +430,19 @@ export default {
         })
         .then((response) => {
           console.log(response.data);
-          this.show();
+          this.show(this.parking_id);
           this.makeToast("update succesful", "success");
-          console.log("registration updated");
         })
         .catch((errors) => {
           console.log(errors.data);
           this.makeToast("update failed", "error");
-          console.log("resgistration wasn't updated");
         });
     },
-    deleteRegistration(registrationId) {
+    deleteRegistration(id) {
       axios
-        .post(`/registration/delete/${registrationId}`)
+        .post(`/registration/delete/${id}`)
         .then((response) => {
-          this.show();
+          this.show(this.parking_id);
           this.makeToast("delete successful", "success");
           console.log(response.data);
         })
@@ -445,11 +451,10 @@ export default {
           console.log(errors.data);
         });
     },
-    show() {
+    show(id) {
       axios
-        .get(`/registration/parking/${this.current_registration.parking_id}`)
+        .get(`/registration/parking/${id}`)
         .then((response) => {
-          this.totalRecords = response.data.registration.length;
           this.rows = response.data.registration.map((item) => ({
             ...item,
           }));

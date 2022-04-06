@@ -347,7 +347,6 @@ import {
   maxLength,
   sameAs,
   numeric,
-  between,
   helpers,
   maxValue,
 } from "@vuelidate/validators";
@@ -357,6 +356,7 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import axios from "axios";
+
 export default {
   data() {
     return {
@@ -402,10 +402,7 @@ export default {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        this.$router.replace({
-          path: "/dashboard",
-          params: { user_email: this.user.email },
-        });
+        this.$router.replace(`/dashboard/${this.user.national_id}`);
       }
     });
   },
@@ -642,7 +639,7 @@ export default {
 
 <style scoped>
 .error-box {
-  background-color: rgba(255, 0, 0, 0.4);
+  background-color: rgba(255, 64, 0, 0.4);
   margin: 10px;
   border-radius: 3px;
 }

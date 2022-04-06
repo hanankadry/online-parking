@@ -1,5 +1,5 @@
 <template>
-  <nav-bar />
+  <nav-bar :id="current_user.id" />
   <div class="container-fluid background">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
     <div class="container-fluid p-3">
@@ -112,6 +112,7 @@
               type="button"
               class="btn-close"
               data-bs-dismiss="modal"
+              id="btn-update-close"
               aria-label="Close"
             ></button>
           </div>
@@ -200,19 +201,6 @@
                     />
                   </div>
                   <div class="col-md-6">
-                    <i class="bi bi-clock sm-icon" />
-                    <label for="workHours" class="form-label">Work Hours</label>
-                    <input
-                      type="text"
-                      v-model="current_user.work_hours"
-                      class="form-control input-lg"
-                      id="workHours"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
                     <i class="bi bi-telephone sm-icon" />
                     <label for="phone" class="form-label">Phone</label>
                     <input
@@ -224,21 +212,27 @@
                     />
                   </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <i class="bi bi-clock sm-icon" />
+                    <label for="workHours" class="form-label">Work Hours</label>
+                    <input
+                      type="text"
+                      v-model="current_user.work_hours"
+                      class="form-control col-3 input-lg"
+                      id="from"
+                      required
+                    />
+                  </div>
+                </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="button-xs-unfill"
-              data-bs-dismiss="modal"
-            >
-              Cancel
-            </button>
+            <button type="button" class="button-xs-unfill">Cancel</button>
             <button
               type="button"
               class="button-xs-fill"
-              data-bs-dismiss="modal"
               @click="updateSecurity(current_user.id)"
             >
               Update
@@ -365,6 +359,7 @@
             <button
               type="button"
               class="btn-close"
+              id="btn-activate-close"
               data-bs-dismiss="modal"
               aria-label="Close"
             ></button>
@@ -388,7 +383,6 @@
               class="button-xs-danger"
               style="width: 6rem"
               v-if="current_user.status == 'active'"
-              data-bs-dismiss="modal"
               @click="activateSecurity(current_user.id)"
             >
               Disactivate
@@ -397,7 +391,6 @@
               type="button"
               class="button-xs-success"
               v-else
-              data-bs-dismiss="modal"
               @click="activateSecurity(current_user.id)"
             >
               Activate
@@ -424,6 +417,7 @@
             <button
               type="button"
               class="btn-close"
+              id="btn-delete-close"
               data-bs-dismiss="modal"
               aria-label="Close"
             ></button>
@@ -432,16 +426,9 @@
             Are you sure you want to delete {{ current_user.name }}?
           </div>
           <div class="modal-footer">
+            <button type="button" class="button-xs-unfill">Cancel</button>
             <button
               type="button"
-              class="button-xs-unfill"
-              data-bs-dismiss="modal"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              data-bs-dismiss="modal"
               @click="deleteSecurity(current_user.id)"
               class="button-xs-danger"
             >
@@ -466,11 +453,46 @@
             <button
               type="button"
               class="btn-close"
+              id="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
             ></button>
           </div>
           <div class="modal-body">
+            <div class="error-box">
+              <ul>
+                <li v-if="v$.new_user.name.$error">
+                  {{ v$.new_user.name.$errors[0].$message }}
+                </li>
+                <li v-if="v$.new_user.security_id.$error">
+                  {{ v$.new_user.security_id.$errors[0].$message }}
+                </li>
+                <li v-if="v$.new_user.email.$error">
+                  {{ v$.new_user.email.$errors[0].$message }}
+                </li>
+                <li v-if="v$.new_user.address.$error">
+                  {{ v$.new_user.address.$errors[0].$message }}
+                </li>
+                <li v-if="v$.new_user.gender.$error">
+                  {{ v$.new_user.gender.$errors[0].$message }}
+                </li>
+                <li v-if="v$.new_user.phone.$error">
+                  {{ v$.new_user.phone.$errors[0].$message }}
+                </li>
+                <li v-if="v$.new_user.dob.$error">
+                  {{ v$.new_user.dob.$errors[0].$message }}
+                </li>
+                <li v-if="v$.new_user.work_hours.from.$error">
+                  {{ v$.new_user.work_hours.from.$errors[0].$message }}
+                </li>
+                <li v-if="v$.new_user.work_hours.to.$error">
+                  {{ v$.new_user.work_hours.to.$errors[0].$message }}
+                </li>
+                <li v-if="v$.new_user.status.$error">
+                  {{ v$.new_user.status.$errors[0].$message }}
+                </li>
+              </ul>
+            </div>
             <form>
               <div class="row form-box justify-content-center">
                 <div class="row">
@@ -549,32 +571,9 @@
                     <input
                       type="date"
                       v-model="new_user.dob"
+                      @change="getAge"
                       class="form-control input-lg date"
                       id="dateOfBirth"
-                      required
-                    />
-                  </div>
-                  <div class="col-md-6">
-                    <i class="bi bi-clock sm-icon" />
-                    <label for="workHours" class="form-label">Work Hours</label>
-                    <input
-                      type="text"
-                      v-model="new_user.work_hours"
-                      class="form-control input-lg"
-                      id="workHours"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <i class="bi bi-telephone sm-icon" />
-                    <label for="phone" class="form-label">Phone</label>
-                    <input
-                      type="text"
-                      v-model="new_user.phone"
-                      class="form-control input-lg"
-                      id="phone"
                       required
                     />
                   </div>
@@ -593,23 +592,53 @@
                     </select>
                   </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <i class="bi bi-telephone sm-icon" />
+                    <label for="phone" class="form-label">Phone</label>
+                    <input
+                      type="text"
+                      v-model="new_user.phone"
+                      class="form-control input-lg"
+                      id="phone"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-6 row">
+                    <div>
+                      <i class="bi bi-clock sm-icon" />
+                      <label for="workHours" class="form-label"
+                        >Work Hours</label
+                      >
+                    </div>
+                    <div class="col">
+                      <label for="from" class="form-label">From</label>
+                      <input
+                        type="time"
+                        v-model="new_user.work_hours.from"
+                        class="form-control col-3 input-lg"
+                        id="from"
+                        required
+                      />
+                    </div>
+                    <div class="col">
+                      <label for="to" class="form-label">To</label>
+                      <input
+                        type="time"
+                        v-model="new_user.work_hours.to"
+                        class="form-control col-3 input-lg"
+                        id="to"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="button-xs-unfill"
-              data-bs-dismiss="modal"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              data-bs-dismiss="modal"
-              @click="addSecurity"
-              class="button-xs-fill"
-            >
+            <button type="button" class="button-xs-unfill">Cancel</button>
+            <button type="button" @click="create" class="button-xs-fill">
               Add
             </button>
           </div>
@@ -621,118 +650,23 @@
 
 <script>
 import axios from "axios";
+import useValidate from "@vuelidate/core";
+import {
+  required,
+  email,
+  minLength,
+  maxLength,
+  numeric,
+  helpers,
+} from "@vuelidate/validators";
+
 export default {
-  mounted() {
-    this.show();
-  },
-  methods: {
-    makeToast(msg, type) {
-      this.$toast.show(msg, { type: type });
-    },
-    show() {
-      axios
-        .get(`/security/${this.parking_id}`)
-        .then((response) => {
-          this.rows = response.data.security.map((item) => ({
-            ...item,
-          }));
-          console.log(response.data);
-        })
-        .catch((errors) => {
-          console.log(errors.data);
-        });
-    },
-    addSecurity() {
-      axios
-        .post("/security/insert", {
-          security_id: this.new_user.security_id,
-          name: this.new_user.name,
-          email: this.new_user.email,
-          address: this.new_user.address,
-          gender: this.new_user.gender,
-          phone: this.new_user.phone,
-          dob: this.new_user.dob,
-          status: this.new_user.status,
-          work_hours: this.new_user.work_hours,
-          created_at: this.new_user.created_at,
-          parking_id: this.parking_id,
-        })
-        .then((response) => {
-          this.makeToast("insert successful", "success");
-          console.log(response.data);
-        })
-        .catch((errors) => {
-          this.makeToast("insert failed", "error");
-          console.log(errors.data);
-        });
-      console.log(this.new_user);
-    },
-    updateSecurity(id) {
-      axios
-        .post(`/security/update/${id}`, {
-          securtiy_id: this.current_user.security_id,
-          name: this.current_user.name,
-          email: this.current_user.email,
-          address: this.current_user.address,
-          gender: this.current_user.gender,
-          dob: this.current_user.dob,
-          phone: this.current_user.phone,
-          status: this.current_user.status,
-          work_hours: this.current_user.work_hours,
-          created_at: this.current_user.created_at,
-        })
-        .then((response) => {
-          console.log(response.data);
-          this.makeToast("update succesful", "success");
-          this.show();
-        })
-        .catch((errors) => {
-          this.makeToast("update failed", "error");
-          console.log(errors.data);
-        });
-      console.log("updated");
-    },
-    activateSecurity(id) {
-      if ((this.current_user.status = "active")) {
-        this.current_user.status = "inactive";
-        console.log("disactivated");
-      } else {
-        this.current_user.status = "active";
-        console.log("activated");
-      }
-      axios
-        .post(`/security/${id}`, {
-          status: this.current_user.status,
-        })
-        .then((response) => {
-          this.show();
-          this.makeToast("status change succesful", "success");
-          console.log(response.data);
-        })
-        .catch((errors) => {
-          this.makeToast("status change failed", "error");
-          console.log(errors.data);
-        });
-    },
-    deleteSecurity(id) {
-      axios
-        .delete(`/security/delete/${id}`)
-        .then((response) => {
-          this.makeToast("delete successful", "success");
-          console.log(response.data);
-          this.show();
-        })
-        .catch((errors) => {
-          this.makeToast("delete failed", "error");
-          console.log(errors.data);
-        });
-    },
-  },
   data() {
     return {
-      parking_id: 1,
+      v$: useValidate(),
+      parking_id: null,
       current_user: {
-        id: "",
+        id: this.id,
         name: "",
         security_id: "",
         email: "",
@@ -745,7 +679,6 @@ export default {
         status: "",
       },
       new_user: {
-        id: "",
         name: "",
         security_id: "",
         email: "",
@@ -754,7 +687,10 @@ export default {
         phone: "",
         dob: "",
         created_at: "",
-        work_hours: "",
+        work_hours: {
+          from: "",
+          to: "",
+        },
         status: "",
       },
       searchInput: "",
@@ -797,11 +733,233 @@ export default {
         },
       ],
       rows: [],
+      thisYear: new Date().toLocaleDateString("en-us", {
+        year: "numeric",
+      }),
+      minValue: null,
     };
+  },
+  props: ["id"],
+  mounted() {
+    this.getParkingID();
+  },
+  validations() {
+    return {
+      new_user: {
+        name: { required: helpers.withMessage("Name is required", required) },
+        security_id: {
+          required: helpers.withMessage("National ID is required", required),
+          numeric: helpers.withMessage("National ID must be numeric", numeric),
+          maxLength: helpers.withMessage(
+            "National ID must be 14 digits long",
+            maxLength(14)
+          ),
+          minLength: helpers.withMessage(
+            "National ID must be 14 digits long",
+            maxLength(14)
+          ),
+        },
+        email: {
+          required: helpers.withMessage("Email is required", required),
+          email,
+        },
+        address: {
+          required: helpers.withMessage("Address is required", required),
+        },
+        gender: {
+          required: helpers.withMessage("Gender is required", required),
+        },
+        phone: {
+          required: helpers.withMessage("Phone Number is required", required),
+          numeric: helpers.withMessage("Phone Number must be numeric", numeric),
+          maxLength: helpers.withMessage(
+            "Phone Number must be 11 digits long",
+            maxLength(11)
+          ),
+          minLength: helpers.withMessage(
+            "Phone Number must be 11 digits long",
+            minLength(11)
+          ),
+        },
+        dob: {
+          required: helpers.withMessage("Date of Birth is required", required),
+          checkAge: helpers.withMessage(
+            () => "Age must be greater than 21",
+            () => this.minValue >= 21
+          ),
+        },
+        work_hours: {
+          from: {
+            required: helpers.withMessage("From value is required", required),
+          },
+          to: {
+            required: helpers.withMessage("To value is required", required),
+          },
+        },
+        status: {
+          required: helpers.withMessage("Status is required", required),
+        },
+      },
+    };
+  },
+  methods: {
+    getAge() {
+      const year = this.new_user.dob.split("-", 1);
+      this.minValue = this.thisYear - year;
+      return this.minValue;
+    },
+    makeToast(msg, type) {
+      this.$toast.show(msg, { type: type });
+    },
+    getParkingID() {
+      axios
+        .get(`/parking/${this.current_user.id}`)
+        .then((response) => {
+          response.data.parking.map((item) => {
+            this.parking_id = item.id;
+          });
+          console.log(response.data);
+          this.show(this.parking_id);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
+    show(id) {
+      axios
+        .get(`/security/${id}`)
+        .then((response) => {
+          this.rows = response.data.security.map((item) => ({
+            ...item,
+          }));
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
+    create() {
+      this.v$.$validate();
+      if (!this.v$.$error) {
+        this.addSecurity();
+        const trigger = document.getElementById("btn-close");
+        trigger.click();
+      }
+    },
+    addSecurity() {
+      axios
+        .post(`/security/${this.parking_id}/insert`, {
+          security_id: this.new_user.security_id,
+          name: this.new_user.name,
+          email: this.new_user.email,
+          gender: this.new_user.gender,
+          address: this.new_user.address,
+          dob: this.new_user.dob,
+          work_hours:
+            this.new_user.work_hours.from + " - " + this.new_user.work_hours.to,
+          phone: this.new_user.phone,
+          status: this.new_user.status,
+          created_at: this.new_user.created_at,
+        })
+        .then((response) => {
+          this.makeToast("insert successful", "success");
+          this.show(this.parking_id);
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          this.makeToast("insert failed", "error");
+          console.log(errors.data);
+        });
+      console.log(this.new_user);
+    },
+    updateSecurity(id) {
+      axios
+        .post(`/security/update/${id}`, {
+          security_id: this.current_user.security_id,
+          name: this.current_user.name,
+          email: this.current_user.email,
+          gender: this.current_user.gender,
+          address: this.current_user.address,
+          dob: this.current_user.dob,
+          work_hours: this.current_user.work_hours,
+          phone: this.current_user.phone,
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.show(this.parking_id);
+          const trigger = document.getElementById("btn-update-close");
+          trigger.click();
+          this.makeToast("update succesful", "success");
+        })
+        .catch((errors) => {
+          this.makeToast("update failed", "error");
+          console.log(errors.data);
+        });
+      console.log("updated");
+    },
+    activateSecurity(id) {
+      if ((this.current_user.status = "active")) {
+        this.current_user.status = "inactive";
+        axios
+          .post(`/security/${id}`, {
+            status: this.current_user.status,
+          })
+          .then((response) => {
+            this.show(this.parking_id);
+            const trigger = document.getElementById("btn-activate-close");
+            trigger.click();
+            this.makeToast("status change succesful", "success");
+            console.log(response.data);
+          })
+          .catch((errors) => {
+            this.makeToast("status change failed", "error");
+            console.log(errors.data);
+          });
+        console.log("disactivated");
+      } else {
+        this.current_user.status = "active";
+        axios
+          .post(`/security/${id}`, {
+            status: this.current_user.status,
+          })
+          .then((response) => {
+            this.show(this.parking_id);
+            const trigger = document.getElementById("btn-activate-close");
+            trigger.click();
+            this.makeToast("status change succesful", "success");
+            console.log(response.data);
+          })
+          .catch((errors) => {
+            this.makeToast("status change failed", "error");
+            console.log(errors.data);
+          });
+        console.log("activated");
+      }
+    },
+    deleteSecurity(id) {
+      axios
+        .delete(`/security/delete/${id}`)
+        .then((response) => {
+          this.makeToast("delete successful", "success");
+          console.log(response.data);
+          const trigger = document.getElementById("btn-delete-close");
+          trigger.click();
+          this.show(this.parking_id);
+        })
+        .catch((errors) => {
+          this.makeToast("delete failed", "error");
+          console.log(errors.data);
+        });
+    },
   },
 };
 </script>
 <style scoped>
+.error-box {
+  background-color: rgba(255, 64, 0, 0.4);
+  margin: 10px;
+  border-radius: 3px;
+}
 .modal-content {
   background-color: #374258;
 }
@@ -836,6 +994,7 @@ span > a {
 }
 
 .input-lg {
+  padding-left: 2rem;
   border-radius: 95px;
   height: 50px;
   background-color: #374258;
@@ -851,6 +1010,13 @@ span > a {
 
 input[type="date"]::-webkit-calendar-picker-indicator {
   background-image: url("@/assets/images/icons8-calendar-96.png");
+  background-position: end;
+  background-size: 20px 20px, 20px 20px;
+  background-repeat: no-repeat;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  background-image: url("@/assets/images/icons8-clock-96.png");
   background-position: end;
   background-size: 20px 20px, 20px 20px;
   background-repeat: no-repeat;

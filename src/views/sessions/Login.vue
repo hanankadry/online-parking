@@ -69,11 +69,13 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
+import axios from "axios";
 
 export default {
   data() {
     return {
       user: {
+        id: "",
         email: "",
         password: "",
       },
@@ -83,12 +85,31 @@ export default {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        this.$router.replace({path: "/dashboard", params: {user_email: this.user.email}});
+        this.getUser();
+        this.$router.replace(`/dashboard/${this.user.id}`);
       }
     });
   },
   methods: {
-    async signIn() {
+    signIn() {
+      const id = this.getUser();
+      this.checkUser(id);
+    },
+    getUser() {
+      axios
+        .get(`/admin/${this.user.email}`)
+        .then((response) => {
+          response.data.user.map((user) => {
+            this.user.id = user.id;
+          });
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+      return this.user.id;
+    },
+    async checkUser(user_id) {
       const auth = getAuth();
       await signInWithEmailAndPassword(
         auth,
@@ -97,7 +118,8 @@ export default {
       )
         .then((userCredential) => {
           const user = userCredential.user;
-          this.$router.push("/dashboard");
+          console.log(user_id);
+          this.$router.push(`/dashboard/${user_id}`);
         })
         .catch((error) => {
           const errorCode = error.code;
