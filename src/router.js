@@ -6,9 +6,10 @@ import NotFound from '@/views/pages/NotFound'
 const routes = [
 
   {
-    path: '/',
+    path: '/:id',
     name: 'home',
     component: () => import('@/views/Home.vue'),
+    props: true,
   },
 
   //sessions

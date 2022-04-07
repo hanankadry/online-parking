@@ -1,5 +1,5 @@
 <template>
-  <nav-bar />
+  <nav-bar :id="current_user.national_id" />
   <div class="container-fluid background">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
     <div class="container-fluid p-3">
@@ -624,25 +624,26 @@
 
 <script>
 export default {
+  props: ["id"],
   data() {
     return {
       current_user: {
         name: "",
-        nationalID: 0,
+        national_id: this.id,
         email: "",
         address: "",
-        gender: ["male", "female"],
-        phoneNumbers: [{ phone: "" }],
-        dateOfBirth: "",
+        gender: "",
+        phone: "",
+        dob: "",
       },
       new_user: {
         name: "",
-        nationalID: 0,
+        national_id: "",
         email: "",
         address: "",
-        gender: ["male", "female"],
-        phoneNumbers: [{ phone: "" }],
-        dateOfBirth: "",
+        gender: "",
+        phone: "",
+        dob: "",
       },
       phone: false,
       status: true,
@@ -667,7 +668,7 @@ export default {
         },
         {
           label: "Created At",
-          field: "createdAt",
+          field: "created_at",
           sortable: false,
           dateInputFormat: "yyyy-MM-dd",
           dateOutputFormat: "MMM do yyyy",
@@ -678,32 +679,7 @@ export default {
           sortable: false,
         },
       ],
-      rows: [
-        {
-          id: 1,
-          name: "John",
-          registrations: 5,
-          createdAt: "2020-12-03",
-        },
-        {
-          id: 2,
-          name: "Jane",
-          registrations: 3,
-          createdAt: "2021-12-03",
-        },
-        {
-          id: 3,
-          name: "Mark",
-          registrations: 8,
-          createdAt: "2018-12-03",
-        },
-        {
-          id: 4,
-          name: "Violet",
-          registrations: 1,
-          createdAt: "2009-12-03",
-        },
-      ],
+      rows: [],
     };
   },
 };

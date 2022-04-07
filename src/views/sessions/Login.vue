@@ -92,8 +92,7 @@ export default {
   },
   methods: {
     signIn() {
-      const id = this.getUser();
-      this.checkUser(id);
+      this.getUser();
     },
     getUser() {
       axios
@@ -102,12 +101,13 @@ export default {
           response.data.user.map((user) => {
             this.user.id = user.id;
           });
+          this.checkUser(this.user.id);
           console.log(response.data);
         })
         .catch((errors) => {
           console.log(errors.data);
         });
-      return this.user.id;
+      // return this.user.id;
     },
     async checkUser(user_id) {
       const auth = getAuth();

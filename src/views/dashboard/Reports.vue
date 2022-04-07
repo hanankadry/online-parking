@@ -1,5 +1,5 @@
 <template>
-  <nav-bar />
+  <nav-bar :id="user_id" />
   <div class="report">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
     <div class="container-fluid">
@@ -90,8 +90,10 @@
 
 <script>
 export default {
+  props: ["id"],
   data() {
     return {
+      user_id: this.id,
       label: "Reports",
       href: "/reports",
     };

@@ -19,7 +19,7 @@
         <div class="row">
           <ul class="nav">
             <li class="nav-item">
-              <router-link class="nav-link active" aria-current="page" to="/"
+              <router-link class="nav-link active" aria-current="page" :to="{ path: `/${user.id}` }" 
                 ><i class="bi bi-house-door nav-icon"></i>
               </router-link>
             </li>
@@ -181,7 +181,6 @@
 import { getAuth, signOut } from "firebase/auth";
 import { getMessaging, getToken } from "firebase/messaging";
 import axios from "axios";
-import { use } from "chai";
 
 export default {
   props: ["id"],

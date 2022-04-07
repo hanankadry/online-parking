@@ -1,11 +1,21 @@
 <template>
   <div class="container chart my-5">
-    <apexchart
-      type="line"
-      height="350"
-      :options="chartOptions"
-      :series="series"
-    ></apexchart>
+    <div class="row">
+      <apexchart
+        class="col-8"
+        type="bar"
+        height="350"
+        :options="barChartOptions"
+        :series="barSeries"
+      ></apexchart>
+      <apexchart
+        class="col-4"
+        type="polarArea"
+        height="350"
+        :options="pieChartOptions"
+        :series="pieSeries"
+      ></apexchart>
+    </div>
   </div>
 </template>
 
@@ -15,18 +25,24 @@ export default {
   components: {
     VueApexCharts,
   },
+  props: ["bar_new_data", "bar_old_data", "bar_name", "pie_data", "pie_labels"],
   data() {
     return {
-      series: [
+      pieSeries: this.pie_data,
+      barSeries: [
         {
-          name: "Sales",
-          data: [4, 3, 10, 9, 29, 19, 22, 9, 12, 7, 19, 5, 13, 9, 17, 2, 7, 5],
+          name: "New " + this.bar_name,
+          data: this.bar_new_data,
+        },
+        {
+          name: "Old " + this.bar_name,
+          data: this.bar_old_data,
         },
       ],
-      chartOptions: {
+      barChartOptions: {
         chart: {
           height: 350,
-          type: "line",
+          type: "bar",
           toolbar: {
             tools: {
               download: true,
@@ -40,37 +56,15 @@ export default {
           },
         },
         stroke: {
-          width: 5,
-          curve: "smooth",
+          show: true,
+          width: 1,
+          colors: ["transparent"],
+        },
+        dataLabels: {
+          enabled: false,
         },
         xaxis: {
-          type: "datetime",
-          categories: [
-            "1/11/2000",
-            "2/11/2000",
-            "3/11/2000",
-            "4/11/2000",
-            "5/11/2000",
-            "6/11/2000",
-            "7/11/2000",
-            "8/11/2000",
-            "9/11/2000",
-            "10/11/2000",
-            "11/11/2000",
-            "12/11/2000",
-            "1/11/2001",
-            "2/11/2001",
-            "3/11/2001",
-            "4/11/2001",
-            "5/11/2001",
-            "6/11/2001",
-          ],
-          tickAmount: 10,
-          labels: {
-            formatter: function (value, timestamp, opts) {
-              return opts.dateFormatter(new Date(timestamp), "dd MMM");
-            },
-          },
+          categories: ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"],
         },
         responsive: [
           {
@@ -79,7 +73,7 @@ export default {
           },
         ],
         title: {
-          text: "This Week",
+          text: "Last Two Weeks",
           align: "left",
           style: {
             fontSize: "16px",
@@ -87,21 +81,63 @@ export default {
           },
         },
         fill: {
-          type: "gradient",
-          gradient: {
-            shade: "dark",
-            gradientToColors: ["#374258"],
-            shadeIntensity: 1,
-            type: "horizontal",
-            opacityFrom: 1,
-            opacityTo: 1,
-            stops: [0, 100, 100, 100],
-          },
+          opacity: 1,
+          colors: ["#374258", "#f74464"],
         },
         yaxis: {
-          min: -10,
+          min: 0,
           max: 40,
         },
+      },
+      pieChartOptions: {
+        labels: this.pie_labels,
+        chart: {
+          height: 350,
+          type: "polarArea",
+          toolbar: {
+            tools: {
+              download: true,
+              selection: false,
+              zoom: false,
+              zoomin: false,
+              zoomout: false,
+              pan: false,
+              reset: false | '<img src="/static/icons/reset.png" width="20">',
+            },
+          },
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ["transparent"],
+        },
+        dataLabels: {
+          enabled: false,
+        },
+        fill: {
+          opacity: 1,
+        },
+        title: {
+          text: "Most Registered",
+          align: "left",
+          style: {
+            fontSize: "16px",
+            color: "#374258",
+          },
+        },
+        responsive: [
+          {
+            breakpoint: 480,
+            options: {
+              chart: {
+                width: 200,
+              },
+              legend: {
+                position: "bottom",
+              },
+            },
+          },
+        ],
       },
     };
   },

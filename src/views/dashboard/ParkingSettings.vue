@@ -1,5 +1,5 @@
 <template>
-  <nav-bar />
+  <nav-bar :id="user_id" />
   <div class="container-fluid background">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
     <form class="mt-5">
@@ -159,33 +159,35 @@
 
 <script>
 import { ref } from "@vue/reactivity";
+
 export default {
+  props: ["id"],
   data() {
     return {
       editting: false,
       label: "Parking Settings",
       href: "/parkingSettings",
+      user_id: this.id,
+      parkingSpace: {
+        location: "",
+        category: "",
+        description: "",
+        levels: "",
+        fees: false,
+        fee: "",
+        capacity: "",
+        name: "",
+        slotNaming: ["alpha", "numerical"],
+        slotLevel: 0,
+      },
+      numOfAlpha: "",
+      numPerAlpha: "",
+      slots: [],
+      Alphabets: Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
     };
   },
-  setup() {
-    const parkingSpace = ref({
-      location: "",
-      category: ["mall", "club", "public"],
-      description: "",
-      levels: 0,
-      fees: false,
-      fee: 0,
-      capacity: 0,
-      name: "",
-      slotNaming: ["alpha", "numerical"],
-      slotLevel: 0,
-    });
-    const numOfAlpha = ref(0);
-    const numPerAlpha = ref(0);
-    var slots = [];
-    const Alphabets = Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-
-    const getSlots = (endValue, numValue) => {
+  methods: {
+    getSlots(endValue, numValue) {
       slots = [];
       const letters = Alphabets.slice(0, endValue);
       const numOfSlots = [...Array(numValue - 1 + 1).keys()].map((x) => x + 1);
@@ -197,14 +199,7 @@ export default {
         }
       }
       return slots;
-    };
-
-    return {
-      parkingSpace,
-      numOfAlpha,
-      numPerAlpha,
-      getSlots,
-    };
+    },
   },
 };
 </script>

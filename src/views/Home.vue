@@ -33,7 +33,11 @@
               >
                 <button class="button-sm-fill">Login</button>
               </router-link>
-              <router-link to="/dashboard" class="nav-link" v-else>
+              <router-link
+                :to="{ path: `/dashboard/${user_id}` }"
+                class="nav-link"
+                v-else
+              >
                 <button class="button-sm-fill">Dashboard</button>
               </router-link>
             </li>
@@ -117,8 +121,10 @@
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import LandingPage from "@/components/LandingPage.vue";
 export default {
+  props: ["id"],
   data() {
     return {
+      user_id: this.id,
       loggedIn: true,
     };
   },
