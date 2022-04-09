@@ -19,7 +19,10 @@
         <div class="row">
           <ul class="nav">
             <li class="nav-item">
-              <router-link class="nav-link active" aria-current="page" :to="{ path: `/${user.id}` }" 
+              <router-link
+                class="nav-link active"
+                aria-current="page"
+                :to="{ path: `/${user.id}` }"
                 ><i class="bi bi-house-door nav-icon"></i>
               </router-link>
             </li>
@@ -154,22 +157,22 @@
         ></button>
       </div>
       <div class="offcanvas-body container mt-5">
-        <router-link :to="{ path: `/dashboard/${user.id}` }" class="nav"
+        <router-link :to="{ path: `/dashboard/${parking_id}` }" class="nav"
           ><i class="bi bi-columns nav-icon" />Dashboard</router-link
         >
-        <router-link :to="{ path: `/parkingSettings/${user.id}` }" class="nav">
+        <router-link :to="{ path: `/parkingSettings/${parking_id}` }" class="nav">
           <img class="sp-icon" />Parking Settings
         </router-link>
-        <router-link :to="{ path: `/securityMen/${user.id}` }" class="nav"
+        <router-link :to="{ path: `/securityMen/${parking_id}` }" class="nav"
           ><i class="bi bi-person nav-icon" />Security Men</router-link
         >
-        <router-link :to="{ path: `/users/${user.id}` }" class="nav"
+        <router-link :to="{ path: `/users/${parking_id}` }" class="nav"
           ><i class="bi bi-person nav-icon" />Users</router-link
         >
-        <router-link :to="{ path: `/reports/${user.id}` }" class="nav"
+        <router-link :to="{ path: `/reports/${parking_id}` }" class="nav"
           ><i class="bi bi-exclamation-octagon nav-icon" />Reports</router-link
         >
-        <router-link :to="{ path: `/registrations/${user.id}` }" class="nav"
+        <router-link :to="{ path: `/registrations/${parking_id}` }" class="nav"
           ><i class="bi bi-list-ul nav-icon" />Registrations</router-link
         >
       </div>
@@ -191,13 +194,13 @@ export default {
       notification: false,
       profile: false,
       user: {
-        id: this.id,
+        id: null,
         name: "",
         email: "",
         address: "",
         phone: "",
       },
-      parking_id: null,
+      parking_id: this.id,
       newNotifications: [
         {
           imageSrc: "@/assets/images/logo.jpg",
@@ -235,9 +238,25 @@ export default {
     };
   },
   mounted() {
-    this.getParkingID();
+    this.getUserID();
   },
   methods: {
+    getUserID() {
+      axios
+        .get(`/admin/id/${this.parking_id}`)
+        .then((response) => {
+          response.data.user.map((user) => {
+            this.user.name = user.username;
+            this.user.email = user.email;
+            this.user.address = user.address;
+            this.user.phone = user.phone;
+          });
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
     getParkingID() {
       axios
         .get(`/parking/${this.user.id}`)

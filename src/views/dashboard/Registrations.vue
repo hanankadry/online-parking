@@ -1,5 +1,5 @@
 <template>
-  <nav-bar :id="user_id" />
+  <nav-bar :id="parking_id" />
   <div class="container-fluid background">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
     <div class="container-fluid p-3">
@@ -334,9 +334,8 @@ export default {
   props: ["id"],
   data() {
     return {
-      user_id: this.id,
+      parking_id: this.id,
       current_registration: {
-        parking_id: null,
         id: "",
         user_id: "",
         car_id: "",
@@ -394,7 +393,8 @@ export default {
     };
   },
   mounted() {
-    this.getParkingID();
+    this.show(this.parking_id);
+    // this.getParkingID();
   },
   methods: {
     getParkingID() {
@@ -405,7 +405,6 @@ export default {
             this.parking_id = item.id;
           });
           console.log(response.data);
-          this.show(this.parking_id);
         })
         .catch((errors) => {
           console.log(errors.data);
@@ -417,7 +416,7 @@ export default {
     updateRegistration(id) {
       axios
         .post(`registration/update/${id}`, {
-          parking_id: this.current_registration.parking_id,
+          parking_id: this.parking_id,
           id: this.current_registration.id,
           user_id: this.current_registration.user_id,
           car_id: this.current_registration.car_id,

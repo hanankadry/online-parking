@@ -1,5 +1,5 @@
 <template>
-  <nav-bar :id="user.id" />
+  <nav-bar :id="parking_id" />
   <div class="container-fluid background">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
     <div class="container-fluid">
@@ -84,14 +84,11 @@
 
 <script>
 import Chart from "@/components/Chart.vue";
-
 import axios from "axios";
 import StatisticsCard from "@/components/StatisticsCard.vue";
-import PolarChart from "@/components/PolarChart.vue";
 
 export default {
   components: {
-    "polar-chart": PolarChart,
     chart: Chart,
     "statistics-card": StatisticsCard,
   },
@@ -100,7 +97,7 @@ export default {
     return {
       bar: {
         data: [15, 11, 12, 42, 15, 21, 20],
-        new_data: [20,],
+        new_data: [20],
         name: "Registrations",
       },
       pie: {
@@ -118,7 +115,7 @@ export default {
         ],
       },
       cards: [],
-      parking_id: null,
+      parking_id: this.id,
       label: "Dashboard",
       href: "/dashboard",
       search: false,
@@ -181,13 +178,12 @@ export default {
       ],
       registrationRows: [],
       slotRows: [],
-      user: {
-        id: this.id,
-      },
     };
   },
   mounted() {
-    this.getParkingID();
+    this.getStatistics(this.parking_id);
+    this.showRegistrations(this.parking_id);
+    this.showSlots(this.parking_id);
   },
   methods: {
     getStatistics(id) {
@@ -208,7 +204,6 @@ export default {
             posts.available_slots.length,
             posts.out_slots.length
           );
-          // const cards = [labels, values, icons];
           for (let i = 0; i < 3; i++) {
             this.cards.push({
               label: labels[i],

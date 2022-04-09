@@ -31,12 +31,12 @@ export default {
       pieSeries: this.pie_data,
       barSeries: [
         {
-          name: "New " + this.bar_name,
-          data: this.bar_new_data,
-        },
-        {
           name: "Old " + this.bar_name,
           data: this.bar_old_data,
+        },
+        {
+          name: "New " + this.bar_name,
+          data: this.bar_new_data,
         },
       ],
       barChartOptions: {
@@ -66,12 +66,6 @@ export default {
         xaxis: {
           categories: ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"],
         },
-        responsive: [
-          {
-            breakpoint: 960,
-            options: {},
-          },
-        ],
         title: {
           text: "Last Two Weeks",
           align: "left",
@@ -82,8 +76,8 @@ export default {
         },
         fill: {
           opacity: 1,
-          colors: ["#374258", "#f74464"],
         },
+        colors: ["#374258", "#f74464"],
         yaxis: {
           min: 0,
           max: 40,

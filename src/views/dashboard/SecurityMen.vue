@@ -1,5 +1,5 @@
 <template>
-  <nav-bar :id="current_user.id" />
+  <nav-bar :id="parking_id" />
   <div class="container-fluid background">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
     <div class="container-fluid p-3">
@@ -664,9 +664,9 @@ export default {
   data() {
     return {
       v$: useValidate(),
-      parking_id: null,
+      parking_id: this.id,
       current_user: {
-        id: this.id,
+        id: "",
         name: "",
         security_id: "",
         email: "",
@@ -741,7 +741,7 @@ export default {
   },
   props: ["id"],
   mounted() {
-    this.getParkingID();
+    this.show(this.parking_id);
   },
   validations() {
     return {
@@ -810,20 +810,6 @@ export default {
     },
     makeToast(msg, type) {
       this.$toast.show(msg, { type: type });
-    },
-    getParkingID() {
-      axios
-        .get(`/parking/${this.current_user.id}`)
-        .then((response) => {
-          response.data.parking.map((item) => {
-            this.parking_id = item.id;
-          });
-          console.log(response.data);
-          this.show(this.parking_id);
-        })
-        .catch((errors) => {
-          console.log(errors.data);
-        });
     },
     show(id) {
       axios
@@ -899,10 +885,9 @@ export default {
     },
     activateSecurity(id) {
       if ((this.current_user.status = "active")) {
-        this.current_user.status = "inactive";
         axios
           .post(`/security/${id}`, {
-            status: this.current_user.status,
+            status: "inactive",
           })
           .then((response) => {
             this.show(this.parking_id);
@@ -917,10 +902,9 @@ export default {
           });
         console.log("disactivated");
       } else {
-        this.current_user.status = "active";
         axios
           .post(`/security/${id}`, {
-            status: this.current_user.status,
+            status: "active",
           })
           .then((response) => {
             this.show(this.parking_id);

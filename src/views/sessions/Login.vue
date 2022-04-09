@@ -79,6 +79,7 @@ export default {
         email: "",
         password: "",
       },
+      parking_id: null,
     };
   },
   beforeMount() {
@@ -109,6 +110,19 @@ export default {
         });
       // return this.user.id;
     },
+    getParkingID(user_id) {
+      axios
+        .get(`/parking/${user_id}`)
+        .then((response) => {
+          response.data.parking.map((item) => {
+            this.parking_id = item.id;
+          });
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
     async checkUser(user_id) {
       const auth = getAuth();
       await signInWithEmailAndPassword(
@@ -118,8 +132,9 @@ export default {
       )
         .then((userCredential) => {
           const user = userCredential.user;
-          console.log(user_id);
-          this.$router.push(`/dashboard/${user_id}`);
+          this.getParkingID(user_id);
+          console.log(this.parking_id);
+          this.$router.push(`/dashboard/${this.parking_id}`);
         })
         .catch((error) => {
           const errorCode = error.code;

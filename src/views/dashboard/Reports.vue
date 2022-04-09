@@ -1,5 +1,5 @@
 <template>
-  <nav-bar :id="user_id" />
+  <nav-bar :id="parking_id" />
   <div class="report">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
     <div class="container-fluid">
@@ -93,7 +93,7 @@ export default {
   props: ["id"],
   data() {
     return {
-      user_id: this.id,
+      parking_id: this.id,
       label: "Reports",
       href: "/reports",
     };

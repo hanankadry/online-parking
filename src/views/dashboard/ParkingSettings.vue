@@ -1,5 +1,5 @@
 <template>
-  <nav-bar :id="user_id" />
+  <nav-bar :id="parking_id" />
   <div class="container-fluid background">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
     <form class="mt-5">
@@ -158,7 +158,6 @@
 </template>
 
 <script>
-import { ref } from "@vue/reactivity";
 
 export default {
   props: ["id"],
@@ -167,7 +166,7 @@ export default {
       editting: false,
       label: "Parking Settings",
       href: "/parkingSettings",
-      user_id: this.id,
+      parking_id: this.id,
       parkingSpace: {
         location: "",
         category: "",
@@ -178,7 +177,7 @@ export default {
         capacity: "",
         name: "",
         slotNaming: ["alpha", "numerical"],
-        slotLevel: 0,
+        slotLevel: "",
       },
       numOfAlpha: "",
       numPerAlpha: "",
