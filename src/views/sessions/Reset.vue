@@ -34,14 +34,16 @@
               required
             />
           </div>
+
           <div class="row mt-0 mx-2">
             <div class="col-xl-2 col-lg-3 col-md-4">
-              <a href="#" class="resend-code" id="link" @click="startTimer"
-                ><h5>Resend Code</h5></a
+              <a href="#" class="resend-code" id="link" @click="play">
+                <h5>Resend Code</h5></a
               >
             </div>
             <div class="col-lg-3 col-md-3">
-              <p id="timer">00:00</p>
+              <p id="timer" v-if="timerEnabled">00:{{ timerCount }}</p>
+              <p id="timer" v-else>01:00</p>
             </div>
           </div>
           <div class="btn-group-vertical mt-5">
@@ -60,6 +62,35 @@
 
 <script>
 export default {
+  data() {
+    return {
+      min:"1:00",
+      timerEnabled: false,
+      timerCount: 59,
+    };
+  },
+
+  watch: {
+    timerEnabled(value) {
+      if (value) {
+        setTimeout(() => {
+          this.timerCount--;
+        }, 1000);
+      }
+    },
+
+    timerCount: {
+      handler(value) {
+        if (value > 0 && this.timerEnabled) {
+          setTimeout(() => {
+            this.timerCount--;
+          }, 1000);
+        }
+      },
+      immediate: true, // This ensures the watcher is triggered upon creation
+    },
+  },
+
   methods: {
     reset() {
       this.$router.push("/dashboard");
@@ -67,28 +98,31 @@ export default {
     goBack() {
       this.$router.push("/forgot");
     },
+
+    play() {
+      this.timerEnabled = true;
+    },
+
+    /*
+    
     startTimer() {
       this.timer();
     },
     timer() {
-      var seconds = 59;
+      var seconds = 60;
       function myFunction() {
-        if(isChecked==true){
-          alert("here");
-        }
+        
         if (seconds < 60) {
           document.getElementById("timer").innerHTML = "00:" + seconds;
         }
         if (seconds > 0) {
-          
-          document.getElementById("timer").innerHTML = "00:" + seconds;
           seconds--;
           if (seconds < 10) {
             document.getElementById("timer").innerHTML = "00:0" + seconds;
           }
-        
           
-        } else {
+        }
+         else {
           document.getElementById("link").style.pointerEvents = "auto";
           document.getElementById("link").style.cursor = "pointer";
         }
@@ -100,6 +134,7 @@ export default {
 
       document.getElementById("timer").innerHTML = "01:00";
     },
+    */
   },
 };
 </script>
