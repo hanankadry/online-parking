@@ -430,7 +430,7 @@ export default {
       createUserWithEmailAndPassword(auth, this.user.email, this.user.password)
         .then((userCredential) => {
           const user = userCredential.user;
-          this.$router.push("/dashboard");
+          this.$router.push(`/dashboard/${this.parkingSpace.id}`);
         })
         .catch((error) => {
           console.log(error.message);
@@ -450,6 +450,8 @@ export default {
           password: this.user.password,
         })
         .then((response) => {
+          this.parkingSpace.id = response.data.parkingspace.id;
+          console.log(this.parkingSpace.id);
           console.log(response.data);
         })
         .catch((errors) => {

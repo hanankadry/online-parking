@@ -22,7 +22,7 @@
               <router-link
                 class="nav-link active"
                 aria-current="page"
-                :to="{ path: `/${user.id}` }"
+                :to="{ path: `/${parking_id}` }"
                 ><i class="bi bi-house-door nav-icon"></i>
               </router-link>
             </li>
@@ -274,9 +274,7 @@ export default {
             this.user.address = user.address;
             this.user.phone = user.phone;
           });
-          response.data.parking.map((item) => {
-            this.parking_id = item.id;
-          });
+          this.parking_id = response.data.parking.find((item) => item.id).id;
           console.log(response.data);
         })
         .catch((errors) => {
@@ -461,6 +459,7 @@ a .nav-link:hover {
   margin-left: 1.5rem;
   color: white;
   font-size: 14pt;
+  overflow: auto;
 }
 
 .dropdown-divider {

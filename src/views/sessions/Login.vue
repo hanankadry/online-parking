@@ -74,6 +74,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      auth: getAuth(),
       user: {
         id: "",
         email: "",
@@ -83,11 +84,10 @@ export default {
     };
   },
   beforeMount() {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(this.auth, (user) => {
       if (user) {
         this.getUser();
-        this.$router.replace(`/dashboard/${this.user.id}`);
+        this.$router.replace(`/dashboard/${this.parking_id}`);
       }
     });
   },
@@ -102,21 +102,20 @@ export default {
           response.data.user.map((user) => {
             this.user.id = user.id;
           });
+          // this.getParkingID(this.user.id);
           this.checkUser(this.user.id);
           console.log(response.data);
         })
         .catch((errors) => {
           console.log(errors.data);
         });
-      // return this.user.id;
     },
     getParkingID(user_id) {
       axios
-        .get(`/parking/${user_id}`)
+        .get(`/admin/parking/${user_id}`)
         .then((response) => {
-          response.data.parking.map((item) => {
-            this.parking_id = item.id;
-          });
+          this.parking_id = response.data.parking.find((item) => item.id).id;
+          console.log(this.parking_id);
           console.log(response.data);
         })
         .catch((errors) => {
@@ -124,9 +123,8 @@ export default {
         });
     },
     async checkUser(user_id) {
-      const auth = getAuth();
       await signInWithEmailAndPassword(
-        auth,
+        this.auth,
         this.user.email,
         this.user.password
       )
