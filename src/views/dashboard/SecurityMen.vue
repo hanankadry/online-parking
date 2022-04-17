@@ -453,7 +453,7 @@
             <button
               type="button"
               class="btn-close"
-              id="btn-close"
+              id="btn-add-close"
               data-bs-dismiss="modal"
               aria-label="Close"
             ></button>
@@ -482,11 +482,8 @@
                 <li v-if="v$.new_user.dob.$error">
                   {{ v$.new_user.dob.$errors[0].$message }}
                 </li>
-                <li v-if="v$.new_user.work_hours.from.$error">
-                  {{ v$.new_user.work_hours.from.$errors[0].$message }}
-                </li>
-                <li v-if="v$.new_user.work_hours.to.$error">
-                  {{ v$.new_user.work_hours.to.$errors[0].$message }}
+                <li v-if="v$.new_user.work_hours.$error">
+                  {{ v$.new_user.work_hours.$errors[0].$message }}
                 </li>
                 <li v-if="v$.new_user.status.$error">
                   {{ v$.new_user.status.$errors[0].$message }}
@@ -610,24 +607,11 @@
                       <label for="workHours" class="form-label"
                         >Work Hours</label
                       >
-                    </div>
-                    <div class="col">
-                      <label for="from" class="form-label">From</label>
                       <input
                         type="time"
-                        v-model="new_user.work_hours.from"
-                        class="form-control col-3 input-lg"
-                        id="from"
-                        required
-                      />
-                    </div>
-                    <div class="col">
-                      <label for="to" class="form-label">To</label>
-                      <input
-                        type="time"
-                        v-model="new_user.work_hours.to"
-                        class="form-control col-3 input-lg"
-                        id="to"
+                        v-model="new_user.work_hours"
+                        class="form-control input-lg"
+                        id="workHours"
                         required
                       />
                     </div>
@@ -687,10 +671,7 @@ export default {
         phone: "",
         dob: "",
         created_at: "",
-        work_hours: {
-          from: "",
-          to: "",
-        },
+        work_hours: "",
         status: "",
       },
       searchInput: "",
@@ -789,12 +770,7 @@ export default {
           ),
         },
         work_hours: {
-          from: {
-            required: helpers.withMessage("From value is required", required),
-          },
-          to: {
-            required: helpers.withMessage("To value is required", required),
-          },
+          required: helpers.withMessage("Work Hours is required", required),
         },
         status: {
           required: helpers.withMessage("Status is required", required),
@@ -828,8 +804,6 @@ export default {
       this.v$.$validate();
       if (!this.v$.$error) {
         this.addSecurity();
-        const trigger = document.getElementById("btn-close");
-        trigger.click();
       }
     },
     addSecurity() {
@@ -841,8 +815,7 @@ export default {
           gender: this.new_user.gender,
           address: this.new_user.address,
           dob: this.new_user.dob,
-          work_hours:
-            this.new_user.work_hours.from + " - " + this.new_user.work_hours.to,
+          work_hours: this.new_user.work_hours,
           phone: this.new_user.phone,
           status: this.new_user.status,
           created_at: this.new_user.created_at,
@@ -850,6 +823,9 @@ export default {
         .then((response) => {
           this.makeToast("insert successful", "success");
           this.show(this.parking_id);
+          const trigger = document.getElementById("btn-add-close");
+          trigger.click();
+          this.new_user = {};
           console.log(response.data);
         })
         .catch((errors) => {
@@ -881,10 +857,9 @@ export default {
           this.makeToast("update failed", "error");
           console.log(errors.data);
         });
-      console.log("updated");
     },
     activateSecurity(id) {
-      if ((this.current_user.status = "active")) {
+      if (this.current_user.status == "active") {
         axios
           .post(`/security/${id}`, {
             status: "inactive",
@@ -901,7 +876,7 @@ export default {
             console.log(errors.data);
           });
         console.log("disactivated");
-      } else {
+      } else if (this.current_user.status == "inactive") {
         axios
           .post(`/security/${id}`, {
             status: "active",
@@ -917,7 +892,6 @@ export default {
             this.makeToast("status change failed", "error");
             console.log(errors.data);
           });
-        console.log("activated");
       }
     },
     deleteSecurity(id) {

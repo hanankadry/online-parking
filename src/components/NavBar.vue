@@ -160,7 +160,10 @@
         <router-link :to="{ path: `/dashboard/${parking_id}` }" class="nav"
           ><i class="bi bi-columns nav-icon" />Dashboard</router-link
         >
-        <router-link :to="{ path: `/parkingSettings/${parking_id}` }" class="nav">
+        <router-link
+          :to="{ path: `/parkingSettings/${parking_id}` }"
+          class="nav"
+        >
           <img class="sp-icon" />Parking Settings
         </router-link>
         <router-link :to="{ path: `/securityMen/${parking_id}` }" class="nav"
@@ -182,14 +185,16 @@
 
 <script>
 import { getAuth, signOut } from "firebase/auth";
-import { getMessaging, getToken } from "firebase/messaging";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import axios from "axios";
 
 export default {
   props: ["id"],
   data() {
     return {
-      myVapidKey: this.vapidKey,
+      messaging: getMessaging(),
+      myVapidKey:
+        "BC3eNJcWM1hONjlE6NEpKLJ0tYNJVnlFtn07yp3uCrn9ahXaPCwuhwYO_8GkWL2SGHLAajIS52uYaMqsP6KgU08",
       showMenu: false,
       notification: false,
       profile: false,
@@ -238,6 +243,8 @@ export default {
     };
   },
   mounted() {
+    // this.getNotifications();
+    // console.log("Firebase cloud messaging object");
     this.getUserID();
   },
   methods: {
@@ -276,26 +283,24 @@ export default {
           console.log(errors.data);
         });
     },
-    updateNotifications() {
-      const messaging = getMessaging();
-      getToken(messaging, {
+    getNotifications() {
+      getToken(this.messaging, {
         vapidKey: this.myVapidKey,
       })
         .then((currentToken) => {
           if (currentToken) {
-            // Send the token to your server and update the UI if necessary
-            // ...
+            console.log("client token", currentToken);
+            // onMessage(this.messaging, (payload) => {
+            //   console.log("Message received. ", payload);
+            // });
           } else {
-            // Show permission request UI
             console.log(
               "No registration token available. Request permission to generate one."
             );
-            // ...
           }
         })
-        .catch((err) => {
-          console.log("An error occurred while retrieving token. ", err);
-          // ...
+        .catch((error) => {
+          console.log("An error occurred while retrieving token. ", error);
         });
     },
     showOffcanvasMenu() {
