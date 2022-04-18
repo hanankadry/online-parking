@@ -8,9 +8,9 @@
         aria-orientation="vertical"
       >
         <div class="row row-cols-auto mb-5 mt-2">
-          <a href="/dashboard">
-            <i class="col bi bi-chevron-left nav-icon"
-          /></a>
+          <button class="btn" @click="goBack">
+            <i class="col bi bi-chevron-left nav-icon" />
+          </button>
           <p class="col title text-start">
             <i class="col bi bi-gear-fill nav-icon me-1" />Settings
           </p>
@@ -53,24 +53,24 @@
               <form class="mt-5">
                 <div class="row pb-3 px-5">
                   <div class="col-md-6">
-                    <i class="bi bi-telephone md-icon" />
-                    <label for="phone1" class="form-label">Phone</label>
-                    <input
-                      type="text"
-                      v-model="user.phone"
-                      class="form-control input-lg"
-                      id="phone1"
-                      required
-                    />
-                  </div>
-                  <div class="col-md-6">
-                    <i class="bi bi-person md-icon" />
-                    <label for="email" class="form-label">Name</label>
+                    <i class="bi bi-envelope md-icon" />
+                    <label for="email" class="form-label">Email</label>
                     <input
                       type="email"
                       v-model="user.email"
                       class="form-control input-lg"
                       id="email"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-6">
+                    <i class="bi bi-telephone md-icon" />
+                    <label for="phone" class="form-label">Phone</label>
+                    <input
+                      type="text"
+                      v-model="user.phone"
+                      class="form-control input-lg"
+                      id="phone"
                       required
                     />
                   </div>
@@ -98,6 +98,7 @@
                       type="date"
                       v-model="user.dob"
                       class="form-control input-lg date"
+                      @change="getAge"
                       id="dateOfBirth"
                       required
                     />
@@ -114,6 +115,27 @@
                       id="address"
                       required
                     />
+                  </div>
+                </div>
+                <div class="row pb-3 px-5" v-if="editting == true">
+                  <div class="error-box" v-if="v$.$error">
+                    <ul>
+                      <li v-if="v$.user.email.$error">
+                        {{ v$.user.email.$errors[0].$message }}
+                      </li>
+                      <li v-if="v$.user.national_id.$error">
+                        {{ v$.user.national_id.$errors[0].$message }}
+                      </li>
+                      <li v-if="v$.user.address.$error">
+                        {{ v$.user.address.$errors[0].$message }}
+                      </li>
+                      <li v-if="v$.user.dob.$error">
+                        {{ v$.user.dob.$errors[0].$message }}
+                      </li>
+                      <li v-if="v$.user.phone.$error">
+                        {{ v$.user.phone.$errors[0].$message }}
+                      </li>
+                    </ul>
                   </div>
                 </div>
                 <div class="row pt-4 pb-3 px-5" v-if="editting == false">
@@ -136,7 +158,7 @@
                     <button
                       class="button-md-fill col"
                       type="button"
-                      @click="editting = false"
+                      @click="updateUser"
                     >
                       Save
                     </button>
@@ -239,6 +261,21 @@
                   </div>
                 </div>
                 <div class="row pb-3 px-5">
+                  <div class="error-box">
+                    <ul>
+                      <li v-if="v$.update.oldPass.$error">
+                        {{ v$.update.oldPass.$errors[0].$message }}
+                      </li>
+                      <li v-if="v$.update.newPass.$error">
+                        {{ v$.update.newPass.$errors[0].$message }}
+                      </li>
+                      <li v-if="v$.update.confirmNewPass.$error">
+                        {{ v$.update.confirmNewPass.$errors[0].$message }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="row pb-3 px-5">
                   <div class="buttons col offset-md-7">
                     <button class="button-md-unfill me-2" type="button">
                       Cancel
@@ -262,23 +299,37 @@
 </template>
 
 <script>
+import axios from "axios";
+import useValidate from "@vuelidate/core";
+import {
+  required,
+  email,
+  minLength,
+  maxLength,
+  numeric,
+  helpers,
+  sameAs,
+} from "@vuelidate/validators";
 export default {
+  props: ["id"],
   data() {
     return {
+      v$: useValidate(),
+      parking_id: this.id,
       show: false,
       showCheck: false,
       confirm: false,
       oldPass: false,
       newPass: false,
       user: {
-        name: "",
         national_id: "",
+        name: "",
         email: "",
         address: "",
-        password: "",
         gender: "",
         phone: "",
         dob: "",
+        password: "",
       },
       update: {
         oldPass: "",
@@ -286,11 +337,139 @@ export default {
         confirmNewPass: "",
       },
       editting: false,
+      thisYear: new Date().toLocaleDateString("en-us", {
+        year: "numeric",
+      }),
+      minValue: null,
     };
   },
+  validations() {
+    return {
+      update: {
+        oldPass: {
+          required: helpers.withMessage("Old Password is required", required),
+          sameAsPassword: helpers.withMessage(
+            "Old Passwaord isn't a match",
+            sameAs(this.user.password)
+          ),
+        },
+        newPass: {
+          required: helpers.withMessage("New Password is required", required),
+        },
+        confirmNewPass: {
+          required: helpers.withMessage(
+            "New Password Confirmation is required",
+            required
+          ),
+          sameAsPassword: helpers.withMessage(
+            "New Password and Password Confirmation must be match",
+            sameAs(this.update.newPass)
+          ),
+        },
+      },
+      user: {
+        national_id: {
+          required: helpers.withMessage("National ID is required", required),
+          numeric: helpers.withMessage("National ID must be numeric", numeric),
+          maxLength: helpers.withMessage(
+            "National ID must be 14 digits long",
+            maxLength(14)
+          ),
+          minLength: helpers.withMessage(
+            "National ID must be 14 digits long",
+            maxLength(14)
+          ),
+        },
+        email: {
+          required: helpers.withMessage("Email is required", required),
+          email,
+        },
+        address: {
+          required: helpers.withMessage("Address is required", required),
+        },
+        phone: {
+          required: helpers.withMessage("Phone Number is required", required),
+          numeric: helpers.withMessage("Phone Number must be numeric", numeric),
+          maxLength: helpers.withMessage(
+            "Phone Number must be 11 digits long",
+            maxLength(11)
+          ),
+          minLength: helpers.withMessage(
+            "Phone Number must be 11 digits long",
+            minLength(11)
+          ),
+        },
+        dob: {
+          required: helpers.withMessage("Date of Birth is required", required),
+          checkAge: helpers.withMessage(
+            () => "Age must be greater than 21",
+            () => this.minValue >= 21
+          ),
+        },
+      },
+    };
+  },
+  mounted() {
+    this.getUser();
+  },
   methods: {
+    getAge() {
+      const year = this.user.dob.split("-", 1);
+      this.minValue = this.thisYear - year;
+      return this.minValue;
+    },
+    getUser() {
+      axios
+        .get(`/admin/id/${this.parking_id}`)
+        .then((response) => {
+          response.data.user.map((user) => {
+            this.user.dob = user.dob;
+            this.user.name = user.username;
+            this.user.gender = user.gender;
+            this.user.national_id = user.id;
+            this.user.email = user.email;
+            this.user.address = user.address;
+            this.user.phone = user.phone;
+            this.user.password = user.password;
+          });
+          console.log(this.user);
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
+    goBack() {
+      this.$router.back();
+    },
+    makeToast(msg, type) {
+      this.$toast.show(msg, { type: type });
+    },
     updateUser() {
-      this.user.password = this.update.newPass;
+      this.v$.$validate();
+      if (!this.v$.$error) {
+        axios
+          .post(`/user/update/${this.user.national_id}`, {
+            dob: this.user.dob,
+            username: this.user.name,
+            gender: this.user.gender,
+            id: this.user.national_id,
+            email: this.user.email,
+            address: this.user.address,
+            phone: this.user.phone,
+            role: "admin",
+          })
+          .then((response) => {
+            this.makeToast("update successful", "success");
+            this.getUser();
+            this.editting = false;
+            console.log(response.data);
+          })
+          .catch((errors) => {
+            this.makeToast("update failed", "error");
+            console.log(errors.data);
+          });
+      }
     },
     checkPass() {
       this.show = true;
@@ -324,6 +503,17 @@ export default {
 </script>
 
 <style scoped>
+.error-box {
+  background-color: rgba(255, 64, 0, 0.4);
+  margin: 10px;
+  border-radius: 3px;
+}
+.btn {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+
 .container-fluid {
   top: 0;
   background-color: #374258;
@@ -351,6 +541,7 @@ export default {
 }
 
 .title {
+  padding-top: 15px;
   font-size: 30px;
 }
 
@@ -364,16 +555,18 @@ export default {
   position: relative;
   font-weight: bold;
   font-size: larger;
+  text-decoration: none;
 }
 
-.nav-link:focus {
+/* .nav-link:focus {
   background-color: #374258;
   border: none;
-}
+} */
 
-.nav-link:active {
-  background-color: #374258;
+.nav-link:is(.active) {
+  background-color: #374258 !important;
   border: none;
+  border-radius: 95px;
 }
 
 .body {

@@ -145,16 +145,17 @@
       :style="{ visibility: showMenu ? 'visible' : 'hidden' }"
     >
       <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="">
-          <a class="nav-brand" href="/">
+        <h5 class="offcanvas-title">
+          <router-link class="nav-brand" :to="{ path: `/${parking_id}` }">
             <img src="@/assets/images/logo.jpg" class="logo" />
-          </a>
+          </router-link>
         </h5>
         <button
           type="button"
           class="me-3 btn-close text-reset"
+          data-bs-dismiss="offcanvas"
           @click.prevent="showOffcanvasMenu()"
-        ></button>
+        />
       </div>
       <div class="offcanvas-body container mt-5">
         <router-link :to="{ path: `/dashboard/${parking_id}` }" class="nav"
@@ -248,6 +249,13 @@ export default {
     this.getUserID();
   },
   methods: {
+    updateNotifications() {
+      if (this.newNotifications.length != 0) {
+        for (let i = 0; i < this.newNotifications.length; i++) {
+          this.oldNotifications.push(this.newNotifications[i]);
+        }
+      }
+    },
     getUserID() {
       axios
         .get(`/admin/id/${this.parking_id}`)
@@ -288,9 +296,9 @@ export default {
         .then((currentToken) => {
           if (currentToken) {
             console.log("client token", currentToken);
-            // onMessage(this.messaging, (payload) => {
-            //   console.log("Message received. ", payload);
-            // });
+            onMessage(this.messaging, (payload) => {
+              console.log("Message received. ", payload);
+            });
           } else {
             console.log(
               "No registration token available. Request permission to generate one."
@@ -305,7 +313,7 @@ export default {
       this.showMenu ? (this.showMenu = false) : (this.showMenu = true);
     },
     edit() {
-      this.$router.push("/settings");
+      this.$router.push(`/settings/${this.parking_id}`);
     },
     signOut() {
       const auth = getAuth();
@@ -441,6 +449,7 @@ a .nav-link:hover {
 .profile .dropdown-menu {
   height: 27.5rem;
   width: 17rem;
+  padding: 10px;
 }
 
 .profile-image {
@@ -459,7 +468,9 @@ a .nav-link:hover {
   margin-left: 1.5rem;
   color: white;
   font-size: 14pt;
-  overflow: auto;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .dropdown-divider {

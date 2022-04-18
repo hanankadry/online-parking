@@ -40,9 +40,10 @@ const routes = [
 
   //pages
   {
-    path: '/settings',
+    path: '/settings/:id',
     name: 'settings',
-    component: () => import('@/views/pages/Settings')
+    component: () => import('@/views/pages/Settings'),
+    props: true
   },
   {
     path: '/:pathMatch(.*)*',
