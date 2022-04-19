@@ -60,23 +60,27 @@
                       v-model="user.email"
                       class="form-control input-lg"
                       id="email"
+                      disabled
                       required
                     />
                   </div>
                   <div class="col-md-6">
-                    <i class="bi bi-telephone md-icon" />
-                    <label for="phone" class="form-label">Phone</label>
+                    <i class="bi bi-image md-icon" />
+                    <label for="picture" class="form-label"
+                      >Profile Picture</label
+                    >
                     <input
-                      type="text"
-                      v-model="user.phone"
-                      class="form-control input-lg"
-                      id="phone"
+                      type="file"
+                      :change="user.photoURL"
+                      class="form-control-lg input-file-lg"
+                      id="picture"
+                      disabled
                       required
                     />
                   </div>
                 </div>
                 <div class="row pb-3 px-5">
-                  <div class="col-md-6">
+                  <div class="col-lg-4">
                     <i class="bi bi-person-lines-fill md-icon" />
                     <label for="nationalID" class="form-label"
                       >National ID</label
@@ -86,10 +90,23 @@
                       v-model="user.national_id"
                       class="form-control input-lg"
                       id="nationalID"
+                      disabled
                       required
                     />
                   </div>
-                  <div class="col-lg-6">
+                  <div class="col-lg-4">
+                    <i class="bi bi-telephone md-icon" />
+                    <label for="phone" class="form-label">Phone</label>
+                    <input
+                      type="text"
+                      v-model="user.phone"
+                      class="form-control input-lg"
+                      id="phone"
+                      disabled
+                      required
+                    />
+                  </div>
+                  <div class="col-lg-4">
                     <i class="bi bi-calendar2-week md-icon" />
                     <label for="dateOfBirth" class="form-label"
                       >Date of Birth</label
@@ -100,6 +117,7 @@
                       class="form-control input-lg date"
                       @change="getAge"
                       id="dateOfBirth"
+                      disabled
                       required
                     />
                   </div>
@@ -113,6 +131,7 @@
                       v-model="user.address"
                       class="form-control input-lg"
                       id="address"
+                      disabled
                       required
                     />
                   </div>
@@ -141,7 +160,7 @@
                 <div class="row pt-4 pb-3 px-5" v-if="editting == false">
                   <button
                     class="button-md-fill col-3 offset-lg-9 offset-sm-8"
-                    @click="editting = true"
+                    @click="enable"
                   >
                     Edit
                   </button>
@@ -151,7 +170,7 @@
                     <button
                       class="button-md-unfill col me-2"
                       type="button"
-                      @click="editting = false"
+                      @click="disable"
                     >
                       Cancel
                     </button>
@@ -165,6 +184,75 @@
                   </div>
                 </div>
               </form>
+              <div
+                class="modal fade delete-modal"
+                id="myModal"
+                data-bs-keyboard="false"
+                tabindex="-1"
+                aria-labelledby="staticBackdropLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="staticBackdropLabel">
+                        Re-authenticate
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        id="btn-delete-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      <form class="row g-3">
+                        <div class="col-auto">
+                          <label for="staticEmail2" class="visually-hidden"
+                            >Email</label
+                          >
+                          <input
+                            type="text"
+                            readonly
+                            class="form-control-plaintext"
+                            id="staticEmail2"
+                            value="email@example.com"
+                          />
+                        </div>
+                        <div class="col-auto">
+                          <label for="inputPassword2" class="visually-hidden"
+                            >Password</label
+                          >
+                          <input
+                            type="password"
+                            class="form-control"
+                            id="inputPassword2"
+                            placeholder="Password"
+                          />
+                        </div>
+                        <div class="col-auto">
+                          <button type="submit" class="btn btn-primary mb-3">
+                            Confirm identity
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="button-xs-unfill">
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        @click="deleteSecurity(current_user.id)"
+                        class="button-xs-danger"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -261,7 +349,7 @@
                   </div>
                 </div>
                 <div class="row pb-3 px-5">
-                  <div class="error-box">
+                  <div class="error-box" v-if="v$.$error">
                     <ul>
                       <li v-if="v$.update.oldPass.$error">
                         {{ v$.update.oldPass.$errors[0].$message }}
@@ -276,7 +364,7 @@
                   </div>
                 </div>
                 <div class="row pb-3 px-5">
-                  <div class="buttons col offset-md-7">
+                  <div class="buttons col offset-lg-6">
                     <button class="button-md-unfill me-2" type="button">
                       Cancel
                     </button>
@@ -299,6 +387,14 @@
 </template>
 
 <script>
+import {
+  getAuth,
+  updateProfile,
+  updateEmail,
+  updatePassword,
+  reauthenticateWithCredential,
+  onAuthStateChanged,
+} from "firebase/auth";
 import axios from "axios";
 import useValidate from "@vuelidate/core";
 import {
@@ -314,6 +410,7 @@ export default {
   props: ["id"],
   data() {
     return {
+      auth: getAuth(),
       v$: useValidate(),
       parking_id: this.id,
       show: false,
@@ -330,6 +427,7 @@ export default {
         phone: "",
         dob: "",
         password: "",
+        photoURL: "",
       },
       update: {
         oldPass: "",
@@ -413,11 +511,13 @@ export default {
     this.getUser();
   },
   methods: {
+    //check age if < 21
     getAge() {
       const year = this.user.dob.split("-", 1);
       this.minValue = this.thisYear - year;
       return this.minValue;
     },
+    //get user data
     getUser() {
       axios
         .get(`/admin/id/${this.parking_id}`)
@@ -432,45 +532,129 @@ export default {
             this.user.phone = user.phone;
             this.user.password = user.password;
           });
+          const userAuth = this.auth.currentUser;
+          if (userAuth !== null) {
+            this.user.photoURL = userAuth.photoURL;
+            const uid = userAuth.uid;
+          }
           console.log(this.user);
+          console.log(this.user.photoURL);
           console.log(response.data);
         })
         .catch((errors) => {
           console.log(errors.data);
         });
     },
+    //return to previous page
     goBack() {
       this.$router.back();
     },
+    //show to toast on change made
     makeToast(msg, type) {
       this.$toast.show(msg, { type: type });
     },
-    updateUser() {
+    //general settings save btn action
+    updateGeneral() {
       this.v$.$validate();
       if (!this.v$.$error) {
-        axios
-          .post(`/user/update/${this.user.national_id}`, {
-            dob: this.user.dob,
-            username: this.user.name,
-            gender: this.user.gender,
-            id: this.user.national_id,
-            email: this.user.email,
-            address: this.user.address,
-            phone: this.user.phone,
-            role: "admin",
-          })
-          .then((response) => {
-            this.makeToast("update successful", "success");
-            this.getUser();
-            this.editting = false;
-            console.log(response.data);
-          })
-          .catch((errors) => {
-            this.makeToast("update failed", "error");
-            console.log(errors.data);
-          });
+        this.updateUser();
+        // this.updatePass();
       }
     },
+    //change password save btn action
+    update() {
+      this.v$.$validate();
+      if (!this.v$.$error) {
+        // this.updateUser();
+        this.updatePass();
+      }
+    },
+    //input enable action
+    enable() {
+      this.editting = true;
+      document.getElementById("email").disabled = "";
+      document.getElementById("picture").disabled = "";
+      document.getElementById("nationalID").disabled = "";
+      document.getElementById("phone").disabled = "";
+      document.getElementById("dateOfBirth").disabled = "";
+      document.getElementById("address").disabled = "";
+    },
+    //input disable action
+    disable() {
+      this.editting = false;
+      document.getElementById("email").disabled = "true";
+      document.getElementById("picture").disabled = "true";
+      document.getElementById("nationalID").disabled = "true";
+      document.getElementById("phone").disabled = "true";
+      document.getElementById("dateOfBirth").disabled = "true";
+      document.getElementById("address").disabled = "true";
+    },
+    //change user data in database and firebase
+    updateUser() {
+      axios
+        .post(`/user/update/${this.user.national_id}`, {
+          dob: this.user.dob,
+          username: this.user.name,
+          gender: this.user.gender,
+          id: this.user.national_id,
+          email: this.user.email,
+          address: this.user.address,
+          phone: this.user.phone,
+          role: "admin",
+        })
+        .then((response) => {
+          this.makeToast("update successful", "success");
+          this.getUser();
+          this.disable();
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          this.makeToast("update failed", "error");
+          console.log(errors.data);
+        });
+      // updateProfile(this.auth.currentUser, {
+      //   photoURL: this.user.photoURL,
+      // })
+      //   .then((response) => {
+      //     alert("successful photo");
+      //     console.log(response);
+      //   })
+      //   .catch((error) => {
+      //     console.log(error.data);
+      //   });
+      updateEmail(this.auth.currentUser, this.user.email)
+        .then((response) => {
+          alert("successful email");
+          console.log(response);
+        })
+        .catch((error) => {
+          if (error.code == "auth/requires-recent-login") {
+            this.reauthenticate();
+          } else {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert(errorCode + " " + errorMessage);
+          }
+        });
+    },
+    reauthenticate() {
+      const user = this.auth.currentUser;
+      const credential = this.promptForCredentials();
+      reauthenticateWithCredential(user, credential)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((errors) => {
+          const errorsCode = errors.code;
+          const errorsMessage = errors.message;
+          alert(errorsCode + errorsMessage);
+        });
+    },
+    promptForCredentials() {
+      var myModalEl = document.getElementById("myModal");
+      myModalEl.addEventListener("show.bs.modal");
+    },
+    //
     checkPass() {
       this.show = true;
       if (this.update.oldPass == this.user.password) {
@@ -597,6 +781,15 @@ export default {
   padding-left: 30px;
 }
 
+.input-file-lg {
+  border-radius: 95px;
+  height: 50px;
+  width: calc(100% - 5px);
+  background-color: white;
+  border: none;
+  color: black;
+}
+
 .upload-input {
   border-radius: 95px;
   background-color: white;
@@ -619,6 +812,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background-size: 20px 20px, 20px 20px;
   background-repeat: no-repeat;
 }
+
+input[type="file"]::-webkit-file-upload-button {
+  border: none;
+  height: 50px;
+  border-radius: 95px;
+  background-color: #f74464;
+}
+
 .selector-lg {
   border-radius: 95px;
   height: 50px;
