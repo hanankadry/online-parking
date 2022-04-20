@@ -50,6 +50,18 @@ const routes = [
     name: 'not found',
     component: NotFound
   },
+  {
+    path: '/contact/:id',
+    name: 'contact',
+    component: () => import('@/views/pages/Contact'),
+    props: true
+  },
+  {
+    path: '/about/:id',
+    name: 'about',
+    component: () => import('@/views/pages/About'),
+    props: true
+  },
 
   //dashboard
   {

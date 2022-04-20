@@ -96,8 +96,8 @@ export default {
   data() {
     return {
       bar: {
-        data: [15, 11, 12, 42, 15, 21, 20],
-        new_data: [20],
+        data: [],
+        new_data: [],
         name: "Registrations",
       },
       pie: {
@@ -182,10 +182,26 @@ export default {
   },
   mounted() {
     this.getStatistics(this.parking_id);
+    this.getChartValues(this.parking_id);
     this.showRegistrations(this.parking_id);
     this.showSlots(this.parking_id);
   },
   methods: {
+    getChartValues(id) {
+      axios
+        .get(`/admin/chart/${id}`)
+        .then((response) => {
+          this.bar.data = response.data.old_values;
+          this.bar.new_data = response.data.new_values;
+
+          console.log(response.data);
+          console.log(this.bar.data);
+          console.log(this.bar.new_data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
     getStatistics(id) {
       const labels = ["Registrations", "Available Slots", "Out of Order Slots"];
       const icons = [
