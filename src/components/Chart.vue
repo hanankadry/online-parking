@@ -26,6 +26,9 @@ export default {
     VueApexCharts,
   },
   props: ["bar_new_data", "bar_old_data", "bar_name", "pie_data", "pie_labels"],
+  mounted() {
+    console.log(this.barSeries);
+  },
   data() {
     return {
       pieSeries: this.pie_data,
@@ -80,7 +83,7 @@ export default {
         colors: ["#374258", "#f74464"],
         yaxis: {
           min: 0,
-          max: 40,
+          max: 10,
         },
       },
       pieChartOptions: {
@@ -112,7 +115,7 @@ export default {
           opacity: 1,
         },
         title: {
-          text: "Most Registered",
+          text: "Most Crowded",
           align: "left",
           style: {
             fontSize: "16px",

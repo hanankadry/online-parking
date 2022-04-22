@@ -191,8 +191,10 @@ export default {
       axios
         .get(`/admin/chart/${id}`)
         .then((response) => {
-          this.bar.data = response.data.old_values;
-          this.bar.new_data = response.data.new_values;
+          for (let i = 0; i < 7; i++) {
+            this.bar.data.push(response.data.old_values[i]);
+            this.bar.new_data.push(response.data.new_values[i]);
+          }
 
           console.log(response.data);
           console.log(this.bar.data);
