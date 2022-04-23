@@ -3,9 +3,9 @@
   <header class="header">
     <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container-fluid">
-        <a class="nav-brand" href="/">
+        <router-link class="nav-brand" :to="{ path: `/${user_id}` }">
           <img src="@/assets/images/logo.jpg" class="logo" />
-        </a>
+        </router-link>
         <button
           class="navbar-toggler"
           type="button"
@@ -20,10 +20,18 @@
         <div class="collapse navbar-collapse justify-content-end">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link mt-2">About</a>
+              <router-link
+                class="nav-link mt-2"
+                :to="{ path: `/about/${user_id}` }"
+                >About</router-link
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link mt-2">Contact</a>
+              <router-link
+                class="nav-link mt-2"
+                :to="{ path: `/contact/${user_id}` }"
+                >Contact</router-link
+              >
             </li>
             <li class="nav-item">
               <router-link

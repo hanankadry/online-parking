@@ -184,7 +184,8 @@
                   </div>
                 </div>
               </form>
-              <div
+              <!-- re-authenticate modal -->
+              <!-- <div
                 class="modal fade delete-modal"
                 id="myModal"
                 data-bs-keyboard="false"
@@ -252,7 +253,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -393,7 +394,7 @@ import {
   updateEmail,
   updatePassword,
   reauthenticateWithCredential,
-  onAuthStateChanged,
+  EmailAuthProvider,
 } from "firebase/auth";
 import axios from "axios";
 import useValidate from "@vuelidate/core";
@@ -406,6 +407,7 @@ import {
   helpers,
   sameAs,
 } from "@vuelidate/validators";
+import { use } from "chai";
 export default {
   props: ["id"],
   data() {
@@ -509,6 +511,7 @@ export default {
   },
   mounted() {
     this.getUser();
+    console.log(this.user.email);
   },
   methods: {
     //check age if < 21
@@ -538,7 +541,6 @@ export default {
             const uid = userAuth.uid;
           }
           console.log(this.user);
-          console.log(this.user.photoURL);
           console.log(response.data);
         })
         .catch((errors) => {
@@ -558,6 +560,7 @@ export default {
       this.v$.$validate();
       if (!this.v$.$error) {
         this.updateUser();
+
         // this.updatePass();
       }
     },
@@ -591,6 +594,7 @@ export default {
     },
     //change user data in database and firebase
     updateUser() {
+      const user = this.auth.currentUser;
       axios
         .post(`/user/update/${this.user.national_id}`, {
           dob: this.user.dob,
@@ -612,47 +616,44 @@ export default {
           this.makeToast("update failed", "error");
           console.log(errors.data);
         });
-      // updateProfile(this.auth.currentUser, {
-      //   photoURL: this.user.photoURL,
-      // })
-      //   .then((response) => {
-      //     alert("successful photo");
-      //     console.log(response);
-      //   })
-      //   .catch((error) => {
-      //     console.log(error.data);
-      //   });
-      updateEmail(this.auth.currentUser, this.user.email)
-        .then((response) => {
-          alert("successful email");
-          console.log(response);
+      if (this.user.photoURL != null) {
+        updateProfile(this.auth.currentUser, {
+          photoURL: this.user.photoURL,
         })
-        .catch((error) => {
-          if (error.code == "auth/requires-recent-login") {
-            this.reauthenticate();
-          } else {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            alert(errorCode + " " + errorMessage);
-          }
-        });
-    },
-    reauthenticate() {
-      const user = this.auth.currentUser;
-      const credential = this.promptForCredentials();
-      reauthenticateWithCredential(user, credential)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((errors) => {
-          const errorsCode = errors.code;
-          const errorsMessage = errors.message;
-          alert(errorsCode + errorsMessage);
-        });
-    },
-    promptForCredentials() {
-      var myModalEl = document.getElementById("myModal");
-      myModalEl.addEventListener("show.bs.modal");
+          .then((response) => {
+            alert("successful photo");
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log(error.data);
+          });
+      }
+      if (this.user.email != user.email) {
+        updateEmail(user, this.user.email)
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            if (error.code == "auth/requires-recent-login") {
+              const credential = EmailAuthProvider.credential(
+                user.email,
+                this.user.password
+              );
+              reauthenticateWithCredential(user, credential)
+                .then((response) => {
+                  console.log(response);
+                  console.log("email change successful");
+                })
+                .catch((error) => {
+                  console.log(error.data);
+                  console.log("email change failed");
+                });
+            } else {
+              const errorMessage = error.message;
+              console.log(errorMessage);
+            }
+          });
+      }
     },
     //
     checkPass() {

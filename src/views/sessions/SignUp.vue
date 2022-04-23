@@ -188,7 +188,7 @@
               <i class="bi bi-geo-alt sm-icon" />
               <label for="location" class="form-label">Location</label>
               <input
-                type="text"
+                type="address"
                 v-model="parkingSpace.location"
                 class="form-control input-xl"
                 id="loaction"
