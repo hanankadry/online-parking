@@ -40,7 +40,12 @@
             </div>
             <div class="col-lg-3 col-md-3">
               <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="toggle" />
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="toggle"
+                  v-model="user.remember"
+                />
               </div>
             </div>
           </div>
@@ -66,6 +71,9 @@
 <script>
 import {
   getAuth,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
   signInWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
@@ -79,6 +87,7 @@ export default {
         id: "",
         email: "",
         password: "",
+        rememeber: false,
       },
       parking_id: null,
     };
@@ -123,6 +132,29 @@ export default {
         });
     },
     async checkUser(user_id) {
+      if (this.user.rememeber == true) {
+        setPersistence(this.auth, browserLocalPersistence)
+          .then(() => {
+            return this.firebaseSignIn(user_id);
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode);
+          });
+      } else {
+        setPersistence(this.auth, browserSessionPersistence)
+          .then(() => {
+            return this.firebaseSignIn(user_id);
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode);
+          });
+      }
+    },
+    async firebaseSignIn(user_id) {
       await signInWithEmailAndPassword(
         this.auth,
         this.user.email,

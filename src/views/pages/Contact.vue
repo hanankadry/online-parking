@@ -224,7 +224,7 @@ header h1 {
   margin: 0px;
 }
 .vue-form .error-message p {
-  background: #e94b35;
+  background-color: rgba(255, 64, 0, 0.4);
   color: #ffffff;
   font-size: 1.4rem;
   text-align: center;
@@ -234,7 +234,7 @@ header h1 {
   padding: 16px;
 }
 .vue-form .error {
-  border-color: #e94b35 !important;
+  border-color: rgba(255, 64, 0, 0.4) !important;
 }
 .vue-form .counter {
   background-color: #ecf0f1;

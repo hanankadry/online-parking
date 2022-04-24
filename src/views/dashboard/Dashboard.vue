@@ -178,13 +178,11 @@ export default {
       ],
       registrationRows: [],
       slotRows: [],
+      loaded: false,
     };
   },
   mounted() {
-    this.getStatistics(this.parking_id);
-    this.getChartValues(this.parking_id);
-    this.showRegistrations(this.parking_id);
-    this.showSlots(this.parking_id);
+    this.getParkingID();
   },
   methods: {
     getChartValues(id) {
@@ -195,10 +193,7 @@ export default {
             this.bar.data.push(response.data.old_values[i]);
             this.bar.new_data.push(response.data.new_values[i]);
           }
-
           console.log(response.data);
-          console.log(this.bar.data);
-          console.log(this.bar.new_data);
         })
         .catch((errors) => {
           console.log(errors.data);
@@ -229,27 +224,16 @@ export default {
               icon: icons[i],
             });
           }
-          console.log(this.cards);
         })
         .catch((errors) => {
           console.log(errors.data);
         });
     },
     getParkingID() {
-      axios
-        .get(`/parking/${this.user.id}`)
-        .then((response) => {
-          response.data.parking.map((item) => {
-            this.parking_id = item.id;
-          });
-          console.log(response.data);
-          this.getStatistics(this.parking_id);
-          this.showRegistrations(this.parking_id);
-          this.showSlots(this.parking_id);
-        })
-        .catch((errors) => {
-          console.log(errors.data);
-        });
+      this.getStatistics(this.parking_id);
+      this.getChartValues(this.parking_id);
+      this.showRegistrations(this.parking_id);
+      this.showSlots(this.parking_id);
     },
     showSlots(id) {
       axios
