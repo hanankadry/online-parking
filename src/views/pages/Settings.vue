@@ -28,7 +28,7 @@
           General Settings
         </button>
         <button
-          class="nav-link"
+          class="nav-link mb-3"
           id="v-pills-password-tab"
           data-bs-toggle="pill"
           data-bs-target="#change-password"
@@ -38,6 +38,18 @@
           aria-selected="false"
         >
           Change Password
+        </button>
+        <button
+          class="nav-link"
+          id="v-pills-delete-tab"
+          data-bs-toggle="pill"
+          data-bs-target="#delete-user"
+          type="button"
+          role="tab"
+          aria-controls="v-pills-delete"
+          aria-selected="false"
+        >
+          Delete User
         </button>
       </div>
       <div class="tab-content" id="v-pills-tabContent">
@@ -170,7 +182,7 @@
                     <button
                       class="button-md-unfill col me-2"
                       type="button"
-                      @click="disable"
+                      @click="cancel('profile')"
                     >
                       Cancel
                     </button>
@@ -184,76 +196,6 @@
                   </div>
                 </div>
               </form>
-              <!-- re-authenticate modal -->
-              <!-- <div
-                class="modal fade delete-modal"
-                id="myModal"
-                data-bs-keyboard="false"
-                tabindex="-1"
-                aria-labelledby="staticBackdropLabel"
-                aria-hidden="true"
-              >
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="staticBackdropLabel">
-                        Re-authenticate
-                      </h5>
-                      <button
-                        type="button"
-                        class="btn-close"
-                        id="btn-delete-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div class="modal-body">
-                      <form class="row g-3">
-                        <div class="col-auto">
-                          <label for="staticEmail2" class="visually-hidden"
-                            >Email</label
-                          >
-                          <input
-                            type="text"
-                            readonly
-                            class="form-control-plaintext"
-                            id="staticEmail2"
-                            value="email@example.com"
-                          />
-                        </div>
-                        <div class="col-auto">
-                          <label for="inputPassword2" class="visually-hidden"
-                            >Password</label
-                          >
-                          <input
-                            type="password"
-                            class="form-control"
-                            id="inputPassword2"
-                            placeholder="Password"
-                          />
-                        </div>
-                        <div class="col-auto">
-                          <button type="submit" class="btn btn-primary mb-3">
-                            Confirm identity
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="button-xs-unfill">
-                        Cancel
-                      </button>
-                      <button
-                        type="button"
-                        @click="deleteSecurity(current_user.id)"
-                        class="button-xs-danger"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div> -->
             </div>
           </div>
         </div>
@@ -268,7 +210,7 @@
               <p class="header">Change Password</p>
               <form class="mt-5">
                 <div class="row pb-3 px-5">
-                  <div class="col-lg-5">
+                  <div class="col-xl-5">
                     <i class="bi bi-lock md-icon" />
                     <label for="oldPassword" class="form-label"
                       >Old Password</label
@@ -287,7 +229,7 @@
                     /></span>
                     <input
                       type="password"
-                      v-model="update.oldPass"
+                      v-model="update_pass.oldPass"
                       @change="checkPass"
                       class="form-control input-lg"
                       id="oldPassword"
@@ -296,7 +238,7 @@
                   </div>
                 </div>
                 <div class="row pb-3 px-5">
-                  <div class="col-lg-5">
+                  <div class="col-xl-5">
                     <i class="bi bi-lock md-icon" />
                     <label for="newPassword" class="form-label"
                       >New Password</label
@@ -315,7 +257,7 @@
                     /></span>
                     <input
                       type="password"
-                      v-model="update.newPass"
+                      v-model="update_pass.newPass"
                       class="form-control input-lg"
                       id="newPassword"
                       required
@@ -323,7 +265,7 @@
                   </div>
                 </div>
                 <div class="row pb-3 px-5">
-                  <div class="col-lg-5">
+                  <div class="col-xl-5">
                     <i class="bi bi-lock md-icon" />
                     <label for="confirmPassword" class="form-label"
                       >Confirm New Password</label
@@ -342,7 +284,8 @@
                     /></span>
                     <input
                       type="password"
-                      v-model="update.confirmNewPass"
+                      @change="confirmPass"
+                      v-model="update_pass.confirmNewPass"
                       class="form-control input-lg"
                       id="confirmPassword"
                       required
@@ -350,23 +293,12 @@
                   </div>
                 </div>
                 <div class="row pb-3 px-5">
-                  <div class="error-box" v-if="v$.$error">
-                    <ul>
-                      <li v-if="v$.update.oldPass.$error">
-                        {{ v$.update.oldPass.$errors[0].$message }}
-                      </li>
-                      <li v-if="v$.update.newPass.$error">
-                        {{ v$.update.newPass.$errors[0].$message }}
-                      </li>
-                      <li v-if="v$.update.confirmNewPass.$error">
-                        {{ v$.update.confirmNewPass.$errors[0].$message }}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="row pb-3 px-5">
                   <div class="buttons col offset-lg-6">
-                    <button class="button-md-unfill me-2" type="button">
+                    <button
+                      class="button-md-unfill me-2"
+                      type="button"
+                      @click="cancel('password')"
+                    >
                       Cancel
                     </button>
                     <button
@@ -379,6 +311,54 @@
                   </div>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="delete-user"
+          role="tabpanel"
+          aria-labelledby="v-pills-delete-tab"
+        >
+          <div class="container">
+            <div class="body">
+              <p class="header">Delete Account</p>
+              <div class="mt-5 px-5">
+                <div class="row">
+                  <p class="lead">Export data before deleting.</p>
+                  <button
+                    class="mt-3 col-lg-3 button-lg-unfill"
+                    @click="exportData"
+                  >
+                    Export All Data
+                  </button>
+                </div>
+                <hr />
+                <div class="row">
+                  <p class="lead">Are you sure this account?</p>
+                  <p class="lead">
+                    All data related to this account will not be recovered if
+                    the account is deleted.
+                  </p>
+                </div>
+
+                <div class="row">
+                  <div class="mt-3 buttons">
+                    <button
+                      class="col-lg-3 button-lg-danger"
+                      @click="deleteAccount"
+                    >
+                      Confirm Delete
+                    </button>
+                    <button
+                      class="col-lg-3 button-lg-unfill"
+                      @click="cancel('delete')"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -405,9 +385,7 @@ import {
   maxLength,
   numeric,
   helpers,
-  sameAs,
 } from "@vuelidate/validators";
-import { use } from "chai";
 export default {
   props: ["id"],
   data() {
@@ -431,7 +409,7 @@ export default {
         password: "",
         photoURL: "",
       },
-      update: {
+      update_pass: {
         oldPass: "",
         newPass: "",
         confirmNewPass: "",
@@ -445,28 +423,6 @@ export default {
   },
   validations() {
     return {
-      update: {
-        oldPass: {
-          required: helpers.withMessage("Old Password is required", required),
-          sameAsPassword: helpers.withMessage(
-            "Old Passwaord isn't a match",
-            sameAs(this.user.password)
-          ),
-        },
-        newPass: {
-          required: helpers.withMessage("New Password is required", required),
-        },
-        confirmNewPass: {
-          required: helpers.withMessage(
-            "New Password Confirmation is required",
-            required
-          ),
-          sameAsPassword: helpers.withMessage(
-            "New Password and Password Confirmation must be match",
-            sameAs(this.update.newPass)
-          ),
-        },
-      },
       user: {
         national_id: {
           required: helpers.withMessage("National ID is required", required),
@@ -511,9 +467,53 @@ export default {
   },
   mounted() {
     this.getUser();
-    console.log(this.user.email);
   },
   methods: {
+    exportData() {
+      console.log("exported");
+    },
+    deleteAccount() {
+      console.log("deleted");
+    },
+    cancel(modal) {
+      if (modal == "profile") {
+        const user = this.user;
+        const condition =
+          (user.name ||
+            user.address ||
+            user.national_id ||
+            user.gender ||
+            user.email ||
+            user.phone ||
+            user.dob ||
+            user.password) != null;
+        if (condition) {
+          if (
+            confirm("Are you sure you want to cancel these changes?") == true
+          ) {
+            console.log("confirm");
+            this.disable();
+          } else {
+            console.log("cancel");
+          }
+        }
+      } else if (modal == "password") {
+        const update = this.update_pass;
+        const condition =
+          (update.oldPass || update.newPass || update.confirmNewPass) != null;
+        if (condition) {
+          if (
+            confirm("Are you sure you want to cancel these changes?") == true
+          ) {
+            console.log("confirm");
+          } else {
+            console.log("cancel");
+          }
+        }
+      } else {
+        console.log("cancelled");
+      }
+    },
     //check age if < 21
     getAge() {
       const year = this.user.dob.split("-", 1);
@@ -560,17 +560,11 @@ export default {
       this.v$.$validate();
       if (!this.v$.$error) {
         this.updateUser();
-
-        // this.updatePass();
       }
     },
     //change password save btn action
     update() {
-      this.v$.$validate();
-      if (!this.v$.$error) {
-        // this.updateUser();
-        this.updatePass();
-      }
+      this.updatePass();
     },
     //input enable action
     enable() {
@@ -655,33 +649,73 @@ export default {
           });
       }
     },
-    //
+    // password validation
     checkPass() {
+      // this.getUser();
       this.show = true;
-      if (this.update.oldPass == this.user.password) {
+      if (this.update_pass.oldPass == this.user.password) {
         this.oldPass = true;
       } else {
         this.oldPass = false;
       }
     },
-    updatePass() {
+    confirmPass() {
       this.showCheck = true;
-      if (this.update.newPass == this.update.oldPass) {
+      if (this.update_pass.newPass == this.update_pass.oldPass) {
         this.newPass = false;
       } else {
         this.newPass = true;
-        if (this.update.confirmNewPass != this.update.newPass) {
+        if (this.update_pass.confirmNewPass != this.update_pass.newPass) {
           this.confirm = false;
         } else {
           this.confirm = true;
-          this.showCheck = false;
-          this.user.password = this.update.newPass;
-          this.show = false;
-          this.update.oldPass = "";
-          this.update.newPass = "";
-          this.update.confirmNewPass = "";
         }
       }
+    },
+    updatePass() {
+      const user = this.auth.currentUser;
+      updatePassword(user, this.update_pass.newPass)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          if (error.code == "auth/requires-recent-login") {
+            const credential = EmailAuthProvider.credential(
+              user.email,
+              this.user.password
+            );
+            reauthenticateWithCredential(user, credential)
+              .then((response) => {
+                console.log(response);
+                console.log("email change successful");
+              })
+              .catch((error) => {
+                console.log(error.data);
+                console.log("email change failed");
+              });
+          } else {
+            const errorMessage = error.message;
+            console.log(errorMessage);
+          }
+        });
+      axios
+        .post(`/user/updatepass/${this.user.national_id}`, {
+          password: this.update_pass.newPass,
+        })
+        .then((response) => {
+          this.confirm = true;
+          this.showCheck = false;
+          this.user.password = this.update_pass.newPass;
+          this.show = false;
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+
+      this.update_pass.oldPass = "";
+      this.update_pass.newPass = "";
+      this.update_pass.confirmNewPass = "";
     },
   },
 };
@@ -697,6 +731,18 @@ export default {
   background-color: transparent;
   border: none;
   padding: 0;
+}
+
+.button-lg-danger {
+  background-color: #fd1d1d;
+  border-radius: 95px;
+  height: 40px;
+  color: white;
+  position: relative;
+  margin: 5px;
+  border: none;
+  font-weight: bold;
+  text-align: center;
 }
 
 .container-fluid {

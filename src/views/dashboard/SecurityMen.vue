@@ -233,7 +233,7 @@
             <button
               type="button"
               class="button-xs-unfill"
-              @click="cancel(current_user)"
+              @click="cancel(current_user, 'edit')"
             >
               Cancel
             </button>
@@ -634,7 +634,13 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="button-xs-unfill">Cancel</button>
+            <button
+              type="button"
+              class="button-xs-unfill"
+              @click="cancel(new_user, 'add')"
+            >
+              Cancel
+            </button>
             <button type="button" @click="create" class="button-xs-fill">
               Add
             </button>
@@ -792,7 +798,7 @@ export default {
     };
   },
   methods: {
-    cancel(user) {
+    cancel(user, modal) {
       const condition =
         (user.name ||
           user.address ||
@@ -803,18 +809,41 @@ export default {
           user.dob ||
           user.work_hours ||
           user.status) != null;
-      if (condition) {
-        if (confirm("Are you sure you want to cancel these changes?") == true) {
-          console.log("confirm");
+      if (modal == "edit") {
+        if (condition) {
+          if (
+            confirm("Are you sure you want to cancel these changes?") == true
+          ) {
+            console.log("confirm");
+            const trigger = document.getElementById("btn-update-close");
+            trigger.click();
+
+            this.show(this.parking_id);
+          } else {
+            console.log("cancel");
+          }
+        } else {
           const trigger = document.getElementById("btn-update-close");
           trigger.click();
-          this.show(this.parking_id);
-        } else {
-          console.log("cancel");
         }
-      } else {
-        const trigger = document.getElementById("btn-update-close");
-        trigger.click();
+      } else if (modal == "add") {
+        if (condition) {
+          if (
+            confirm("Are you sure you want to cancel these changes?") == true
+          ) {
+            console.log("confirm");
+            this.new_user = {};
+            const trigger = document.getElementById("btn-add-close");
+            trigger.click();
+            this.show(this.parking_id);
+          } else {
+            console.log("cancel");
+          }
+        } else {
+          const trigger = document.getElementById("btn-add-close");
+          trigger.click();
+          this.new_user = {};
+        }
       }
     },
     getAge() {

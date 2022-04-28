@@ -16,8 +16,6 @@
         :bar_old_data="bar.data"
         :bar_new_data="bar.new_data"
         :bar_name="bar.name"
-        :pie_data="pie.data"
-        :pie_labels="pie.labels"
       />
 
       <hr />
@@ -99,20 +97,6 @@ export default {
         data: [],
         new_data: [],
         name: "Registrations",
-      },
-      pie: {
-        data: [14, 23, 21, 17, 15, 10, 12, 17, 21],
-        labels: [
-          "8:00-9:00",
-          "10:00-11:00",
-          "12:00-13:00",
-          "14:00-15:00",
-          "16:00-17:00",
-          "18:00-19:00",
-          "20:00-21:00",
-          "22:00-23:00",
-          "24:00-00:00",
-        ],
       },
       cards: [],
       parking_id: this.id,
