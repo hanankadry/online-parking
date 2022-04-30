@@ -96,7 +96,7 @@ export default {
       bar: {
         data: [],
         new_data: [],
-        name: "Registrations",
+        name: "Week",
       },
       cards: [],
       parking_id: this.id,

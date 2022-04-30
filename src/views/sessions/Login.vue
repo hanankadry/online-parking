@@ -7,6 +7,7 @@
 
       <form>
         <div class="mt-5">
+          <p class="lead" v-show="errorMsg != null">{{ errorMsg }}</p>
           <div class="input-icons">
             <i class="bi bi-envelope icon" />
             <input
@@ -83,6 +84,7 @@ export default {
   data() {
     return {
       auth: getAuth(),
+      errorMsg: null,
       user: {
         id: "",
         email: "",
@@ -108,12 +110,16 @@ export default {
       axios
         .get(`/admin/${this.user.email}`)
         .then((response) => {
-          response.data.user.map((user) => {
-            this.user.id = user.id;
-          });
-          // this.getParkingID(this.user.id);
-          this.checkUser(this.user.id);
-          console.log(response.data);
+          if (response.data.code == 200) {
+            response.data.user.map((user) => {
+              this.user.id = user.id;
+            });
+            this.checkUser(this.user.id);
+
+            console.log(response.data);
+          } else {
+            this.errorMsg = "Email or Password is incorrect.";
+          }
         })
         .catch((errors) => {
           console.log(errors.data);
@@ -135,21 +141,21 @@ export default {
       if (this.user.rememeber == true) {
         setPersistence(this.auth, browserLocalPersistence)
           .then(() => {
+            console.log("Local");
             return this.firebaseSignIn(user_id);
           })
           .catch((error) => {
             const errorCode = error.code;
-            const errorMessage = error.message;
             console.log(errorCode);
           });
       } else {
         setPersistence(this.auth, browserSessionPersistence)
           .then(() => {
+            console.log("Session");
             return this.firebaseSignIn(user_id);
           })
           .catch((error) => {
             const errorCode = error.code;
-            const errorMessage = error.message;
             console.log(errorCode);
           });
       }
@@ -168,8 +174,7 @@ export default {
         })
         .catch((error) => {
           const errorCode = error.code;
-          const errorMessage = error.message;
-          alert(errorMessage);
+          console.log(errorCode);
         });
     },
     signUp() {
@@ -180,6 +185,15 @@ export default {
 </script>
 
 <style scoped>
+.lead {
+  color: white;
+  width: 20rem;
+  text-align: justify;
+  background-color: rgba(255, 64, 0, 0.4);
+  padding: 5px;
+  font-size: 12pt;
+}
+
 .container {
   font-weight: bold;
   text-align: justify;

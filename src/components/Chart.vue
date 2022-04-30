@@ -23,11 +23,11 @@ export default {
     return {
       barSeries: [
         {
-          name: "Old " + this.bar_name,
+          name: "Previous " + this.bar_name,
           data: this.bar_old_data,
         },
         {
-          name: "New " + this.bar_name,
+          name: "Current " + this.bar_name,
           data: this.bar_new_data,
         },
       ],

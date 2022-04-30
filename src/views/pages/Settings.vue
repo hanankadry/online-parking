@@ -346,15 +346,9 @@
                   <div class="mt-3 buttons">
                     <button
                       class="col-lg-3 button-lg-danger"
-                      @click="deleteAccount"
+                      @click="deleteAccount(user.national_id)"
                     >
                       Confirm Delete
-                    </button>
-                    <button
-                      class="col-lg-3 button-lg-unfill"
-                      @click="cancel('delete')"
-                    >
-                      Cancel
                     </button>
                   </div>
                 </div>
@@ -375,6 +369,7 @@ import {
   updatePassword,
   reauthenticateWithCredential,
   EmailAuthProvider,
+  deleteUser,
 } from "firebase/auth";
 import axios from "axios";
 import useValidate from "@vuelidate/core";
@@ -472,8 +467,24 @@ export default {
     exportData() {
       console.log("exported");
     },
-    deleteAccount() {
-      console.log("deleted");
+    deleteAccount(id) {
+      const user = this.auth.currentUser;
+
+      deleteUser(user)
+        .then(() => {
+          console.log("deleted");
+        })
+        .catch((error) => {
+          console.log(error.data);
+        });
+      axios
+        .post(`/user/delete/${id}`)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
     },
     cancel(modal) {
       if (modal == "profile") {
@@ -510,8 +521,6 @@ export default {
             console.log("cancel");
           }
         }
-      } else {
-        console.log("cancelled");
       }
     },
     //check age if < 21

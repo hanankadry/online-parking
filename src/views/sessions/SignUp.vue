@@ -421,7 +421,6 @@ export default {
     createAccount() {
       this.v$.$validate();
       if (!this.v$.$error) {
-        this.register();
         this.addUser();
         // this.addParkingSlot(endValue, numValue, capacity);
         this.addParkingSpace();
@@ -452,6 +451,7 @@ export default {
           password: this.user.password,
         })
         .then((response) => {
+          this.register();
           this.parkingSpace.id = response.data.parkingspace.id;
           console.log(this.parkingSpace.id);
           console.log(response.data);
