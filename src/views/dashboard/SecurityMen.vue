@@ -867,9 +867,9 @@ export default {
           console.log(errors.data);
         });
     },
-    create() {
-      this.v$.$validate();
-      if (!this.v$.$error) {
+    async create() {
+      const isFormCorrect = await this.v$.$validate();
+      if (!isFormCorrect) {
         this.addSecurity();
       }
     },
@@ -891,6 +891,7 @@ export default {
           this.makeToast("insert successful", "success");
           this.show(this.parking_id);
           this.new_user = {};
+          this.v$.$errors = [];
           const trigger = document.getElementById("btn-add-close");
           trigger.click();
           console.log(response.data);
