@@ -14,7 +14,7 @@ export default {
       if (user) {
         const uid = user.uid;
       } else {
-        this.$router.replace("/login");
+        this.$router.replace("/");
       }
     });
   },

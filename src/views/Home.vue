@@ -17,7 +17,29 @@
         >
           <span class="navbar-toggler-icon" />
         </button>
-        <div class="collapse navbar-collapse justify-content-end">
+        <div
+          class="collapse navbar-collapse justify-content-end"
+          v-if="loggedIn == false"
+        >
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <router-link class="nav-link mt-2" :to="{ path: `/about` }"
+                >About</router-link
+              >
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link mt-2" :to="{ path: `/contact` }"
+                >Contact</router-link
+              >
+            </li>
+            <li class="nav-item">
+              <router-link to="/login" class="nav-link">
+                <button class="button-sm-fill">Login</button>
+              </router-link>
+            </li>
+          </ul>
+        </div>
+        <div class="collapse navbar-collapse justify-content-end" v-else>
           <ul class="navbar-nav">
             <li class="nav-item">
               <router-link
@@ -35,16 +57,8 @@
             </li>
             <li class="nav-item">
               <router-link
-                to="/login"
-                class="nav-link"
-                v-if="loggedIn == false"
-              >
-                <button class="button-sm-fill">Login</button>
-              </router-link>
-              <router-link
                 :to="{ path: `/dashboard/${user_id}` }"
                 class="nav-link"
-                v-else
               >
                 <button class="button-sm-fill">Dashboard</button>
               </router-link>
@@ -133,7 +147,7 @@ export default {
   data() {
     return {
       user_id: this.id,
-      loggedIn: true,
+      loggedIn: false,
     };
   },
   beforeMount() {
