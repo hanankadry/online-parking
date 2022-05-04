@@ -2,86 +2,44 @@
   <nav-bar :id="parking_id" />
   <div class="report">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
-    <div class="container-fluid">
-      <div class="accordion" id="accordionExample">
-        <div class="card">
-          <div
-            class="card-header"
-            id="headingOne"
-            style="background-color: rgb(55, 66, 88); color: rgb(247, 68, 100)"
-          >
-            <h2 class="mb-0">
-              <button
-                class="btn"
-                type="button"
-                data-toggle="collapse"
-                data-target="#collapseOne"
-                aria-expanded="true"
-                aria-controls="collapseOne"
-              >
-                WEEKLY REPORTS
-              </button>
-            </h2>
-          </div>
-          <div
-            id="collapseOne"
-            class="collapse show"
-            aria-labelledby="headingOne"
-            data-parent="#accordionExample"
-          >
-            <div class="card-body">
-              Anim pariatur cliche reprehenderit, enim eiusmod high life
-              accusamus terry richardson ad squid. 3 wolf moon officia aute, non
-              cupidatat skateboard dolor brunch. Food truck quinoa nesciunt
-              laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird
-              on it squid single-origin coffee nulla assumenda shoreditch et.
-              Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred
-              nesciunt sapiente ea proident. Ad vegan excepteur butcher vice
-              lomo. Leggings occaecat craft beer farm-to-table, raw denim
-              aesthetic synth nesciunt you probably haven't heard of them
-              accusamus labore sustainable VHS.
-            </div>
-          </div>
-        </div>
 
-        <div class="card">
-          <div
-            class="card-header"
-            id="headingTwo"
-            style="background-color: rgb(55, 66, 88); color: rgb(247, 68, 100)"
-          >
-            <h2 class="mb-0">
-              <button
-                class="btn"
-                type="button"
-                data-toggle="collapse"
-                data-target="#collapseTwo"
-                aria-expanded="false"
-                aria-controls="collapseTwo"
-              >
-                YEARLY REPORTS
-              </button>
-            </h2>
+    <div class="container-fluid">
+      <div class="dropdown" >
+        <button
+          class="btn btn-secondary dropdown-toggle"
+          type="button"
+          id="dropdownMenuButton1"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          Find By
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><a class="dropdown-item" href="#">Year</a></li>
+          <li><a class="dropdown-item" href="#">Month</a></li>
+          <li><a class="dropdown-item" href="#">Weekly</a></li>
+        </ul>
+      </div>
+      <div class="mb-3">
+        <label for="Input1" class="form-label">OR</label>
+        <label for="Input1" class="form-label">Find by Specific day</label>
+        <input type="date" class="form-control" id="Input1" />
+      </div>
+
+      <div class="col-lg">
+        <div class="row">
+          <div class="col-xl" v-for="card in cards" :key="card.index" >
+            <statistics-card 
+              :cardIcon="card.icon"
+              :cardLabel="card.label"
+              :cardValue="card.value"
+            />
           </div>
-          <div
-            id="collapseTwo"
-            class="collapse"
-            aria-labelledby="headingTwo"
-            data-parent="#accordionExample"
-          >
-            <div class="card-body">
-              Anim pariatur cliche reprehenderit, enim eiusmod high life
-              accusamus terry richardson ad squid. 3 wolf moon officia aute, non
-              cupidatat skateboard dolor brunch. Food truck quinoa nesciunt
-              laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird
-              on it squid single-origin coffee nulla assumenda shoreditch et.
-              Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred
-              nesciunt sapiente ea proident. Ad vegan excepteur butcher vice
-              lomo. Leggings occaecat craft beer farm-to-table, raw denim
-              aesthetic synth nesciunt you probably haven't heard of them
-              accusamus labore sustainable VHS.
-            </div>
-          </div>
+          <chart style="width:90%;"
+            :bar_old_data="bar.data"
+            :bar_new_data="bar.new_data"
+            :bar_name="bar.name"
+          />
         </div>
       </div>
     </div>
@@ -89,29 +47,58 @@
 </template>
 
 <script>
+import Chart from "@/components/Chart.vue";
+import StatisticsCard from "@/components/StatisticsCard.vue";
+
 export default {
+  components: {
+    chart: Chart,
+    "statistics-card": StatisticsCard,
+  },
   props: ["id"],
   data() {
     return {
       parking_id: this.id,
       label: "Reports",
       href: "/reports",
+
+      bar: {
+        data: [15, 11, 12, 42, 15, 21, 20],
+        new_data: [20],
+        name: "Registrations",
+      },
+      cards: [],
     };
   },
 };
 </script>
 
-<style>
-.title {
-  color: rgb(247, 68, 100);
-  margin: 100px;
+<style scoped>
+.btn {
+  background-color: rgb(247, 68, 100);
+  margin-left: 10px;
+  margin-bottom: 15px;
+  border-radius: 30px;
+  display: inline-block;
+}
+.dropdown {
+  display: inline-block;
+  position: relative;
+
+}
+.form-label {
+    margin-left: 10px;
+  color: #f74464;
+  font: 18pt;
   font-weight: bold;
+  display: inline-block;
 }
-.card-body {
-  background-color: rgb(55, 66, 88);
-  color: rgb(247, 68, 100);
+.form-control {
+    margin-left: 10px;
+  display: inline-block;
+  width: auto;
 }
-.accordion {
-  width: 70%;
-}
+
 </style>
+
+
