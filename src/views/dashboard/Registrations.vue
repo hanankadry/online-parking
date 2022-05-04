@@ -231,7 +231,8 @@
                   <div class="col-md-6">
                     <label for="leaveTime" class="form-label">Leave Time</label>
                     <input
-                      type="text"
+                      type="time"
+                      step="2"
                       v-model="current_registration.leave_time"
                       class="form-control input-lg"
                       id="leaveTime"
@@ -243,7 +244,8 @@
                       >Check In Time</label
                     >
                     <input
-                      type="text"
+                      type="time"
+                      step="2"
                       v-model="current_registration.checkin_time"
                       class="form-control input-lg"
                       id="checkIn"
@@ -495,6 +497,7 @@ export default {
 }
 
 .input-lg {
+  padding-left: 2rem;
   border-radius: 95px;
   height: 50px;
   background-color: #374258;
@@ -518,6 +521,13 @@ export default {
 
 span > a {
   text-decoration: none;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  background-image: url("@/assets/images/icons8-clock-96.png");
+  background-position: end;
+  background-size: 20px 20px, 20px 20px;
+  background-repeat: no-repeat;
 }
 
 .text-success {

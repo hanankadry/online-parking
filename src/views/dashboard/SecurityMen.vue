@@ -218,7 +218,7 @@
                       >Work Hours</label
                     >
                     <input
-                      type="text"
+                      type="time"
                       v-model="current_user.work_hours"
                       class="form-control col-3 input-lg"
                       id="work_hours"
@@ -747,6 +747,10 @@ export default {
     return {
       new_user: {
         name: { required: helpers.withMessage("Name is required", required) },
+        email: {
+          required: helpers.withMessage("Email is required", required),
+          email,
+        },
         security_id: {
           required: helpers.withMessage("National ID is required", required),
           numeric: helpers.withMessage("National ID must be numeric", numeric),
@@ -759,15 +763,21 @@ export default {
             maxLength(14)
           ),
         },
-        email: {
-          required: helpers.withMessage("Email is required", required),
-          email,
+        gender: {
+          required: helpers.withMessage("Gender is required", required),
         },
         address: {
           required: helpers.withMessage("Address is required", required),
         },
-        gender: {
-          required: helpers.withMessage("Gender is required", required),
+        dob: {
+          required: helpers.withMessage("Date of Birth is required", required),
+          checkAge: helpers.withMessage(
+            () => "Age must be greater than 21",
+            () => this.minValue >= 21
+          ),
+        },
+        status: {
+          required: helpers.withMessage("Status is required", required),
         },
         phone: {
           required: helpers.withMessage("Phone Number is required", required),
@@ -781,18 +791,8 @@ export default {
             minLength(11)
           ),
         },
-        dob: {
-          required: helpers.withMessage("Date of Birth is required", required),
-          checkAge: helpers.withMessage(
-            () => "Age must be greater than 21",
-            () => this.minValue >= 21
-          ),
-        },
         work_hours: {
           required: helpers.withMessage("Work Hours is required", required),
-        },
-        status: {
-          required: helpers.withMessage("Status is required", required),
         },
       },
     };
@@ -868,7 +868,8 @@ export default {
         });
     },
     async create() {
-      const isFormCorrect = await this.v$.$validate();
+      await this.v$.$validate();
+      const isFormCorrect = this.v$.$invalid;
       if (!isFormCorrect) {
         this.addSecurity();
       }
