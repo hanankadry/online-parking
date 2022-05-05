@@ -52,13 +52,6 @@ const routes = [
     component: NotFound
   },
   {
-    path: '/contact/:id',
-    alias: ['/contact'],
-    name: 'contact',
-    component: () => import('@/views/pages/Contact'),
-    props: true
-  },
-  {
     path: '/about/:id',
     alias: ['/about'],
     name: 'about',
