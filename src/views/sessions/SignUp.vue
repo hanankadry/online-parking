@@ -66,12 +66,12 @@
             </div>
             <div class="col-md-4">
               <i class="bi bi-person-lines-fill sm-icon" />
-              <label for="nationalID" class="form-label">National ID</label>
+              <label for="national_id" class="form-label">National ID</label>
               <input
                 type="text"
                 v-model="user.national_id"
                 class="form-control input-xl"
-                id="nationalID"
+                id="national_id"
                 required
               />
             </div>
@@ -90,14 +90,14 @@
             </div>
             <div class="col-lg-4 col-md-6">
               <i class="bi bi-lock sm-icon" />
-              <label for="confirmPassword" class="form-label"
+              <label for="confirm_password" class="form-label"
                 >Confirm Password</label
               >
               <input
                 type="password"
                 v-model="user.confirm_password"
                 class="form-control input-xl"
-                id="confirmPassword"
+                id="confirm_password"
                 required
               />
             </div>
@@ -130,24 +130,25 @@
             </div>
             <div class="col-lg-4">
               <i class="bi bi-telephone sm-icon" />
-              <label for="phone1" class="form-label">Phone</label>
+              <label for="phone" class="form-label">Phone</label>
               <input
-                type="text"
+                type="tel"
+                pattern="[0-9]{4}-[0-9]{3}-[0-9]{4}"
                 v-model="user.phone"
                 class="form-control input-xl"
-                id="phone1"
+                id="phone"
                 required
               />
             </div>
             <div class="col-lg-4">
               <i class="bi bi-calendar2-week sm-icon" />
-              <label for="dateOfBirth" class="form-label">Date of Birth</label>
+              <label for="dob" class="form-label">Date of Birth</label>
               <input
                 type="date"
                 v-model="user.dob"
                 @change="getAge"
                 class="form-control input-xl date"
-                id="dateOfBirth"
+                id="dob"
                 required
               />
             </div>
@@ -191,18 +192,18 @@
                 type="text"
                 v-model="parkingSpace.location"
                 class="form-control input-xl"
-                id="loaction"
+                id="location"
                 required
               />
             </div>
             <div class="col-lg-4">
               <i class="bi bi-house sm-icon" />
-              <label for="parkingName" class="form-label">Name</label>
+              <label for="parking_name" class="form-label">Parking Name</label>
               <input
                 type="text"
                 v-model="parkingSpace.name"
                 class="form-control input-xl"
-                id="parkingName"
+                id="parking_name"
                 required
               />
             </div>
@@ -252,6 +253,7 @@
                 type="number"
                 v-model="parkingSpace.capacity"
                 class="form-control input-xl"
+                id="capacity"
                 required
               />
             </div>
@@ -271,7 +273,7 @@
                 v-model="parkingSpace.fee"
                 class="form-control input-xl"
                 v-if="parkingSpace.fees == true"
-                id="capacity"
+                id="fees"
                 required
               />
             </div>
@@ -419,7 +421,6 @@ export default {
     createAccount() {
       this.v$.$validate();
       if (!this.v$.$error) {
-        this.register();
         this.addUser();
         // this.addParkingSlot(endValue, numValue, capacity);
         this.addParkingSpace();
@@ -450,6 +451,7 @@ export default {
           password: this.user.password,
         })
         .then((response) => {
+          this.register();
           this.parkingSpace.id = response.data.parkingspace.id;
           console.log(this.parkingSpace.id);
           console.log(response.data);

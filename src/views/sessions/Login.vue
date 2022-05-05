@@ -7,6 +7,7 @@
 
       <form>
         <div class="mt-5">
+          <p class="lead" v-show="errorMsg != null">{{ errorMsg }}</p>
           <div class="input-icons">
             <i class="bi bi-envelope icon" />
             <input
@@ -40,7 +41,12 @@
             </div>
             <div class="col-lg-3 col-md-3">
               <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="toggle" />
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="toggle"
+                  v-model="user.remember"
+                />
               </div>
             </div>
           </div>
@@ -66,6 +72,9 @@
 <script>
 import {
   getAuth,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
   signInWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
@@ -75,10 +84,12 @@ export default {
   data() {
     return {
       auth: getAuth(),
+      errorMsg: null,
       user: {
         id: "",
         email: "",
         password: "",
+        rememeber: false,
       },
       parking_id: null,
     };
@@ -99,12 +110,16 @@ export default {
       axios
         .get(`/admin/${this.user.email}`)
         .then((response) => {
-          response.data.user.map((user) => {
-            this.user.id = user.id;
-          });
-          // this.getParkingID(this.user.id);
-          this.checkUser(this.user.id);
-          console.log(response.data);
+          if (response.data.code == 200) {
+            response.data.user.map((user) => {
+              this.user.id = user.id;
+            });
+            this.checkUser(this.user.id);
+
+            console.log(response.data);
+          } else {
+            this.errorMsg = "Email or Password is incorrect.";
+          }
         })
         .catch((errors) => {
           console.log(errors.data);
@@ -123,6 +138,29 @@ export default {
         });
     },
     async checkUser(user_id) {
+      if (this.user.rememeber == true) {
+        setPersistence(this.auth, browserLocalPersistence)
+          .then(() => {
+            console.log("Local");
+            return this.firebaseSignIn(user_id);
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            console.log(errorCode);
+          });
+      } else {
+        setPersistence(this.auth, browserSessionPersistence)
+          .then(() => {
+            console.log("Session");
+            return this.firebaseSignIn(user_id);
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            console.log(errorCode);
+          });
+      }
+    },
+    async firebaseSignIn(user_id) {
       await signInWithEmailAndPassword(
         this.auth,
         this.user.email,
@@ -136,8 +174,7 @@ export default {
         })
         .catch((error) => {
           const errorCode = error.code;
-          const errorMessage = error.message;
-          alert(errorMessage);
+          console.log(errorCode);
         });
     },
     signUp() {
@@ -148,6 +185,15 @@ export default {
 </script>
 
 <style scoped>
+.lead {
+  color: white;
+  width: 20rem;
+  text-align: justify;
+  background-color: rgba(255, 64, 0, 0.4);
+  padding: 5px;
+  font-size: 12pt;
+}
+
 .container {
   font-weight: bold;
   text-align: justify;

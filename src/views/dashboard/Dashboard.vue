@@ -16,8 +16,6 @@
         :bar_old_data="bar.data"
         :bar_new_data="bar.new_data"
         :bar_name="bar.name"
-        :pie_data="pie.data"
-        :pie_labels="pie.labels"
       />
 
       <hr />
@@ -96,23 +94,9 @@ export default {
   data() {
     return {
       bar: {
-        data: [15, 11, 12, 42, 15, 21, 20],
-        new_data: [20],
-        name: "Registrations",
-      },
-      pie: {
-        data: [14, 23, 21, 17, 15, 10, 12, 17, 21],
-        labels: [
-          "8:00-9:00",
-          "10:00-11:00",
-          "12:00-13:00",
-          "14:00-15:00",
-          "16:00-17:00",
-          "18:00-19:00",
-          "20:00-21:00",
-          "22:00-23:00",
-          "24:00-00:00",
-        ],
+        data: [],
+        new_data: [],
+        name: "Week",
       },
       cards: [],
       parking_id: this.id,
@@ -178,14 +162,27 @@ export default {
       ],
       registrationRows: [],
       slotRows: [],
+      loaded: false,
     };
   },
   mounted() {
-    this.getStatistics(this.parking_id);
-    this.showRegistrations(this.parking_id);
-    this.showSlots(this.parking_id);
+    this.getParkingID();
   },
   methods: {
+    getChartValues(id) {
+      axios
+        .get(`/admin/chart/${id}`)
+        .then((response) => {
+          for (let i = 0; i < 7; i++) {
+            this.bar.data.push(response.data.old_values[i]);
+            this.bar.new_data.push(response.data.new_values[i]);
+          }
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
     getStatistics(id) {
       const labels = ["Registrations", "Available Slots", "Out of Order Slots"];
       const icons = [
@@ -211,27 +208,16 @@ export default {
               icon: icons[i],
             });
           }
-          console.log(this.cards);
         })
         .catch((errors) => {
           console.log(errors.data);
         });
     },
     getParkingID() {
-      axios
-        .get(`/parking/${this.user.id}`)
-        .then((response) => {
-          response.data.parking.map((item) => {
-            this.parking_id = item.id;
-          });
-          console.log(response.data);
-          this.getStatistics(this.parking_id);
-          this.showRegistrations(this.parking_id);
-          this.showSlots(this.parking_id);
-        })
-        .catch((errors) => {
-          console.log(errors.data);
-        });
+      this.getStatistics(this.parking_id);
+      this.getChartValues(this.parking_id);
+      this.showRegistrations(this.parking_id);
+      this.showSlots(this.parking_id);
     },
     showSlots(id) {
       axios

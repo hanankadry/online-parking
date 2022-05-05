@@ -7,6 +7,7 @@ const routes = [
 
   {
     path: '/:id',
+    alias: ['/'],
     name: 'home',
     component: () => import('@/views/Home.vue'),
     props: true,
@@ -49,6 +50,20 @@ const routes = [
     path: '/:pathMatch(.*)*',
     name: 'not found',
     component: NotFound
+  },
+  {
+    path: '/contact/:id',
+    alias: ['/contact'],
+    name: 'contact',
+    component: () => import('@/views/pages/Contact'),
+    props: true
+  },
+  {
+    path: '/about/:id',
+    alias: ['/about'],
+    name: 'about',
+    component: () => import('@/views/pages/About'),
+    props: true
   },
 
   //dashboard

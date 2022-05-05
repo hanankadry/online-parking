@@ -106,7 +106,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="staticBackdropLabel">
-              Edit Security Man
+              Edit Security Man No. "{{ current_user.id }}"
             </h5>
             <button
               type="button"
@@ -146,14 +146,14 @@
                 <div class="row">
                   <div class="col-md-6">
                     <i class="bi bi-person-lines-fill sm-icon" />
-                    <label for="nationalId" class="form-label"
+                    <label for="national_id" class="form-label"
                       >National ID</label
                     >
                     <input
                       type="number"
                       v-model="current_user.security_id"
                       class="form-control input-lg"
-                      id="nationalId"
+                      id="national_id"
                       required
                     />
                   </div>
@@ -189,14 +189,12 @@
                 <div class="row">
                   <div class="col-md-6">
                     <i class="bi bi-calendar2-week sm-icon" />
-                    <label for="dateOfBirth" class="form-label"
-                      >Date of Birth</label
-                    >
+                    <label for="dob" class="form-label">Date of Birth</label>
                     <input
                       type="date"
                       v-model="current_user.dob"
                       class="form-control input-lg date"
-                      id="dateOfBirth"
+                      id="dob"
                       required
                     />
                   </div>
@@ -204,7 +202,8 @@
                     <i class="bi bi-telephone sm-icon" />
                     <label for="phone" class="form-label">Phone</label>
                     <input
-                      type="text"
+                      type="tel"
+                      pattern="[0-9]{4}-[0-9]{3}-[0-9]{4}"
                       v-model="current_user.phone"
                       class="form-control input-lg"
                       id="phone"
@@ -215,12 +214,14 @@
                 <div class="row">
                   <div class="col-md-6">
                     <i class="bi bi-clock sm-icon" />
-                    <label for="workHours" class="form-label">Work Hours</label>
+                    <label for="work_hours" class="form-label"
+                      >Work Hours</label
+                    >
                     <input
                       type="text"
                       v-model="current_user.work_hours"
                       class="form-control col-3 input-lg"
-                      id="from"
+                      id="work_hours"
                       required
                     />
                   </div>
@@ -229,7 +230,13 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="button-xs-unfill">Cancel</button>
+            <button
+              type="button"
+              class="button-xs-unfill"
+              @click="cancel(current_user, 'edit')"
+            >
+              Cancel
+            </button>
             <button
               type="button"
               class="button-xs-fill"
@@ -254,7 +261,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="staticBackdropLabel">
-              More Infromation
+              Security Man No. "{{ current_user.id }}"
             </h5>
           </div>
           <div class="modal-body">
@@ -353,8 +360,15 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="staticBackdropLabel">
-              Disactivate Security Man
+            <h5
+              class="modal-title"
+              id="staticBackdropLabel"
+              v-if="current_user.status == 'active'"
+            >
+              Disactivate Security Man No. "{{ current_user.id }}"
+            </h5>
+            <h5 class="modal-title" id="staticBackdropLabel" v-else>
+              Activate Security Man No. "{{ current_user.id }}"
             </h5>
             <button
               type="button"
@@ -412,7 +426,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="staticBackdropLabel">
-              Delete Security Man
+              Delete Security Man No. "{{ current_user.id }}"
             </h5>
             <button
               type="button"
@@ -519,14 +533,14 @@
                 <div class="row">
                   <div class="col-md-6">
                     <i class="bi bi-person-lines-fill sm-icon" />
-                    <label for="nationalId" class="form-label"
+                    <label for="national_id" class="form-label"
                       >National ID</label
                     >
                     <input
                       type="number"
                       v-model="new_user.security_id"
                       class="form-control input-lg"
-                      id="nationalId"
+                      id="national_id"
                       required
                     />
                   </div>
@@ -562,15 +576,13 @@
                 <div class="row">
                   <div class="col-md-6">
                     <i class="bi bi-calendar2-week sm-icon" />
-                    <label for="dateOfBirth" class="form-label"
-                      >Date of Birth</label
-                    >
+                    <label for="dob" class="form-label">Date of Birth</label>
                     <input
                       type="date"
                       v-model="new_user.dob"
                       @change="getAge"
                       class="form-control input-lg date"
-                      id="dateOfBirth"
+                      id="dob"
                       required
                     />
                   </div>
@@ -594,7 +606,8 @@
                     <i class="bi bi-telephone sm-icon" />
                     <label for="phone" class="form-label">Phone</label>
                     <input
-                      type="text"
+                      type="tel"
+                      pattern="[0-9]{4}-[0-9]{3}-[0-9]{4}"
                       v-model="new_user.phone"
                       class="form-control input-lg"
                       id="phone"
@@ -604,14 +617,14 @@
                   <div class="col-md-6 row">
                     <div>
                       <i class="bi bi-clock sm-icon" />
-                      <label for="workHours" class="form-label"
+                      <label for="work_hours" class="form-label"
                         >Work Hours</label
                       >
                       <input
                         type="time"
                         v-model="new_user.work_hours"
                         class="form-control input-lg"
-                        id="workHours"
+                        id="work_hours"
                         required
                       />
                     </div>
@@ -621,7 +634,13 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="button-xs-unfill">Cancel</button>
+            <button
+              type="button"
+              class="button-xs-unfill"
+              @click="cancel(new_user, 'add')"
+            >
+              Cancel
+            </button>
             <button type="button" @click="create" class="button-xs-fill">
               Add
             </button>
@@ -779,6 +798,54 @@ export default {
     };
   },
   methods: {
+    cancel(user, modal) {
+      const condition =
+        (user.name ||
+          user.address ||
+          user.security_id ||
+          user.gender ||
+          user.email ||
+          user.phone ||
+          user.dob ||
+          user.work_hours ||
+          user.status) != null;
+      if (modal == "edit") {
+        if (condition) {
+          if (
+            confirm("Are you sure you want to cancel these changes?") == true
+          ) {
+            console.log("confirm");
+            const trigger = document.getElementById("btn-update-close");
+            trigger.click();
+
+            this.show(this.parking_id);
+          } else {
+            console.log("cancel");
+          }
+        } else {
+          const trigger = document.getElementById("btn-update-close");
+          trigger.click();
+        }
+      } else if (modal == "add") {
+        if (condition) {
+          if (
+            confirm("Are you sure you want to cancel these changes?") == true
+          ) {
+            console.log("confirm");
+            this.new_user = {};
+            const trigger = document.getElementById("btn-add-close");
+            trigger.click();
+            this.show(this.parking_id);
+          } else {
+            console.log("cancel");
+          }
+        } else {
+          const trigger = document.getElementById("btn-add-close");
+          trigger.click();
+          this.new_user = {};
+        }
+      }
+    },
     getAge() {
       const year = this.new_user.dob.split("-", 1);
       this.minValue = this.thisYear - year;
@@ -800,9 +867,9 @@ export default {
           console.log(errors.data);
         });
     },
-    create() {
-      this.v$.$validate();
-      if (!this.v$.$error) {
+    async create() {
+      const isFormCorrect = await this.v$.$validate();
+      if (!isFormCorrect) {
         this.addSecurity();
       }
     },
@@ -823,9 +890,10 @@ export default {
         .then((response) => {
           this.makeToast("insert successful", "success");
           this.show(this.parking_id);
+          this.new_user = {};
+          this.v$.$errors = [];
           const trigger = document.getElementById("btn-add-close");
           trigger.click();
-          this.new_user = {};
           console.log(response.data);
         })
         .catch((errors) => {
@@ -847,11 +915,11 @@ export default {
           phone: this.current_user.phone,
         })
         .then((response) => {
-          console.log(response.data);
+          this.makeToast("update succesful", "success");
           this.show(this.parking_id);
           const trigger = document.getElementById("btn-update-close");
           trigger.click();
-          this.makeToast("update succesful", "success");
+          console.log(response.data);
         })
         .catch((errors) => {
           this.makeToast("update failed", "error");
@@ -865,10 +933,10 @@ export default {
             status: "inactive",
           })
           .then((response) => {
+            this.makeToast("status change succesful", "success");
             this.show(this.parking_id);
             const trigger = document.getElementById("btn-activate-close");
             trigger.click();
-            this.makeToast("status change succesful", "success");
             console.log(response.data);
           })
           .catch((errors) => {
@@ -882,10 +950,10 @@ export default {
             status: "active",
           })
           .then((response) => {
+            this.makeToast("status change succesful", "success");
             this.show(this.parking_id);
             const trigger = document.getElementById("btn-activate-close");
             trigger.click();
-            this.makeToast("status change succesful", "success");
             console.log(response.data);
           })
           .catch((errors) => {

@@ -93,24 +93,20 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">More Infromation</h5>
+            <h5 class="modal-title">
+              Registration No. "{{ current_registration.id }}"
+            </h5>
           </div>
           <div class="modal-body">
             <div class="container">
               <div class="row">
-                <div class="col-md-4">
-                  <p>
-                    <strong>ID:</strong>
-                    {{ current_registration.id }}
-                  </p>
-                </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                   <p>
                     <strong>Day:</strong>
                     {{ current_registration.day }}
                   </p>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                   <p>
                     <strong>Created At:</strong>
                     {{ current_registration.date }}
@@ -184,25 +180,21 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="staticBackdropLabel">
-              Edit Registration
+              Edit Registration No. "{{ current_registration.id }}"
             </h5>
             <button
               type="button"
               class="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              id="btn-update-close"
             ></button>
           </div>
           <div class="modal-body">
             <form>
               <div class="row form-box justify-content-center">
                 <div class="row">
-                  <div class="col-md-3">
-                    <label for="id" class="form-label"
-                      >ID: {{ current_registration.id }}</label
-                    >
-                  </div>
-                  <div class="col-md-3">
+                  <div class="col-md-6">
                     <label for="day" class="form-label"
                       >Day: {{ current_registration.day }}</label
                     >
@@ -266,14 +258,13 @@
             <button
               type="button"
               class="button-xs-unfill"
-              data-bs-dismiss="modal"
+              @click="cancel(current_registration)"
             >
               Cancel
             </button>
             <button
               type="button"
               class="button-xs-fill"
-              data-bs-dismiss="modal"
               @click="updateRegistration(current_registration.id)"
             >
               Update
@@ -293,30 +284,26 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Delete Registration</h5>
+            <h5 class="modal-title">
+              Delete Registration No. "{{ current_registration.id }}"
+            </h5>
             <button
               type="button"
               class="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              id="btn-delete-close"
             ></button>
           </div>
           <div class="modal-body">
             Are you sure you want to delete {{ current_registration.id }}?
           </div>
           <div class="modal-footer">
+            <button type="button" class="button-xs-unfill">Cancel</button>
             <button
               type="button"
-              class="button-xs-unfill"
-              data-bs-dismiss="modal"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              data-bs-dismiss="modal"
-              @click="deleteRegistration(current_registration.id)"
               class="button-xs-danger"
+              @click="deleteRegistration(current_registration.id)"
             >
               Delete
             </button>
@@ -397,6 +384,26 @@ export default {
     // this.getParkingID();
   },
   methods: {
+    cancel(registration) {
+      const condition =
+        (registration.slot_name ||
+          registration.leave_time ||
+          registration.checkin_time ||
+          registration.status) != null;
+      if (condition) {
+        if (confirm("Are you sure you want to cancel these changes?") == true) {
+          console.log("confirm");
+          const trigger = document.getElementById("btn-update-close");
+          trigger.click();
+          this.show(this.parking_id);
+        } else {
+          console.log("cancel");
+        }
+      } else {
+        const trigger = document.getElementById("btn-update-close");
+        trigger.click();
+      }
+    },
     getParkingID() {
       axios
         .get(`/parking/${this.user_id}`)
@@ -428,21 +435,25 @@ export default {
           day: this.current_registration.day,
         })
         .then((response) => {
-          console.log(response.data);
-          this.show(this.parking_id);
           this.makeToast("update succesful", "success");
+          this.show(this.parking_id);
+          const trigger = document.getElementById("btn-update-close");
+          trigger.click();
+          console.log(response.data);
         })
         .catch((errors) => {
-          console.log(errors.data);
           this.makeToast("update failed", "error");
+          console.log(errors.data);
         });
     },
     deleteRegistration(id) {
       axios
         .post(`/registration/delete/${id}`)
         .then((response) => {
-          this.show(this.parking_id);
           this.makeToast("delete successful", "success");
+          this.show(this.parking_id);
+          const trigger = document.getElementById("btn-delete-close");
+          trigger.click();
           console.log(response.data);
         })
         .catch((errors) => {
