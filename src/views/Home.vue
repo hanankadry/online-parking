@@ -28,11 +28,6 @@
               >
             </li>
             <li class="nav-item">
-              <router-link class="nav-link mt-2" :to="{ path: `/contact` }"
-                >Contact</router-link
-              >
-            </li>
-            <li class="nav-item">
               <router-link to="/login" class="nav-link">
                 <button class="button-sm-fill">Login</button>
               </router-link>
@@ -48,13 +43,7 @@
                 >About</router-link
               >
             </li>
-            <li class="nav-item">
-              <router-link
-                class="nav-link mt-2"
-                :to="{ path: `/contact/${user_id}` }"
-                >Contact</router-link
-              >
-            </li>
+          
             <li class="nav-item">
               <router-link
                 :to="{ path: `/dashboard/${user_id}` }"

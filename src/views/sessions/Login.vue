@@ -174,6 +174,7 @@ export default {
         })
         .catch((error) => {
           const errorCode = error.code;
+          this.errorMsg = "Email or Password is incorrect.";
           console.log(errorCode);
         });
     },
