@@ -178,9 +178,6 @@
               <li v-if="v$.parkingSpace.capacity.$error">
                 {{ v$.parkingSpace.capacity.$errors[0].$message }}
               </li>
-              <!-- <li v-if="v$.parkingSpace.slotNaming.$error">
-                {{ v$.parkingSpace.slotNaming.$errors[0].$message }}
-              </li> -->
             </ul>
           </div>
           <p class="heading mt-5">Parking Space Information</p>
@@ -277,49 +274,6 @@
                 required
               />
             </div>
-            <!-- <div class="col-lg-3 col-md-4">
-              <label for="slotNaming" class="form-label ms-4"
-                >Slot Naming</label
-              >
-              <select
-                class="form-select selector-xl mt-1"
-                v-model="parkingSpace.slotNaming"
-                id="slotNaming"
-                required
-              >
-                <option selected value="default">Choose</option>
-                <option value="alpha">Alphanumerical</option>
-                <option value="numerical">Numerical</option>
-              </select>
-            </div>
-            <div
-              class="col-lg-3 col-md-4"
-              v-if="parkingSpace.slotNaming == 'alpha'"
-            >
-              <label for="alphabets" class="form-label ms-4">Alphabets</label>
-              <input
-                type="number"
-                v-model="numOfAlpha"
-                class="form-control input-xl mt-1"
-                id="alphabet"
-                required
-              />
-            </div>
-            <div
-              class="col-lg-3 col-md-4"
-              v-if="parkingSpace.slotNaming == 'alpha'"
-            >
-              <label for="numberPerAlphabet" class="form-label ms-4"
-                >Number/Alphabet</label
-              >
-              <input
-                type="number"
-                v-model="numPerAlpha"
-                class="form-control input-xl mt-1"
-                id="numberPerAlphabet"
-                required
-              />
-            </div> -->
           </div>
         </section>
         <div class="row col-md-3 offset-md-5 py-5">
@@ -362,7 +316,6 @@ import axios from "axios";
 export default {
   data() {
     return {
-      slotStatus: "available",
       role: "admin",
       v$: useValidate(),
       parkingSpace: {
@@ -375,8 +328,6 @@ export default {
         fee: "",
         capacity: "",
         name: "",
-        // slotNaming: ["default", "alpha", "numerical"],
-        // slotLevel: "",
       },
       user: {
         name: "",
@@ -389,15 +340,10 @@ export default {
         phone: "",
         dob: "",
       },
-      // numOfAlpha: 0,
-      // numPerAlpha: 0,
       thisYear: new Date().toLocaleDateString("en-us", {
         year: "numeric",
       }),
       minValue: null,
-      // slots: [],
-      // levels: [],
-      // Alphabets: Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
     };
   },
   beforeMount() {
@@ -417,12 +363,10 @@ export default {
     goBack() {
       this.$router.push("/login");
     },
-    // createAccount(endValue, numValue, capacity) {
     createAccount() {
       this.v$.$validate();
       if (!this.v$.$error) {
         this.addUser();
-        // this.addParkingSlot(endValue, numValue, capacity);
         this.addParkingSpace();
       }
     },
@@ -479,60 +423,6 @@ export default {
           console.log(errors.data);
         });
     },
-    // addParkingSlot(endValue, numValue, capacity) {
-    //   this.slots = this.getSlots(endValue, numValue, capacity);
-    //   this.levels = this.getLevels();
-    //   for (let i = 0; i < this.slots.length; i++) {
-    //     axios
-    //       .post("/parkingslot/insert", {
-    //         name: this.slots[i],
-    //         level: this.levels[i],
-    //         parking_id: this.parkingSpace.id,
-    //         status: this.slotStatus,
-    //       })
-    //       .then((response) => {
-    //         console.log(response.data);
-    //       })
-    //       .catch((errors) => {
-    //         console.log(errors.data);
-    //       });
-    //   }
-    // },
-    // getLevels() {
-    //   this.levels = [];
-    //   const slotPerLevel =
-    //     this.parkingSpace.capacity / this.parkingSpace.levels;
-    //   for (let j = 0; j < this.parkingSpace.levels; j++) {
-    //     for (let k = 0; k < slotPerLevel; k++) {
-    //       this.levels.push(j + 1);
-    //     }
-    //   }
-    //   console.log(this.levels);
-    //   return this.levels;
-    // },
-    // getSlots(endValue, numValue, capacity) {
-    //   this.slots = [];
-    //   if (this.parkingSpace.slotNaming == "alpha") {
-    //     const letters = this.Alphabets.slice(0, endValue);
-    //     const numOfSlots = [...Array(numValue - 1 + 1).keys()].map(
-    //       (x) => x + 1
-    //     );
-    //     for (let i = 0; i < letters.length; i++) {
-    //       for (let j = 0; j < numOfSlots.length; j++) {
-    //         const slotName = letters[i] + numOfSlots[j];
-    //         this.slots.push(slotName);
-    //       }
-    //     }
-    //     console.log(this.slots);
-    //     return this.slots;
-    //   } else if (this.parkingSpace.slotNaming == "numerical") {
-    //     for (let i = 1; i <= parseInt(capacity); i++) {
-    //       this.slots.push(i);
-    //     }
-    //     console.log(this.slots);
-    //     return this.slots;
-    //   }
-    // },
   },
   validations() {
     return {
@@ -562,12 +452,6 @@ export default {
             required
           ),
         },
-        // slotNaming: {
-        //   required: helpers.withMessage(
-        //     "Slot Naming convention is required",
-        //     required
-        //   ),
-        // },
       },
       user: {
         name: { required: helpers.withMessage("Name is required", required) },

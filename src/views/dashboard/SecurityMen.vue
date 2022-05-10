@@ -58,7 +58,7 @@
               href=""
               data-bs-toggle="modal"
               data-bs-target=".edit-modal"
-              @click="this.current_user = props.row"
+              @click="current_user = props.row"
             >
               <i class="bi bi-pencil-square table-icon"></i>
               {{ props.row.button }}</a
@@ -67,7 +67,7 @@
               href=""
               data-bs-toggle="modal"
               data-bs-target=".info-modal"
-              @click="this.current_user = props.row"
+              @click="current_user = props.row"
             >
               <i class="bi bi-info-circle table-icon text-success"></i>
               {{ props.row.button }}</a
@@ -76,7 +76,7 @@
               href=""
               data-bs-toggle="modal"
               data-bs-target=".activate-modal"
-              @click="this.current_user = props.row"
+              @click="current_user = props.row"
             >
               <i class="bi bi-clock table-icon text-warning"></i>
               {{ props.row.button }}</a
@@ -85,7 +85,7 @@
               href=""
               data-bs-toggle="modal"
               data-bs-target=".delete-modal"
-              @click="this.current_user = props.row"
+              @click="current_user = props.row"
             >
               <i class="bi bi-x-lg table-icon text-danger"></i>
               {{ props.row.button }}</a
@@ -890,11 +890,11 @@ export default {
         })
         .then((response) => {
           this.makeToast("insert successful", "success");
-          this.show(this.parking_id);
           this.new_user = {};
           this.v$.$errors = [];
           const trigger = document.getElementById("btn-add-close");
           trigger.click();
+          this.show(this.parking_id);
           console.log(response.data);
         })
         .catch((errors) => {
@@ -917,9 +917,9 @@ export default {
         })
         .then((response) => {
           this.makeToast("update succesful", "success");
-          this.show(this.parking_id);
           const trigger = document.getElementById("btn-update-close");
           trigger.click();
+          this.show(this.parking_id);
           console.log(response.data);
         })
         .catch((errors) => {
@@ -935,9 +935,9 @@ export default {
           })
           .then((response) => {
             this.makeToast("status change succesful", "success");
-            this.show(this.parking_id);
             const trigger = document.getElementById("btn-activate-close");
             trigger.click();
+            this.show(this.parking_id);
             console.log(response.data);
           })
           .catch((errors) => {
@@ -952,9 +952,9 @@ export default {
           })
           .then((response) => {
             this.makeToast("status change succesful", "success");
-            this.show(this.parking_id);
             const trigger = document.getElementById("btn-activate-close");
             trigger.click();
+            this.show(this.parking_id);
             console.log(response.data);
           })
           .catch((errors) => {
@@ -968,10 +968,10 @@ export default {
         .delete(`/security/delete/${id}`)
         .then((response) => {
           this.makeToast("delete successful", "success");
-          console.log(response.data);
           const trigger = document.getElementById("btn-delete-close");
           trigger.click();
           this.show(this.parking_id);
+          console.log(response.data);
         })
         .catch((errors) => {
           this.makeToast("delete failed", "error");
