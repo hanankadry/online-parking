@@ -648,8 +648,8 @@ export default {
       phone: false,
       status: true,
       searchInput: "",
-      label: "Users",
-      href: "/users",
+      label: "Slots",
+      href: "/slots",
       columns: [
         {
           label: "ID",

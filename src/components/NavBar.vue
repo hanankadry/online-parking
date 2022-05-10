@@ -159,25 +159,31 @@
       </div>
       <div class="offcanvas-body container mt-5">
         <router-link :to="{ path: `/dashboard/${parking_id}` }" class="nav"
-          ><i class="bi bi-columns nav-icon" />Dashboard</router-link
+             id =dash active-class="active" exact
+             ><i class="bi bi-columns nav-icon" />Dashboard</router-link
         >
         <router-link
           :to="{ path: `/parkingSettings/${parking_id}` }"
           class="nav"
+          id= "park" active-class="active" exact
         >
           <img class="sp-icon" />Parking Settings
         </router-link>
         <router-link :to="{ path: `/securityMen/${parking_id}` }" class="nav"
-          ><i class="bi bi-person nav-icon" />Security Men</router-link
+          id= "security" active-class="active" exact >
+          <i class="bi bi-person nav-icon" />Security Men</router-link
         >
-        <router-link :to="{ path: `/users/${parking_id}` }" class="nav"
-          ><i class="bi bi-person nav-icon" />Users</router-link
+        <router-link :to="{ path: `/slots/${parking_id}` }" class="nav"
+          id= "slots" active-class="active" exact>
+          <i class="bi bi-person nav-icon" />Slots</router-link
         >
         <router-link :to="{ path: `/reports/${parking_id}` }" class="nav"
+          active-class="active" exact id= "reports" 
           ><i class="bi bi-exclamation-octagon nav-icon" />Reports</router-link
         >
         <router-link :to="{ path: `/registrations/${parking_id}` }" class="nav"
-          ><i class="bi bi-list-ul nav-icon" />Registrations</router-link
+          active-class="active" exact id="registrations">
+          <i class="bi bi-list-ul nav-icon" />Registrations</router-link
         >
       </div>
     </div>
@@ -365,6 +371,11 @@ a .nav-link:hover {
   position: relative;
   color: #374258;
   margin-left: 10px;
+}
+
+#dash.active,#park.active,#security.active,#slots.active,
+#reports.active,#registrations.active{
+  color:#f74464;
 }
 
 .icon {
