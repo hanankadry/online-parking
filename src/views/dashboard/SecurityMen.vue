@@ -37,15 +37,6 @@
           enabled: false,
           externalQuery: searchInput,
         }"
-        :select-options="{
-          enabled: true,
-          selectOnCheckboxOnly: true,
-          selectionInfoClass: 'custom-class',
-          selectionText: 'rows selected',
-          clearSelectionText: 'clear',
-          disableSelectInfo: true,
-          selectAllByGroup: true,
-        }"
         ><template #table-row="props">
           <span v-if="props.column.field == 'status'">
             <span class="status-success" v-if="props.row.status == 'active'">{{

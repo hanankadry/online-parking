@@ -24,6 +24,21 @@
           </button>
         </div>
       </div>
+      <div class="box" v-if="full == true">
+        <div class="row">
+          <div class="col-auto me-auto">
+            <strong>{{ errorMsg }}</strong>
+          </div>
+          <div class="col-auto">
+            <button
+              type="button"
+              class="btn-close"
+              @click="full = false"
+              aria-label="Close"
+            ></button>
+          </div>
+        </div>
+      </div>
       <vue-good-table
         :columns="columns"
         :rows="rows"
@@ -36,15 +51,6 @@
         :search-options="{
           enabled: false,
           externalQuery: searchInput,
-        }"
-        :select-options="{
-          enabled: true,
-          selectOnCheckboxOnly: true,
-          selectionInfoClass: 'custom-class',
-          selectionText: 'rows selected',
-          clearSelectionText: 'clear',
-          disableSelectInfo: true,
-          selectAllByGroup: true,
         }"
         ><template #table-row="props">
           <span v-if="props.column.field == 'status'">
@@ -153,7 +159,13 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="button-xs-unfill">Cancel</button>
+            <button
+              type="button"
+              class="button-xs-unfill"
+              @click="cancel(current_slot, 'edit')"
+            >
+              Cancel
+            </button>
             <button
               type="button"
               class="button-xs-fill"
@@ -299,7 +311,13 @@
             Are you sure you want to delete {{ current_slot.name }}?
           </div>
           <div class="modal-footer">
-            <button type="button" class="button-xs-unfill">Cancel</button>
+            <button
+              type="button"
+              class="button-xs-unfill"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
             <button
               type="button"
               @click="deleteSlot(current_slot.id)"
@@ -332,9 +350,6 @@
             ></button>
           </div>
           <div class="modal-body">
-            <div class="box" v-if="full == true">
-              <strong>{{ errorMsg }}</strong>
-            </div>
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
               <li class="nav-item" role="presentation">
                 <button
@@ -449,7 +464,7 @@
                           checked
                         />
                         <label class="form-check-label" for="ritema"
-                          >Alphanumercal</label
+                          >Alphanumerical</label
                         >
                       </div>
 
@@ -666,15 +681,6 @@ export default {
       },
     };
   },
-  watch: {
-    rows(oldVal, val) {
-      if (this.rows.length == this.parkingSpace.capacity) {
-        this.full = true;
-      } else {
-        this.full = false;
-      }
-    },
-  },
   mounted() {
     this.show(this.parking_id);
     this.getParkingSpace();
@@ -800,27 +806,38 @@ export default {
         });
     },
     addSlot(type) {
-      if (type == "single") {
-        axios
-          .post("/parkingslot/insert", {
-            name: this.new_slot.name,
-            level: this.new_slot.level,
-            parking_id: this.parking_id,
-            status: this.new_slot.status,
-          })
-          .then((response) => {
-            this.makeToast("insert successful", "success");
-            const trigger = document.getElementById("btn-add-close");
-            trigger.click();
-            this.show(this.parking_id);
-            console.log(response.data);
-          })
-          .catch((errors) => {
-            this.makeToast("insert failed", "error");
-            console.log(errors.data);
-          });
+      const condition = this.rows.length < this.parkingSpace.capacity;
+      if (condition) {
+        if (type == "single") {
+          axios
+            .post("/parkingslot/insert", {
+              name: this.new_slot.name,
+              level: this.new_slot.level,
+              parking_id: this.parking_id,
+              status: this.new_slot.status,
+            })
+            .then((response) => {
+              this.makeToast("insert successful", "success");
+              const trigger = document.getElementById("btn-add-close");
+              trigger.click();
+              this.new_slot = {};
+              this.show(this.parking_id);
+              console.log(response.data);
+            })
+            .catch((errors) => {
+              this.makeToast("insert failed", "error");
+              console.log(errors.data);
+            });
+        } else {
+          this.getAllSlots(this.parkingSlots);
+        }
       } else {
-        this.getAllSlots(this.parkingSlots);
+        this.makeToast("insert failed", "error");
+        this.full = true;
+        this.errorMsg = "Parking Space Capacity is full";
+        const trigger = document.getElementById("btn-add-close");
+        trigger.click();
+        this.new_slot = {};
       }
     },
     getAllSlots(array) {
@@ -855,7 +872,6 @@ export default {
             this.parkingSpace.capacity = item.capacity;
             this.parkingSpace.levels = parseInt(item.levels);
           });
-          console.log(this.parkingSpace);
           console.log(response.data);
         })
         .catch((errors) => {
@@ -885,7 +901,6 @@ export default {
       this.slots = [];
       if (this.slotNaming == "option1") {
         for (let i = 0; i < array.length; i++) {
-          console.log(array[i].alphabet);
           for (let j = 1; j <= array[i].number; j++) {
             this.slots.push(array[i].alphabet + j);
           }
@@ -900,8 +915,6 @@ export default {
           }
           console.log(this.slots);
           return this.slots;
-        } else {
-          this.errorMsg = "Parking Space capacity is full.";
         }
       }
     },
@@ -1047,5 +1060,11 @@ span > a {
 .selector-lg > option:hover {
   background-color: white;
   color: #374258;
+}
+
+.box {
+  background-color: rgb(255, 0, 0, 0.3);
+  padding: 12px;
+  margin: 10px 0px 10px 0px;
 }
 </style>
