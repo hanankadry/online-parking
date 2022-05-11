@@ -71,6 +71,7 @@ export default {
       min: "1:00",
       timerEnabled: false,
       timerCount: 59,
+      code: "",
       password: "",
       confirm_pass: "",
     };
@@ -92,10 +93,10 @@ export default {
             this.timerCount--;
           }, 1000);
         }
-        if(this.timerCount==0){
-        this.timerEnabled=false;
-        this.timerCount=59;
-      }
+        if (this.timerCount == 0) {
+          this.timerEnabled = false;
+          this.timerCount = 59;
+        }
       },
       immediate: true, // This ensures the watcher is triggered upon creation
     },
