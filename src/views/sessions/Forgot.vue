@@ -38,27 +38,32 @@
 </template>
 
 <script>
-import { ref } from "@vue/reactivity";
 import router from "@/router";
+import { getAuth, sendPasswordResetEmail} from "firebase/auth";
 
 export default {
-  setup() {
-    const email = ref("");
-
-    const sendEmail = () => {
-      console.log(email.value);
-      router.push("/reset");
-    };
-
-    const signIn = () => {
-      router.push("/login");
-    };
-
+  data() {
     return {
-      email,
-      sendEmail,
-      signIn,
+      email: "",
+      auth: getAuth(),
     };
+  },
+  methods: {
+    sendEmail() {
+      sendPasswordResetEmail(this.auth, this.email)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          console.log(errorCode);
+        });
+      console.log(email);
+      router.push("/reset");
+    },
+    signIn() {
+      router.push("/login");
+    },
   },
 };
 </script>
