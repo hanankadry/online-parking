@@ -64,7 +64,6 @@
 export default {
   data() {
     return {
-      min:"1:00",
       timerEnabled: false,
       timerCount: 59,
     };
@@ -86,6 +85,10 @@ export default {
             this.timerCount--;
           }, 1000);
         }
+        if(this.timerCount==0){
+        this.timerEnabled=false;
+        this.timerCount=59;
+      }
       },
       immediate: true, // This ensures the watcher is triggered upon creation
     },
@@ -102,39 +105,6 @@ export default {
     play() {
       this.timerEnabled = true;
     },
-
-    /*
-    
-    startTimer() {
-      this.timer();
-    },
-    timer() {
-      var seconds = 60;
-      function myFunction() {
-        
-        if (seconds < 60) {
-          document.getElementById("timer").innerHTML = "00:" + seconds;
-        }
-        if (seconds > 0) {
-          seconds--;
-          if (seconds < 10) {
-            document.getElementById("timer").innerHTML = "00:0" + seconds;
-          }
-          
-        }
-         else {
-          document.getElementById("link").style.pointerEvents = "auto";
-          document.getElementById("link").style.cursor = "pointer";
-        }
-      }
-
-      window.setInterval(function () {
-        myFunction();
-      }, 1000);
-
-      document.getElementById("timer").innerHTML = "01:00";
-    },
-    */
   },
 };
 </script>
