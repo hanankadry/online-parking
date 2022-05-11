@@ -68,7 +68,7 @@ export default {
   data() {
     return {
       auth: getAuth(),
-      min: "1:00,
+      min: "1:00",
       timerEnabled: false,
       timerCount: 59,
       password: "",
