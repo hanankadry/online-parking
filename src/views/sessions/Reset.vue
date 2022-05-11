@@ -7,7 +7,7 @@
 
       <form>
         <div class="mt-5">
-          <div class="input-icons">
+          <!-- <div class="input-icons">
             <i class="bi bi-123 icon" />
             <input
               class="form-control input-lg"
@@ -15,13 +15,14 @@
               placeholder="Enter Code"
               required
             />
-          </div>
+          </div> -->
           <div class="input-icons">
             <i class="bi bi-lock icon" />
             <input
               type="password"
               class="form-control input-lg"
               placeholder="Enter Password"
+              v-model="password"
               required
             />
           </div>
@@ -31,6 +32,7 @@
               type="password"
               class="form-control input-lg"
               placeholder="Confirm Password"
+              v-model="confirm_pass"
               required
             />
           </div>
@@ -61,11 +63,16 @@
 </template>
 
 <script>
+import { getAuth, confirmPasswordReset, checkActionCode } from "firebase/auth";
 export default {
   data() {
     return {
+      auth: getAuth(),
+      min: "1:00,
       timerEnabled: false,
       timerCount: 59,
+      password: "",
+      confirm_pass: "",
     };
   },
 
@@ -96,12 +103,11 @@ export default {
 
   methods: {
     reset() {
-      this.$router.push("/dashboard");
+      this.$router.push("/login");
     },
     goBack() {
       this.$router.push("/forgot");
     },
-
     play() {
       this.timerEnabled = true;
     },

@@ -34,8 +34,10 @@ const routes = [
   },
   {
     path: '/reset',
+    alias: ['/reset/:pathMatch(.*)*'],
     name: 'reset',
     component: () => import('@/views/sessions/Reset'),
+    props: true
 
   },
 
