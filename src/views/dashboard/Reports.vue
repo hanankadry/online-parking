@@ -54,15 +54,6 @@
             enabled: false,
             externalQuery: searchInput,
           }"
-          :select-options="{
-            enabled: true,
-            selectOnCheckboxOnly: true,
-            selectionInfoClass: 'custom-class',
-            selectionText: 'rows selected',
-            clearSelectionText: 'clear',
-            disableSelectInfo: true,
-            selectAllByGroup: true,
-          }"
         >
         </vue-good-table>
       </div>

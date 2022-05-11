@@ -26,65 +26,6 @@
                 ><i class="bi bi-house-door nav-icon"></i>
               </router-link>
             </li>
-            <li class="nav-item notifications dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                data-bs-toggle="dropdown"
-                href="#"
-                role="button"
-                aria-expanded="false"
-              >
-                <i class="bi bi-bell nav-icon"
-                  ><span
-                    class="
-                      alert
-                      top-0
-                      start-100
-                      translate-middle
-                      p-2
-                      rounded-circle
-                    "
-                    v-if="this.newNotifications.length > 0"
-                  >
-                    <span class="visually-hidden" /></span></i
-              ></a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <div
-                  class="notification-container"
-                  v-if="this.newNotifications.length > 0"
-                >
-                  <p class="title">
-                    New Notifications<span class="badge float-end">{{
-                      this.newNotifications.length
-                    }}</span>
-                  </p>
-                  <div class="notification-container">
-                    <notification-container
-                      v-for="notification in newNotifications"
-                      :key="notification.id"
-                      :imageSrc="notification.imageSrc"
-                      :name="notification.name"
-                      :msg="notification.body"
-                    >
-                    </notification-container>
-                  </div>
-                  <li><hr class="dropdown-divider" /></li>
-                </div>
-                <div class="notification-container">
-                  <p class="title">Old Notifications</p>
-                  <div class="old-notification-container">
-                    <notification-container
-                      v-for="notification in oldNotifications"
-                      :key="notification.id"
-                      :imageSrc="notification.imageSrc"
-                      :name="notification.name"
-                      :msg="notification.body"
-                    >
-                    </notification-container>
-                  </div>
-                </div>
-              </ul>
-            </li>
             <li class="nav-item profile dropdown">
               <a
                 class="nav-link dropdown-toggle"
@@ -158,31 +99,50 @@
         />
       </div>
       <div class="offcanvas-body container mt-5">
-        <router-link :to="{ path: `/dashboard/${parking_id}` }" class="nav"
-             id =dash active-class="active" exact
-             ><i class="bi bi-columns nav-icon" />Dashboard</router-link
+        <router-link
+          :to="{ path: `/dashboard/${parking_id}` }"
+          class="nav"
+          id="dash"
+          active-class="active"
+          exact
+          ><i class="bi bi-columns nav-icon" />Dashboard</router-link
         >
         <router-link
           :to="{ path: `/parkingSettings/${parking_id}` }"
           class="nav"
-          id= "park" active-class="active" exact
+          id="park"
+          active-class="active"
+          exact
         >
           <img class="sp-icon" />Parking Settings
         </router-link>
-        <router-link :to="{ path: `/securityMen/${parking_id}` }" class="nav"
-          id= "security" active-class="active" exact >
+        <router-link
+          :to="{ path: `/securityMen/${parking_id}` }"
+          class="nav"
+          id="security"
+          active-class="active"
+          exact
+        >
           <i class="bi bi-person nav-icon" />Security Men</router-link
         >
-        <router-link :to="{ path: `/slots/${parking_id}` }" class="nav"
-          id= "slots" active-class="active" exact>
-          <i class="bi bi-person nav-icon" />Slots</router-link
+        <router-link :to="{ path: `/parkingSlots/${parking_id}` }" class="nav"
+          ><i class="bi bi-square-half nav-icon" />Parking Slots</router-link
         >
-        <router-link :to="{ path: `/reports/${parking_id}` }" class="nav"
-          active-class="active" exact id= "reports" 
+        <router-link
+          :to="{ path: `/reports/${parking_id}` }"
+          class="nav"
+          active-class="active"
+          exact
+          id="reports"
           ><i class="bi bi-exclamation-octagon nav-icon" />Reports</router-link
         >
-        <router-link :to="{ path: `/registrations/${parking_id}` }" class="nav"
-          active-class="active" exact id="registrations">
+        <router-link
+          :to="{ path: `/registrations/${parking_id}` }"
+          class="nav"
+          active-class="active"
+          exact
+          id="registrations"
+        >
           <i class="bi bi-list-ul nav-icon" />Registrations</router-link
         >
       </div>
@@ -192,18 +152,13 @@
 
 <script>
 import { getAuth, signOut } from "firebase/auth";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import axios from "axios";
 
 export default {
   props: ["id"],
   data() {
     return {
-      messaging: getMessaging(),
-      myVapidKey:
-        "BC3eNJcWM1hONjlE6NEpKLJ0tYNJVnlFtn07yp3uCrn9ahXaPCwuhwYO_8GkWL2SGHLAajIS52uYaMqsP6KgU08",
       showMenu: false,
-      notification: false,
       profile: false,
       user: {
         id: null,
@@ -213,55 +168,12 @@ export default {
         phone: "",
       },
       parking_id: this.id,
-      newNotifications: [
-        {
-          imageSrc: "@/assets/images/logo.jpg",
-          name: "User",
-          body: "a slot had been registered",
-        },
-        {
-          imageSrc: "@/assets/images/logo.jpg",
-          name: "User",
-          body: "a slot had been registered",
-        },
-        {
-          imageSrc: "@/assets/images/logo.jpg",
-          name: "User",
-          body: "a slot had been registered",
-        },
-      ],
-      oldNotifications: [
-        {
-          imageSrc: "@/assets/images/logo.jpg",
-          name: "User",
-          body: "a slot had been registered",
-        },
-        {
-          imageSrc: "@/assets/images/logo.jpg",
-          name: "User",
-          body: "a slot had been registered",
-        },
-        {
-          imageSrc: "@/assets/images/logo.jpg",
-          name: "User",
-          body: "a slot had been registered",
-        },
-      ],
     };
   },
   mounted() {
-    // this.getNotifications();
-    // console.log("Firebase cloud messaging object");
     this.getUserID();
   },
   methods: {
-    updateNotifications() {
-      if (this.newNotifications.length != 0) {
-        for (let i = 0; i < this.newNotifications.length; i++) {
-          this.oldNotifications.push(this.newNotifications[i]);
-        }
-      }
-    },
     getUserID() {
       axios
         .get(`/admin/id/${this.parking_id}`)
@@ -293,26 +205,6 @@ export default {
         })
         .catch((errors) => {
           console.log(errors.data);
-        });
-    },
-    getNotifications() {
-      getToken(this.messaging, {
-        vapidKey: this.myVapidKey,
-      })
-        .then((currentToken) => {
-          if (currentToken) {
-            console.log("client token", currentToken);
-            onMessage(this.messaging, (payload) => {
-              console.log("Message received. ", payload);
-            });
-          } else {
-            console.log(
-              "No registration token available. Request permission to generate one."
-            );
-          }
-        })
-        .catch((error) => {
-          console.log("An error occurred while retrieving token. ", error);
         });
     },
     showOffcanvasMenu() {
@@ -373,9 +265,13 @@ a .nav-link:hover {
   margin-left: 10px;
 }
 
-#dash.active,#park.active,#security.active,#slots.active,
-#reports.active,#registrations.active{
-  color:#f74464;
+#dash.active,
+#park.active,
+#security.active,
+#slots.active,
+#reports.active,
+#registrations.active {
+  color: #f74464;
 }
 
 .icon {

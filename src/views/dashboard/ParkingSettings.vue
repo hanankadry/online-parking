@@ -12,8 +12,9 @@
               type="text"
               v-model="parkingSpace.location"
               class="form-control input-xl"
-              id="loaction"
+              id="location"
               required
+              disabled
             />
           </div>
           <div class="col-lg-4">
@@ -23,6 +24,7 @@
               class="form-select selector-xl"
               v-model="parkingSpace.category"
               id="category"
+              disabled
               required
             >
               <option selected>Choose Category</option>
@@ -41,6 +43,7 @@
               v-model="parkingSpace.description"
               class="form-control input-xl"
               id="description"
+              disabled
               required
             />
           </div>
@@ -52,6 +55,7 @@
               v-model="parkingSpace.levels"
               class="form-control input-xl"
               id="levels"
+              disabled
               required
             />
           </div>
@@ -62,6 +66,8 @@
               type="number"
               v-model="parkingSpace.capacity"
               class="form-control input-xl"
+              id="capacity"
+              disabled
               required
             />
           </div>
@@ -81,73 +87,25 @@
               v-model="parkingSpace.fee"
               class="form-control input-xl"
               v-if="parkingSpace.fees == true"
-              id="capacity"
-              required
-            />
-          </div>
-          <div class="col-lg-3 col-md-4">
-            <label for="slotNaming" class="form-label ms-4">Slot Naming</label>
-            <select
-              class="form-select selector-xl mt-1"
-              v-model="parkingSpace.slotNaming"
-              id="slotNaming"
-              required
-            >
-              <option selected>Choose</option>
-              <option value="alpha">Alphanumerical</option>
-              <option value="numerical">Numerical</option>
-            </select>
-          </div>
-          <div
-            class="col-lg-3 col-md-4"
-            v-if="parkingSpace.slotNaming == 'alpha'"
-          >
-            <label for="alphabets" class="form-label ms-4">Alphabets</label>
-            <input
-              type="number"
-              v-model="numOfAlpha"
-              class="form-control input-xl mt-1"
-              id="alphabet"
-              required
-            />
-          </div>
-          <div
-            class="col-lg-3 col-md-4"
-            v-if="parkingSpace.slotNaming == 'alpha'"
-          >
-            <label for="numberPerAlphabet" class="form-label ms-4"
-              >Number/Alphabet</label
-            >
-            <input
-              type="number"
-              v-model="numPerAlpha"
-              class="form-control input-xl mt-1"
-              id="numberPerAlphabet"
+              id="fee"
+              disabled
               required
             />
           </div>
         </div>
         <div class="row">
           <button
-            class="button-sm-fill col offset-md-10 me-5"
-            @click="editting = true"
+            class="button-sm-fill col-1 offset-md-10 me-5"
+            @click="enable"
             v-if="editting == false"
           >
             Edit
           </button>
-          <div class="buttons col offset-md-8 me-4" v-else>
-            <button
-              class="button-sm-unfill me-2"
-              type="button"
-              @click="editting = false"
-            >
+          <div class="buttons col offset-md-9 me-4" v-else>
+            <button class="button-sm-unfill me-2" type="button" @click="cancel">
               Cancel
             </button>
-            <button
-              class="button-sm-fill"
-              type="button"
-              @click="editting = false"
-            >
+            <button class="button-sm-fill" type="button" @click="disable">
               Save
             </button>
           </div>
@@ -158,7 +116,7 @@
 </template>
 
 <script>
-
+import axios from "axios";
 export default {
   props: ["id"],
   data() {
@@ -167,6 +125,7 @@ export default {
       label: "Parking Settings",
       href: "/parkingSettings",
       parking_id: this.id,
+      user_id: "",
       parkingSpace: {
         location: "",
         category: "",
@@ -176,28 +135,106 @@ export default {
         fee: "",
         capacity: "",
         name: "",
-        slotNaming: ["alpha", "numerical"],
-        slotLevel: "",
       },
-      numOfAlpha: "",
-      numPerAlpha: "",
-      slots: [],
-      Alphabets: Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
     };
   },
+  mounted() {
+    this.getParkingSpace(this.parking_id);
+    if (this.parkingSpace.fee != null) {
+      this.parkingSpace.fees = true;
+    }
+  },
   methods: {
-    getSlots(endValue, numValue) {
-      slots = [];
-      const letters = Alphabets.slice(0, endValue);
-      const numOfSlots = [...Array(numValue - 1 + 1).keys()].map((x) => x + 1);
-
-      for (let i = 0; i < letters.length; i++) {
-        for (let j = 0; j < numOfSlots.length; j++) {
-          const slotName = letters[i] + numOfSlots[j];
-          slots.push(slotName);
+    getParkingSpace(id) {
+      axios
+        .get(`/parkingspace/${id}`)
+        .then((response) => {
+          response.data.map((item) => {
+            this.parkingSpace.location = item.location;
+            this.parkingSpace.description = item.description;
+            this.parkingSpace.capacity = item.capacity;
+            this.parkingSpace.name = item.name;
+            this.user_id = item.admin_id;
+            this.parkingSpace.fee = item.fees;
+            this.parkingSpace.category = item.category;
+            this.parkingSpace.levels = item.levels;
+          });
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
+    makeToast(msg, type) {
+      this.$toast.show(msg, { type: type });
+    },
+    cancel() {
+      const condition =
+        (this.parkingSpace.location ||
+          this.parkingSpace.category ||
+          this.parkingSpace.description ||
+          this.parkingSpace.levels ||
+          this.parkingSpace.fee ||
+          this.parkingSpace.capacity ||
+          this.parkingSpace.name) != null;
+      if (condition) {
+        if (confirm("Are you sure you want to cancel these changes?") == true) {
+          console.log("confirm");
+          this.disable();
+          this.getParkingSpace(this.parking_id);
+        } else {
+          console.log("cancel");
         }
+      } else {
+        this.disable();
       }
-      return slots;
+    },
+    enable() {
+      this.editting = true;
+      document.getElementById("location").disabled = "";
+      document.getElementById("category").disabled = "";
+      document.getElementById("description").disabled = "";
+      document.getElementById("levels").disabled = "";
+      document.getElementById("capacity").disabled = "";
+      document.getElementById("fees").disabled = "";
+      document.getElementById("fee").disabled = "";
+    },
+    disable() {
+      this.editting = false;
+      document.getElementById("location").disabled = "true";
+      document.getElementById("category").disabled = "true";
+      document.getElementById("description").disabled = "true";
+      document.getElementById("levels").disabled = "true";
+      document.getElementById("capacity").disabled = "true";
+      document.getElementById("fees").disabled = "true";
+      if (this.parkingSpace.fee != null) {
+        this.parkingSpace.fees = true;
+        document.getElementById("fee").disabled = "true";
+      } else {
+        this.parkingSpace.fees = false;
+      }
+      this.update(this.parking_id);
+    },
+    update(id) {
+      axios
+        .post(`/parkingspace/update/${id}`, {
+          location: this.parkingSpace.location,
+          description: this.parkingSpace.description,
+          capacity: this.parkingSpace.capacity,
+          name: this.parkingSpace.name,
+          admin_id: this.user_id,
+          fees: this.parkingSpace.fee,
+          category: this.parkingSpace.category,
+          levels: this.parkingSpace.levels,
+        })
+        .then((response) => {
+          this.makeToast("update successful", "success");
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          this.makeToast("update failed", "error");
+          console.log(errors.data);
+        });
     },
   },
 };
@@ -328,5 +365,21 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .button-xl-fill {
   align-content: center !important;
+}
+
+.input-file-lg {
+  border-radius: 95px;
+  height: 60px;
+  width: 28.4rem;
+  background-color: #374258;
+  color: white;
+  border: none;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+  border: none;
+  height: 60px;
+  border-radius: 95px;
+  background-color: #f74464;
 }
 </style>

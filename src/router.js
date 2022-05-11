@@ -96,9 +96,9 @@ const routes = [
   },
   // change into parking slots 
   {
-    path: '/slots/:id',
-    name: 'slots',
-    component: () => import('@/views/dashboard/Users'),
+    path: '/parkingSlots/:id',
+    name: 'parkingslots',
+    component: () => import('@/views/dashboard/ParkingSlots'),
     props: true
 
   }

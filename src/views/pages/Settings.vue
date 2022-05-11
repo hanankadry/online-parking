@@ -49,7 +49,7 @@
           aria-controls="v-pills-delete"
           aria-selected="false"
         >
-          Delete User
+          Delete Account
         </button>
       </div>
       <div class="tab-content" id="v-pills-tabContent">
@@ -77,22 +77,6 @@
                     />
                   </div>
                   <div class="col-md-6">
-                    <i class="bi bi-image md-icon" />
-                    <label for="picture" class="form-label"
-                      >Profile Picture</label
-                    >
-                    <input
-                      type="file"
-                      :change="user.photoURL"
-                      class="form-control-lg input-file-lg"
-                      id="picture"
-                      disabled
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="row pb-3 px-5">
-                  <div class="col-lg-4">
                     <i class="bi bi-person-lines-fill md-icon" />
                     <label for="nationalID" class="form-label"
                       >National ID</label
@@ -106,7 +90,9 @@
                       required
                     />
                   </div>
-                  <div class="col-lg-4">
+                </div>
+                <div class="row pb-3 px-5">
+                  <div class="col-lg-6">
                     <i class="bi bi-telephone md-icon" />
                     <label for="phone" class="form-label">Phone</label>
                     <input
@@ -118,7 +104,7 @@
                       required
                     />
                   </div>
-                  <div class="col-lg-4">
+                  <div class="col-lg-6">
                     <i class="bi bi-calendar2-week md-icon" />
                     <label for="dateOfBirth" class="form-label"
                       >Date of Birth</label
@@ -364,7 +350,6 @@
 <script>
 import {
   getAuth,
-  updateProfile,
   updateEmail,
   updatePassword,
   reauthenticateWithCredential,
@@ -402,7 +387,6 @@ export default {
         phone: "",
         dob: "",
         password: "",
-        photoURL: "",
       },
       update_pass: {
         oldPass: "",
@@ -544,11 +528,6 @@ export default {
             this.user.phone = user.phone;
             this.user.password = user.password;
           });
-          const userAuth = this.auth.currentUser;
-          if (userAuth !== null) {
-            this.user.photoURL = userAuth.photoURL;
-            const uid = userAuth.uid;
-          }
           console.log(this.user);
           console.log(response.data);
         })
@@ -579,7 +558,6 @@ export default {
     enable() {
       this.editting = true;
       document.getElementById("email").disabled = "";
-      document.getElementById("picture").disabled = "";
       document.getElementById("nationalID").disabled = "";
       document.getElementById("phone").disabled = "";
       document.getElementById("dateOfBirth").disabled = "";
@@ -589,7 +567,6 @@ export default {
     disable() {
       this.editting = false;
       document.getElementById("email").disabled = "true";
-      document.getElementById("picture").disabled = "true";
       document.getElementById("nationalID").disabled = "true";
       document.getElementById("phone").disabled = "true";
       document.getElementById("dateOfBirth").disabled = "true";
@@ -619,18 +596,6 @@ export default {
           this.makeToast("update failed", "error");
           console.log(errors.data);
         });
-      if (this.user.photoURL != null) {
-        updateProfile(this.auth.currentUser, {
-          photoURL: this.user.photoURL,
-        })
-          .then((response) => {
-            alert("successful photo");
-            console.log(response);
-          })
-          .catch((error) => {
-            console.log(error.data);
-          });
-      }
       if (this.user.email != user.email) {
         updateEmail(user, this.user.email)
           .then((response) => {
@@ -837,15 +802,6 @@ export default {
   padding-left: 30px;
 }
 
-.input-file-lg {
-  border-radius: 95px;
-  height: 50px;
-  width: calc(100% - 5px);
-  background-color: white;
-  border: none;
-  color: black;
-}
-
 .upload-input {
   border-radius: 95px;
   background-color: white;
@@ -867,13 +823,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background-position: end;
   background-size: 20px 20px, 20px 20px;
   background-repeat: no-repeat;
-}
-
-input[type="file"]::-webkit-file-upload-button {
-  border: none;
-  height: 50px;
-  border-radius: 95px;
-  background-color: #f74464;
 }
 
 .selector-lg {
