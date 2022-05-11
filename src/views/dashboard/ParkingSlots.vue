@@ -332,6 +332,9 @@
             ></button>
           </div>
           <div class="modal-body">
+            <div class="box" v-if="full == true">
+              <strong>{{ errorMsg }}</strong>
+            </div>
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
               <li class="nav-item" role="presentation">
                 <button
@@ -435,40 +438,41 @@
                       </p>
                     </div>
                     <div class="col-lg-6">
-                      <div class="form-check form-check-inline">
+                      <div class="form-check form-check-inline radio-item">
                         <input
                           class="form-check-input"
                           type="radio"
-                          name="inlineRadioOptions"
-                          id="inlineRadio1"
+                          id="ritema"
+                          name="ritem"
                           value="option1"
                           v-model="slotNaming"
                           checked
                         />
-                        <label class="form-check-label" for="inlineRadio1">
-                          Alphanumercal
-                        </label>
+                        <label class="form-check-label" for="ritema"
+                          >Alphanumercal</label
+                        >
                       </div>
-                      <div class="form-check form-check-inline">
+
+                      <div class="form-check form-check-inline radio-item">
                         <input
                           class="form-check-input"
                           type="radio"
-                          name="inlineRadioOptions"
-                          id="inlineRadio2"
+                          id="ritemb"
+                          name="ritem"
                           value="option2"
                           v-model="slotNaming"
                         />
-                        <label class="form-check-label" for="option2">
-                          Numerical
-                        </label>
+                        <label class="form-check-label" for="ritemb"
+                          >Numerical</label
+                        >
                       </div>
                     </div>
                   </div>
                   <div class="row" v-if="slotNaming == 'option1'">
                     <div
                       class="row"
-                      v-for="input in parkingSlots"
-                      :key="input.index"
+                      v-for="(input, index) in parkingSlots"
+                      :key="index"
                     >
                       <div class="col-lg-3">
                         <label for="alphabet" class="form-label ms-4"
@@ -476,23 +480,22 @@
                         >
                         <select
                           class="form-select selector-lg mt-1"
-                          v-model="input.alpahbet"
+                          v-model="input.alphabet"
                           id="alphabet"
                           required
                         >
                           <option
-                            v-for="item in Alphabets"
-                            :key="item.index"
-                            :value="item"
-                            :selected="item.id == 0"
+                            v-for="(option, index) in Alphabets"
+                            :key="index"
+                            :value="option"
                           >
-                            {{ item }}
+                            {{ option }}
                           </option>
                         </select>
                       </div>
-                      <div class="col-lg-3">
+                      <div class="col-lg-5">
                         <label for="number" class="form-label ms-4"
-                          >Number</label
+                          >Number of Slots</label
                         >
                         <input
                           type="number"
@@ -512,7 +515,7 @@
                           required
                         />
                       </div>
-                      <div class="col-lg-3 mt-4">
+                      <div class="col-lg-1 mt-4">
                         <i class="bi bi-plus-circle sm-icon" @click="add" />
                         <i
                           class="bi bi-dash-circle sm-icon"
@@ -523,6 +526,18 @@
                     </div>
                   </div>
                   <div class="row" v-else>
+                    <div class="col-lg-4">
+                      <label for="number" class="form-label ms-4"
+                        >Number of Slots</label
+                      >
+                      <input
+                        type="number"
+                        v-model="numOfSlots"
+                        class="form-control input-lg mt-1"
+                        id="number"
+                        required
+                      />
+                    </div>
                     <div class="col-lg-3">
                       <label for="level" class="form-label ms-4">Level</label>
                       <input
@@ -539,7 +554,13 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="button-xs-unfill">Cancel</button>
+            <button
+              type="button"
+              class="button-xs-unfill"
+              @click="cancel(new_slot, 'add')"
+            >
+              Cancel
+            </button>
             <button type="button" @click="addSlot(type)" class="button-xs-fill">
               Add
             </button>
@@ -571,11 +592,12 @@ export default {
         level: "",
         status: "",
       },
+      full: false,
+      errorMsg: "",
       slotStatus: "available",
       slots: [],
       levels: [],
       Alphabets: [
-        "Choose Alphabet",
         "A",
         "B",
         "C",
@@ -605,6 +627,7 @@ export default {
       ],
       slotNaming: "option1",
       slotLevel: "",
+      numOfSlots: "",
       searchInput: "",
       label: "Parking Slots",
       href: "/parkingSlots",
@@ -643,6 +666,15 @@ export default {
       },
     };
   },
+  watch: {
+    rows(oldVal, val) {
+      if (this.rows.length == this.parkingSpace.capacity) {
+        this.full = true;
+      } else {
+        this.full = false;
+      }
+    },
+  },
   mounted() {
     this.show(this.parking_id);
     this.getParkingSpace();
@@ -654,8 +686,8 @@ export default {
     remove() {
       this.parkingSlots.pop();
     },
-    cancel(user, modal) {
-      const condition = (user.name || user.level || user.status) != null;
+    cancel(slot, modal) {
+      const condition = (slot.name || slot.level || slot.status) != null;
       if (modal == "edit") {
         if (condition) {
           if (
@@ -664,7 +696,6 @@ export default {
             console.log("confirm");
             const trigger = document.getElementById("btn-update-close");
             trigger.click();
-
             this.show(this.parking_id);
           } else {
             console.log("cancel");
@@ -679,7 +710,10 @@ export default {
             confirm("Are you sure you want to cancel these changes?") == true
           ) {
             console.log("confirm");
-            this.new_user = {};
+            this.new_slot = {};
+            this.parkingSlots = [{ alphabet: "", number: "", level: "" }];
+            this.slotLevel = "";
+            this.numOfSlots = "";
             const trigger = document.getElementById("btn-add-close");
             trigger.click();
             this.show(this.parking_id);
@@ -689,7 +723,10 @@ export default {
         } else {
           const trigger = document.getElementById("btn-add-close");
           trigger.click();
-          this.new_user = {};
+          this.new_slot = {};
+          this.parkingSlots = [{ alphabet: "", number: "", level: "" }];
+          this.slotLevel = "";
+          this.numOfSlots = "";
         }
       }
     },
@@ -789,26 +826,26 @@ export default {
     getAllSlots(array) {
       this.slots = this.getSlots(array);
       this.levels = this.getLevels(array);
-      // for (let i = 0; i < this.slots.length; i++) {
-      //   axios
-      //     .post("/parkingslot/insert", {
-      //       name: this.slots[i],
-      //       level: this.levels[i],
-      //       parking_id: this.parking_id,
-      //       status: this.slotStatus,
-      //     })
-      //     .then((response) => {
-      //       this.makeToast("insert successful", "success");
-      //       const trigger = document.getElementById("btn-add-close");
-      //       trigger.click();
-      //       this.show(this.parking_id);
-      //       console.log(response.data);
-      //     })
-      //     .catch((errors) => {
-      //       this.makeToast("insert failed", "error");
-      //       console.log(errors.data);
-      //     });
-      // }
+      for (let i = 0; i < this.slots.length; i++) {
+        axios
+          .post("/parkingslot/insert", {
+            name: this.slots[i],
+            level: this.levels[i],
+            parking_id: this.parking_id,
+            status: this.slotStatus,
+          })
+          .then((response) => {
+            this.makeToast("insert successful", "success");
+            const trigger = document.getElementById("btn-add-close");
+            trigger.click();
+            this.show(this.parking_id);
+            console.log(response.data);
+          })
+          .catch((errors) => {
+            this.makeToast("insert failed", "error");
+            console.log(errors.data);
+          });
+      }
     },
     getParkingSpace() {
       axios
@@ -831,13 +868,13 @@ export default {
       if (this.slotNaming == "option1") {
         for (let j = 0; j < array.length; j++) {
           for (let k = 0; k < array[j].number; k++) {
-            this.levels.push(k + 1);
+            this.levels.push(array[j].level);
           }
         }
         console.log(this.levels);
         return this.levels;
       } else if (this.slotNaming == "option2") {
-        for (let i = 0; i < value; i++) {
+        for (let i = 0; i < this.numOfSlots; i++) {
           this.levels.push(this.slotLevel);
         }
         console.log(this.levels);
@@ -848,7 +885,7 @@ export default {
       this.slots = [];
       if (this.slotNaming == "option1") {
         for (let i = 0; i < array.length; i++) {
-          console.log(array[i].alphabet.value);
+          console.log(array[i].alphabet);
           for (let j = 1; j <= array[i].number; j++) {
             this.slots.push(array[i].alphabet + j);
           }
@@ -857,11 +894,15 @@ export default {
         return this.slots;
       } else if (this.slotNaming == "option2") {
         var value = this.parkingSpace.capacity - this.rows.length;
-        for (let i = 1; i <= value; i++) {
-          this.slots.push(i);
+        if (this.numOfSlots <= value) {
+          for (let i = 1; i <= this.numOfSlots; i++) {
+            this.slots.push(i);
+          }
+          console.log(this.slots);
+          return this.slots;
+        } else {
+          this.errorMsg = "Parking Space capacity is full.";
         }
-        console.log(this.slots);
-        return this.slots;
       }
     },
   },
@@ -940,12 +981,45 @@ span > a {
   margin-bottom: 0px;
 }
 
-input[type="radio"]::after {
-  color: #f74464;
+.radio-item {
+  display: inline-block;
+  position: relative;
+  padding: 0 6px;
+  margin: 10px 0 0;
 }
 
-input[type="radio"]:checked:after {
-  color: #f74464;
+.radio-item input[type="radio"] {
+  display: none;
+}
+
+.radio-item label {
+  color: #666;
+  font-weight: normal;
+}
+
+.radio-item label:before {
+  content: " ";
+  display: inline-block;
+  position: relative;
+  top: 5px;
+  margin: 0 5px 0 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 11px;
+  border: 2px solid #f74464;
+  background-color: transparent;
+}
+
+.radio-item input[type="radio"]:checked + label:after {
+  border-radius: 11px;
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  top: 9px;
+  left: 10px;
+  content: " ";
+  display: block;
+  background: #f74464;
 }
 
 .selector-lg {

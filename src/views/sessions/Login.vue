@@ -174,7 +174,11 @@ export default {
         })
         .catch((error) => {
           const errorCode = error.code;
-          this.errorMsg = "Email or Password is incorrect.";
+          if (errorCode == "auth/network-request-failed") {
+            this.errorMsg = "Check your internet connection";
+          } else {
+            this.errorMsg = "Email or Password is incorrect.";
+          }
           console.log(errorCode);
         });
     },
