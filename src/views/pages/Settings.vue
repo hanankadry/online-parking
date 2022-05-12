@@ -448,7 +448,40 @@ export default {
     this.getUser();
   },
   methods: {
+    exportSecurity() {
+      axios
+        .get(`/admin/exportsec/${this.parking_id}`)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
+    exportSlots() {
+      axios
+        .get(`/admin/exportslot/${this.parking_id}`)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
+    exportRegistrations() {
+      axios
+        .get(`/admin/exportreg/${this.parking_id}`)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
     exportData() {
+      this.exportRegistrations();
+      this.exportSecurity();
+      this.exportSlots();
       console.log("exported");
     },
     deleteAccount(id) {

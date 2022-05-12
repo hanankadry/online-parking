@@ -16,29 +16,53 @@
             />
           </div>
           <div class="col-auto dropdown">
-            <button
-              class="button-sm-fill dropdown-toggle"
-              type="button"
-              id="find-by"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Find By
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <li><a class="dropdown-item" href="#">Year</a></li>
-              <li><a class="dropdown-item" href="#">Month</a></li>
-              <li><a class="dropdown-item" href="#">Weekly</a></li>
-              <li>
-                <a
+            <div class="row">
+              <select
+                type="button"
+                class="form-select select-sm-fill col me-1"
+                id="filter"
+                v-model="filter"
+                aria-expanded="false"
+              >
+                <option
+                  class="dropdown-item"
+                  v-for="option in options"
+                  :key="option.index"
+                  :value="option"
+                >
+                  {{ option }}
+                </option>
+                <option
                   class="dropdown-item"
                   href="#"
                   data-bs-toggle="modal"
                   data-bs-target=".custom-modal"
-                  >Custom</a
                 >
-              </li>
-            </ul>
+                  custom
+                </option>
+              </select>
+              <select
+                type="button"
+                class="form-select select-sm-fill col"
+                id="type"
+                v-model="type"
+                aria-expanded="false"
+              >
+                <option
+                  class="dropdown-item"
+                  v-for="option in types"
+                  :key="option.index"
+                  :value="option"
+                >
+                  {{ option }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-auto">
+            <button class="button-sm-unfill" type="button" @click="find">
+              <i class="bi bi-search sm-icon" />
+            </button>
           </div>
         </div>
         <vue-good-table
@@ -65,6 +89,7 @@
         class="modal fade custom-modal"
         data-bs-keyboard="false"
         tabindex="-1"
+        id="exampleModal"
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
       >
@@ -115,7 +140,9 @@
               >
                 Cancel
               </button>
-              <button type="button" class="button-xs-fill">Find</button>
+              <button type="button" class="button-xs-fill" @click="findCustom">
+                Find
+              </button>
             </div>
           </div>
         </div>
@@ -125,6 +152,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   props: ["id"],
   data() {
@@ -133,6 +161,17 @@ export default {
       label: "Reports",
       href: "/reports",
       searchInput: "",
+      options: [
+        "Filter",
+        "today",
+        "this-week",
+        "prev-week",
+        "this-month",
+        "prev-month",
+      ],
+      types: ["Type", "security", "registrations", "parkingslots", "all"],
+      type: "Type",
+      filter: "Filter",
       date: {
         from: "",
         to: "",
@@ -171,6 +210,41 @@ export default {
       ],
     };
   },
+  methods: {
+    find() {
+      axios
+        .get(`/admin/reports/${this.parking_id}`, {
+          type: this.type,
+          filter: this.filter,
+        })
+        .then((response) => {
+          this.rows = response.data.map((item) => ({
+            ...item,
+          }));
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
+    findCustom() {
+      axios
+        .get(`/admin/reports/custom/${this.parking_id}`, {
+          type: this.type,
+          from: this.date.from,
+          to: this.date.to,
+        })
+        .then((response) => {
+          this.rows = response.data.map((item) => ({
+            ...item,
+          }));
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
+    },
+  },
 };
 </script>
 
@@ -181,10 +255,6 @@ export default {
   margin-bottom: 15px;
   border-radius: 30px;
   display: inline-block;
-}
-.dropdown {
-  display: inline-block;
-  position: relative;
 }
 .form-label {
   margin-left: 10px;
@@ -198,6 +268,27 @@ export default {
   display: inline-block;
   width: auto;
 }
+.select-sm-fill {
+  background-color: #f74464;
+  border-radius: 95px;
+  color: white;
+  border: none;
+  width: 8rem;
+  font-size: 1rem;
+}
+.button-sx-unfill {
+  background-color: transparent;
+  border-radius: 95px;
+  border: 2px solid #f74464;
+}
+
+ul {
+  background-color: #f74464;
+}
+li > a {
+  color: white;
+}
+
 .icon {
   padding-left: 20px;
   padding-top: 10px;
@@ -232,6 +323,11 @@ export default {
   color: #f74464;
   font-size: 1.5rem;
   padding-right: 10px;
+}
+
+.sm-icon-white {
+  color: white;
+  font-size: 1.5rem;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
