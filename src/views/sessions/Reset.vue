@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { getAuth, confirmPasswordReset, checkActionCode } from "firebase/auth";
+import { getAuth, confirmPasswordReset } from "firebase/auth";
 export default {
   data() {
     return {
