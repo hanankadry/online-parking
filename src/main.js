@@ -44,7 +44,7 @@ app.use(router).use(VueApexCharts).use(VueGoodTablePlugin).use(Toaster, {
   max: 5
 }).mount('#app');
 
-app.component("breadcrumb", Breadcrumb)
-app.component("background", Background)
-app.component("nav-bar", NavBar)
-app.component("notification-container", NotificationContainer)
+app.component("breadcrumb", Breadcrumb);
+app.component("background", Background);
+app.component("nav-bar", NavBar);
+app.component("notification-container", NotificationContainer);

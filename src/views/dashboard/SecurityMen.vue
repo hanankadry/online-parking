@@ -867,7 +867,7 @@ export default {
     },
     addSecurity() {
       axios
-        .post(`/security/${this.parking_id}/insert`, {
+        .post(`/security/insert/${this.parking_id}`, {
           security_id: this.new_user.security_id,
           name: this.new_user.name,
           email: this.new_user.email,

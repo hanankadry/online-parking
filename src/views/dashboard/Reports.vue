@@ -18,7 +18,6 @@
           <div class="col-auto dropdown">
             <div class="row">
               <select
-                type="button"
                 class="form-select select-sm-fill col me-1"
                 id="filter"
                 v-model="filter"
@@ -28,21 +27,21 @@
                   class="dropdown-item"
                   v-for="option in options"
                   :key="option.index"
-                  :value="option"
+                  :value="option.value"
                 >
-                  {{ option }}
+                  {{ option.name }}
                 </option>
-                <option
-                  class="dropdown-item"
-                  href="#"
-                  data-bs-toggle="modal"
-                  data-bs-target=".custom-modal"
-                >
-                  custom
-                </option>
+                <!-- <option class="dropdown-item" value="custom">custom</option> -->
               </select>
+              <!-- <button
+                id="hiddenBtn"
+                v-show="false"
+                data-bs-toggle="modal"
+                data-bs-target=".custom-modal"
+              >
+                Test
+              </button> -->
               <select
-                type="button"
                 class="form-select select-sm-fill col"
                 id="type"
                 v-model="type"
@@ -52,15 +51,15 @@
                   class="dropdown-item"
                   v-for="option in types"
                   :key="option.index"
-                  :value="option"
+                  :value="option.value"
                 >
-                  {{ option }}
+                  {{ option.name }}
                 </option>
               </select>
             </div>
           </div>
           <div class="col-auto">
-            <button class="button-sm-unfill" type="button" @click="find">
+            <button class="button-xs-unfill mt-0" type="button" @click="find">
               <i class="bi bi-search sm-icon" />
             </button>
           </div>
@@ -79,10 +78,23 @@
             externalQuery: searchInput,
           }"
         >
+          <template #table-rows="props">
+            <span v-if="props.column.field == 'button'">
+              <a
+                href=""
+                data-bs-toggle="modal"
+                data-bs-target=".info-modal"
+                @click="current_row = props.row"
+              >
+                <i class="bi bi-info-circle table-icon text-success"></i>
+                {{ props.row.button }}</a
+              >
+            </span>
+          </template>
         </vue-good-table>
       </div>
       <div class="data-container offset-9">
-        Total Number of Data: {{ rows.length }}
+        Total Number of Data: {{ this.rows.length }}
       </div>
 
       <div
@@ -162,14 +174,20 @@ export default {
       href: "/reports",
       searchInput: "",
       options: [
-        "Filter",
-        "today",
-        "this-week",
-        "prev-week",
-        "this-month",
-        "prev-month",
+        { name: "Filter", value: "Filter" },
+        { name: "Today", value: "today" },
+        { name: "This Week", value: "this-week" },
+        { name: "Previous Week", value: "prev-week" },
+        { name: "This Month", value: "this-month" },
+        { name: "Previous Month", value: "prev-month" },
       ],
-      types: ["Type", "security", "registrations", "parkingslots", "all"],
+      types: [
+        { name: "Type", value: "Type" },
+        { name: "Registrations", value: "registrations" },
+        { name: "Security Men", value: "security" },
+        { name: "Parking Slots", value: "parkingslots" },
+        { name: "All", value: "all" },
+      ],
       type: "Type",
       filter: "Filter",
       date: {
@@ -178,6 +196,11 @@ export default {
       },
       rows: [],
       columns: [
+        {
+          label: "ID",
+          field: "id",
+          sortable: false,
+        },
         {
           label: "Name",
           field: "name",
@@ -211,21 +234,64 @@ export default {
     };
   },
   methods: {
+    trigger() {
+      console.log("triggered");
+      const trigger = document.getElementById("hiddenBtn");
+      trigger.click();
+    },
     find() {
-      axios
-        .get(`/admin/reports/${this.parking_id}`, {
-          type: this.type,
-          filter: this.filter,
-        })
-        .then((response) => {
-          this.rows = response.data.map((item) => ({
-            ...item,
-          }));
-          console.log(response.data);
-        })
-        .catch((errors) => {
-          console.log(errors.data);
-        });
+      if (this.filter != "Filter" && this.type != "Type") {
+        axios
+          .get(`/admin/reports/${this.parking_id}`, {
+            filter: this.filter,
+          })
+          .then((response) => {
+            if (this.type == "security") {
+              this.rows = response.data.reports.security.map((item) => ({
+                ...item,
+                type: "Security",
+              }));
+            } else if (this.type == "registrations") {
+              this.rows = response.data.reports.registrations.map((item) => ({
+                id: item.id,
+                name: item.slot_name,
+                type: "Registrations",
+                created_at: item.date,
+                status: item.status,
+              }));
+            } else if (this.type == "parkingslots") {
+              this.rows = response.data.reports.parkingslots.map((item) => ({
+                ...item,
+                type: "Parking Slots",
+              }));
+            } else {
+              this.rows =
+                response.data.reports.security.map((item) => ({
+                  ...item,
+                  type: "Security",
+                })) +
+                response.data.reports.parkingslots.map((item) => ({
+                  ...item,
+                  type: "Parking Slot",
+                })) +
+                response.data.reports.registrations.map((item) => ({
+                  id: item.id,
+                  name: item.slot_name,
+                  type: "Registrations",
+                  created_at: item.date,
+                  status: item.status,
+                }));
+            }
+            console.log("success");
+            console.log(response.data);
+          })
+          .catch((errors) => {
+            console.log("fail");
+            console.log(errors.data);
+          });
+      } else {
+        console.log("Must enter type and filter");
+      }
     },
     findCustom() {
       axios
@@ -276,10 +342,10 @@ export default {
   width: 8rem;
   font-size: 1rem;
 }
-.button-sx-unfill {
+.button-xs-unfill {
   background-color: transparent;
-  border-radius: 95px;
-  border: 2px solid #f74464;
+  height: 40px;
+  border: none;
 }
 
 ul {
@@ -321,7 +387,7 @@ li > a {
 
 .sm-icon {
   color: #f74464;
-  font-size: 1.5rem;
+  font-size: 14pt;
   padding-right: 10px;
 }
 
