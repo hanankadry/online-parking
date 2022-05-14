@@ -78,18 +78,39 @@
             externalQuery: searchInput,
           }"
         >
-          <template #table-rows="props">
-            <span v-if="props.column.field == 'button'">
+          <template #table-row="props">
+            <span v-if="props.column.field == 'status'">
+              <span
+                class="status-success"
+                v-if="
+                  props.row.status == 'available' ||
+                  props.row.status == 'checkin' ||
+                  props.row.status == 'completed' ||
+                  props.row.status == 'active'
+                "
+                >{{ props.row.status }}</span
+              ><span
+                class="status-danger"
+                v-else-if="
+                  props.row.status == 'unavailable' ||
+                  props.row.status == 'cancelled' ||
+                  props.row.status == 'inactive'
+                "
+                >{{ props.row.status }}</span
+              >
+              <span class="status-warning" v-else>{{ props.row.status }}</span>
+            </span>
+            <!-- <span v-if="props.column.field == 'button'">
               <a
                 href=""
                 data-bs-toggle="modal"
                 data-bs-target=".info-modal"
                 @click="current_row = props.row"
               >
-                <i class="bi bi-info-circle table-icon text-success"></i>
+                <i class="bi bi-info-circle table-icon text-success" />
                 {{ props.row.button }}</a
               >
-            </span>
+            </span> -->
           </template>
         </vue-good-table>
       </div>
@@ -242,9 +263,7 @@ export default {
     find() {
       if (this.filter != "Filter" && this.type != "Type") {
         axios
-          .get(`/admin/reports/${this.parking_id}`, {
-            filter: this.filter,
-          })
+          .get(`/admin/reports/${this.parking_id}/${this.filter}`)
           .then((response) => {
             if (this.type == "security") {
               this.rows = response.data.reports.security.map((item) => ({

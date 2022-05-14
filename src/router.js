@@ -84,6 +84,7 @@ const routes = [
   },
   {
     path: '/reports/:id',
+    alias: ['/reports/:id/:filter'],
     name: 'reports',
     component: () => import('@/views/dashboard/Reports'),
     props: true
