@@ -6,8 +6,7 @@ import NotFound from '@/views/pages/NotFound'
 const routes = [
 
   {
-    path: '/:id',
-    alias: ['/'],
+    path: '/home/:id*',
     name: 'home',
     component: () => import('@/views/Home.vue'),
     props: true,
@@ -33,12 +32,17 @@ const routes = [
 
   },
   {
-    path: '/reset',
-    alias: ['/reset/:pathMatch(.*)*'],
+    path: '/reset/:pathMatch(.*)*',
     name: 'reset',
     component: () => import('@/views/sessions/Reset'),
     props: true
 
+  },
+  {
+    path: '/sent/:email',
+    name: 'sent',
+    component: () => import('@/views/sessions/Sent'),
+    props: true
   },
 
   //pages
@@ -54,8 +58,7 @@ const routes = [
     component: NotFound
   },
   {
-    path: '/about/:id',
-    alias: ['/about'],
+    path: '/about/:id*',
     name: 'about',
     component: () => import('@/views/pages/About'),
     props: true
@@ -84,7 +87,6 @@ const routes = [
   },
   {
     path: '/reports/:id',
-    alias: ['/reports/:id/:filter'],
     name: 'reports',
     component: () => import('@/views/dashboard/Reports'),
     props: true

@@ -23,13 +23,9 @@
     <div class="text">
       You seem lost. The page you're looking for isn't found.
     </div>
-    <a class="button" href="/">Go Back Home</a>
+    <router-link class="button" to="/home">Go Back Home</router-link>
   </div>
 </template>
-
-<script>
-export default {};
-</script>
 
 <style scoped>
 .center {

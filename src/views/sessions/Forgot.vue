@@ -39,7 +39,7 @@
 
 <script>
 import router from "@/router";
-import { getAuth, sendPasswordResetEmail} from "firebase/auth";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 
 export default {
   data() {
@@ -58,8 +58,8 @@ export default {
           const errorCode = error.code;
           console.log(errorCode);
         });
-      console.log(email);
-      router.push("/reset");
+      console.log(this.email);
+      router.push(`/sent/${this.email}`);
     },
     signIn() {
       router.push("/login");

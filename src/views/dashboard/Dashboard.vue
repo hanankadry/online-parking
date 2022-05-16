@@ -1,6 +1,11 @@
 <template>
-  <nav-bar :id="parking_id" />
-  <div class="container-fluid background">
+  <nav-bar />
+  <div class="loading d-flex justify-content-center mt-5" v-if="loading">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <div v-else class="container-fluid background">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
     <div class="container-fluid">
       <div class="row">
@@ -99,7 +104,7 @@ export default {
         name: "Week",
       },
       cards: [],
-      parking_id: this.id,
+      parking_id: this.$route.params.id,
       label: "Dashboard",
       href: "/dashboard",
       search: false,
@@ -162,13 +167,32 @@ export default {
       ],
       registrationRows: [],
       slotRows: [],
-      loaded: false,
+      loading: true,
+      error: null,
+      post: null,
     };
   },
+  // created() {
+  //   this.$watch(
+  //     () => this.$route.params,
+  //     () => {
+  //       this.fetchData();
+  //     },
+  //     { immediate: true }
+  //   );
+  // },
   mounted() {
-    this.getParkingID();
+    this.showRegistrations(this.parking_id);
   },
   methods: {
+    fetchData() {
+      this.error = null;
+      this.bar.data = this.bar.new_data = [];
+      if ((this.loading == true)) {
+        this.getParkingID(this.$route.params.id);
+        this.loading = false;
+      }
+    },
     getChartValues(id) {
       axios
         .get(`/admin/chart/${id}`)
@@ -178,6 +202,7 @@ export default {
             this.bar.new_data.push(response.data.new_values[i]);
           }
           console.log(response.data);
+          this.getStatistics(id);
         })
         .catch((errors) => {
           console.log(errors.data);
@@ -208,16 +233,12 @@ export default {
               icon: icons[i],
             });
           }
+          this.loading = false;
+          // this.getChartValues(id);
         })
         .catch((errors) => {
           console.log(errors.data);
         });
-    },
-    getParkingID() {
-      this.getStatistics(this.parking_id);
-      this.getChartValues(this.parking_id);
-      this.showRegistrations(this.parking_id);
-      this.showSlots(this.parking_id);
     },
     showSlots(id) {
       axios
@@ -227,6 +248,7 @@ export default {
             ...item,
           }));
           console.log(response.data);
+          this.getChartValues(id);
         })
         .catch((errors) => {
           console.log(errors.data);
@@ -239,7 +261,7 @@ export default {
           this.registrationRows = response.data.registration.map((item) => ({
             ...item,
           }));
-
+          this.showSlots(id);
           console.log(response.data);
         })
         .catch((errors) => {
@@ -251,6 +273,9 @@ export default {
 </script>
 
 <style scoped>
+.loading {
+  color: #f74464;
+}
 .background {
   padding: 50px;
 }

@@ -321,7 +321,7 @@
                 </div>
                 <hr />
                 <div class="row">
-                  <p class="lead">Are you sure this account?</p>
+                  <p class="lead">Are you sure you want to delete this account?</p>
                   <p class="lead">
                     All data related to this account will not be recovered if
                     the account is deleted.
@@ -329,14 +329,12 @@
                 </div>
 
                 <div class="row">
-                  <div class="mt-3 buttons">
-                    <button
-                      class="col-lg-3 button-lg-danger"
-                      @click="deleteAccount(user.national_id)"
-                    >
-                      Confirm Delete
-                    </button>
-                  </div>
+                  <button
+                    class="mt-3 col-lg-3 button-lg-danger"
+                    @click="deleteAccount(user.national_id)"
+                  >
+                    Confirm Delete
+                  </button>
                 </div>
               </div>
             </div>
@@ -450,8 +448,18 @@ export default {
   methods: {
     exportSecurity() {
       axios
-        .get(`/admin/exportsec/${this.parking_id}`)
+        .get(`/admin/exportsec/${this.parking_id}`, { responseType: "blob" })
         .then((response) => {
+          const url = URL.createObjectURL(
+            new Blob([response.data], {
+              type: "application/vnd.ms-excel",
+            })
+          );
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "security_men.csv");
+          document.body.appendChild(link);
+          link.click();
           console.log(response.data);
         })
         .catch((errors) => {
@@ -460,8 +468,18 @@ export default {
     },
     exportSlots() {
       axios
-        .get(`/admin/exportslot/${this.parking_id}`)
+        .get(`/admin/exportslot/${this.parking_id}`, { responseType: "blob" })
         .then((response) => {
+          const url = URL.createObjectURL(
+            new Blob([response.data], {
+              type: "application/vnd.ms-excel",
+            })
+          );
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "parking_slots.csv");
+          document.body.appendChild(link);
+          link.click();
           console.log(response.data);
         })
         .catch((errors) => {
@@ -470,8 +488,18 @@ export default {
     },
     exportRegistrations() {
       axios
-        .get(`/admin/exportreg/${this.parking_id}`)
+        .get(`/admin/exportreg/${this.parking_id}`, { responseType: "blob" })
         .then((response) => {
+          const url = URL.createObjectURL(
+            new Blob([response.data], {
+              type: "application/vnd.ms-excel",
+            })
+          );
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "registrations.csv");
+          document.body.appendChild(link);
+          link.click();
           console.log(response.data);
         })
         .catch((errors) => {

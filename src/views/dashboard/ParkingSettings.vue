@@ -1,5 +1,5 @@
 <template>
-  <nav-bar :id="parking_id" />
+  <nav-bar />
   <div class="container-fluid background">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
     <form class="mt-5">
@@ -124,7 +124,7 @@ export default {
       editting: false,
       label: "Parking Settings",
       href: "/parkingSettings",
-      parking_id: this.id,
+      parking_id: this.$route.params.id,
       user_id: "",
       parkingSpace: {
         location: "",

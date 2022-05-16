@@ -22,7 +22,7 @@
               <router-link
                 class="nav-link active"
                 aria-current="page"
-                :to="{ path: `/${parking_id}` }"
+                :to="{ path: `/home/${parking_id}` }"
                 ><i class="bi bi-house-door nav-icon"></i>
               </router-link>
             </li>
@@ -87,7 +87,7 @@
     >
       <div class="offcanvas-header">
         <h5 class="offcanvas-title">
-          <router-link class="nav-brand" :to="{ path: `/${parking_id}` }">
+          <router-link class="nav-brand" :to="{ path: `/home/${parking_id}` }">
             <img src="@/assets/images/logo.jpg" class="logo" />
           </router-link>
         </h5>
@@ -129,14 +129,6 @@
           ><i class="bi bi-square-half nav-icon" />Parking Slots</router-link
         >
         <router-link
-          :to="{ path: `/reports/${parking_id}` }"
-          class="nav"
-          active-class="active"
-          exact
-          id="reports"
-          ><i class="bi bi-exclamation-octagon nav-icon" />Reports</router-link
-        >
-        <router-link
           :to="{ path: `/registrations/${parking_id}` }"
           class="nav"
           active-class="active"
@@ -144,6 +136,14 @@
           id="registrations"
         >
           <i class="bi bi-list-ul nav-icon" />Registrations</router-link
+        >
+        <router-link
+          :to="{ path: `/reports/${parking_id}` }"
+          class="nav"
+          active-class="active"
+          exact
+          id="reports"
+          ><i class="bi bi-exclamation-octagon nav-icon" />Reports</router-link
         >
       </div>
     </div>
@@ -155,7 +155,6 @@ import { getAuth, signOut } from "firebase/auth";
 import axios from "axios";
 
 export default {
-  props: ["id"],
   data() {
     return {
       showMenu: false,
@@ -167,7 +166,7 @@ export default {
         address: "",
         phone: "",
       },
-      parking_id: this.id,
+      parking_id: this.$route.params.id,
     };
   },
   mounted() {

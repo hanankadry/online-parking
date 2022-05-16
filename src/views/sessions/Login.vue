@@ -115,9 +115,9 @@ export default {
               this.user.id = user.id;
             });
             this.checkUser(this.user.id);
-
             console.log(response.data);
           } else {
+            console.log("wrong");
             this.errorMsg = "Email or Password is incorrect.";
           }
         })
@@ -131,7 +131,7 @@ export default {
         .then((response) => {
           this.parking_id = response.data.parking.find((item) => item.id).id;
           console.log(this.parking_id);
-          console.log(response.data);
+          this.$router.push(`/dashboard/${this.parking_id}`);
         })
         .catch((errors) => {
           console.log(errors.data);
@@ -169,14 +169,13 @@ export default {
         .then((userCredential) => {
           const user = userCredential.user;
           this.getParkingID(user_id);
-          console.log(this.parking_id);
-          this.$router.push(`/dashboard/${this.parking_id}`);
         })
         .catch((error) => {
           const errorCode = error.code;
           if (errorCode == "auth/network-request-failed") {
             this.errorMsg = "Check your internet connection";
           } else {
+            console.log("wrong firebase");
             this.errorMsg = "Email or Password is incorrect.";
           }
           console.log(errorCode);

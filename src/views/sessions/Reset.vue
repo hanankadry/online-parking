@@ -7,15 +7,15 @@
 
       <form>
         <div class="mt-5">
-          <!-- <div class="input-icons">
-            <i class="bi bi-123 icon" />
+          <div class="input-icons">
+            <i class="bi bi-envelope icon" />
             <input
               class="form-control input-lg"
-              type="number"
-              placeholder="Enter Code"
+              type="email"
+              placeholder="Enter Email"
               required
             />
-          </div> -->
+          </div>
           <div class="input-icons">
             <i class="bi bi-lock icon" />
             <input
@@ -71,9 +71,10 @@ export default {
       min: "1:00",
       timerEnabled: false,
       timerCount: 59,
-      code: "",
+      code: this.$route.query.oobCode,
       password: "",
       confirm_pass: "",
+      email: "",
     };
   },
 
@@ -104,7 +105,26 @@ export default {
 
   methods: {
     reset() {
-      this.$router.push("/login");
+      confirmPasswordReset(this.auth, this.code, this.password)
+        .then((response) => {
+          console.log(response);
+          resetPass();
+        })
+        .catch((errors) => {
+          const errorCode = errors.code;
+          console.log(errorCode);
+        });
+      // this.$router.push("/login");
+    },
+    resetPass() {
+      axios
+        .post(`/user/updatepass/${this.email}`)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((errors) => {
+          console.log(errors.data);
+        });
     },
     goBack() {
       this.$router.push("/forgot");
