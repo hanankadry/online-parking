@@ -4,7 +4,7 @@
       <img src="@/assets/images/email_sent.jpg" alt="email_sent" />
     </div>
     <div class="text">We just sent you an email, check your inbox.</div>
-    <router-link class="mt-2 button-md-fill" to="/login">Go Login </router-link>
+    <router-link class="mt-2 button-md-fill" to="/login">Go Login</router-link>
     <button class="mt-2 button-md-unfill" @click="resend">Resend Email</button>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <nav-bar />
+  <nav-bar :id="parking_id" />
   <div class="loading d-flex justify-content-center mt-5" v-if="loading">
     <div class="spinner-border" role="status">
       <span class="visually-hidden">Loading...</span>
@@ -8,7 +8,7 @@
   <div v-else class="container-fluid background">
     <breadcrumb :crumbLabel="label" :crumbHref="href" />
     <div class="container-fluid">
-      <div class="row">
+      <div class="row" v-if="showCards">
         <div class="col-md-4" v-for="card in cards" :key="card.index">
           <statistics-card
             :cardIcon="card.icon"
@@ -104,7 +104,7 @@ export default {
         name: "Week",
       },
       cards: [],
-      parking_id: this.$route.params.id,
+      parking_id: this.id,
       label: "Dashboard",
       href: "/dashboard",
       search: false,
@@ -170,28 +170,36 @@ export default {
       loading: true,
       error: null,
       post: null,
+      showCards: false,
     };
   },
-  // created() {
-  //   this.$watch(
-  //     () => this.$route.params,
-  //     () => {
-  //       this.fetchData();
-  //     },
-  //     { immediate: true }
-  //   );
-  // },
+  created() {
+    // watch the params of the route to fetch the data again
+    this.$watch(
+      () => this.$route.params,
+      () => {
+        this.fetchData();
+      },
+      // fetch the data when the view is created and the data is
+      // already being observed
+      { immediate: true }
+    );
+  },
   mounted() {
-    this.showRegistrations(this.parking_id);
+    // if (this.slotRows == []) {
+    //   this.loading = true;
+    // } else {
+    //   this.getAll();
+    // }
   },
   methods: {
     fetchData() {
-      this.error = null;
-      this.bar.data = this.bar.new_data = [];
-      if ((this.loading == true)) {
-        this.getParkingID(this.$route.params.id);
-        this.loading = false;
-      }
+      this.error = this.post = null;
+      this.loading = true;
+      this.getChartValues(this.$route.params.id);
+      this.getRegistrations(this.$route.params.id);
+      this.getSlots(this.$route.params.id);
+      this.getStatistics(this.$route.params.id);
     },
     getChartValues(id) {
       axios
@@ -202,30 +210,39 @@ export default {
             this.bar.new_data.push(response.data.new_values[i]);
           }
           console.log(response.data);
-          this.getStatistics(id);
+          this.loading = false;
+          this.parking_id = this.id;
         })
         .catch((errors) => {
           console.log(errors.data);
         });
     },
     getStatistics(id) {
-      const labels = ["Registrations", "Available Slots", "Out of Order Slots"];
-      const icons = [
-        "bi bi-card-checklist lg-icon",
-        "bi bi-check-lg lg-icon",
-        "bi bi-x lg-icon",
-      ];
-      const values = [];
       axios
         .get(`/admin/dashboard/${id}`)
         .then((response) => {
           const posts = response.data;
           console.log(posts);
+
+          const labels = [
+            "Registrations",
+            "Available Slots",
+            "Out of Order Slots",
+          ];
+          const icons = [
+            "bi bi-card-checklist lg-icon",
+            "bi bi-check-lg lg-icon",
+            "bi bi-x lg-icon",
+          ];
+          const values = [];
           values.push(
             posts.registrations.length,
             posts.available_slots.length,
             posts.out_slots.length
           );
+          if (this.cards != []) {
+            this.cards = [];
+          }
           for (let i = 0; i < 3; i++) {
             this.cards.push({
               label: labels[i],
@@ -234,13 +251,14 @@ export default {
             });
           }
           this.loading = false;
-          // this.getChartValues(id);
+          this.showCards = true;
+          console.log(this.cards);
         })
         .catch((errors) => {
           console.log(errors.data);
         });
     },
-    showSlots(id) {
+    getSlots(id) {
       axios
         .get(`/parkingslot/parking/${id}`)
         .then((response) => {
@@ -248,20 +266,18 @@ export default {
             ...item,
           }));
           console.log(response.data);
-          this.getChartValues(id);
         })
         .catch((errors) => {
           console.log(errors.data);
         });
     },
-    showRegistrations(id) {
+    getRegistrations(id) {
       axios
         .get(`/registration/parking/${id}`)
         .then((response) => {
           this.registrationRows = response.data.registration.map((item) => ({
             ...item,
           }));
-          this.showSlots(id);
           console.log(response.data);
         })
         .catch((errors) => {

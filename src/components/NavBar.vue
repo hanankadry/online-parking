@@ -166,16 +166,33 @@ export default {
         address: "",
         phone: "",
       },
-      parking_id: this.$route.params.id,
+      parking_id: this.id,
     };
   },
-  mounted() {
-    this.getUserID();
+  props: ["id"],
+  created() {
+    // watch the params of the route to fetch the data again
+    this.$watch(
+      () => this.$route.params,
+      () => {
+        this.fetchData();
+      },
+      // fetch the data when the view is created and the data is
+      // already being observed
+      { immediate: true }
+    );
   },
+  // mounted() {
+  //   this.getUserID();
+  // },
   methods: {
+    fetchData() {
+      this.parking_id = this.$route.params.id;
+      this.getUserID();
+    },
     getUserID() {
       axios
-        .get(`/admin/id/${this.parking_id}`)
+        .get(`/admin/user/${this.parking_id}`)
         .then((response) => {
           response.data.user.map((user) => {
             this.user.name = user.username;

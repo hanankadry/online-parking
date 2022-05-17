@@ -469,29 +469,29 @@
                 <li v-if="v$.new_user.name.$error">
                   {{ v$.new_user.name.$errors[0].$message }}
                 </li>
-                <li v-if="v$.new_user.security_id.$error">
-                  {{ v$.new_user.security_id.$errors[0].$message }}
-                </li>
                 <li v-if="v$.new_user.email.$error">
                   {{ v$.new_user.email.$errors[0].$message }}
                 </li>
-                <li v-if="v$.new_user.address.$error">
-                  {{ v$.new_user.address.$errors[0].$message }}
+                <li v-if="v$.new_user.security_id.$error">
+                  {{ v$.new_user.security_id.$errors[0].$message }}
                 </li>
                 <li v-if="v$.new_user.gender.$error">
                   {{ v$.new_user.gender.$errors[0].$message }}
                 </li>
-                <li v-if="v$.new_user.phone.$error">
-                  {{ v$.new_user.phone.$errors[0].$message }}
+                <li v-if="v$.new_user.address.$error">
+                  {{ v$.new_user.address.$errors[0].$message }}
                 </li>
                 <li v-if="v$.new_user.dob.$error">
                   {{ v$.new_user.dob.$errors[0].$message }}
                 </li>
-                <li v-if="v$.new_user.work_hours.$error">
-                  {{ v$.new_user.work_hours.$errors[0].$message }}
-                </li>
                 <li v-if="v$.new_user.status.$error">
                   {{ v$.new_user.status.$errors[0].$message }}
+                </li>
+                <li v-if="v$.new_user.phone.$error">
+                  {{ v$.new_user.phone.$errors[0].$message }}
+                </li>
+                <li v-if="v$.new_user.work_hours.$error">
+                  {{ v$.new_user.work_hours.$errors[0].$message }}
                 </li>
               </ul>
             </div>
@@ -632,7 +632,11 @@
             >
               Cancel
             </button>
-            <button type="button" @click="create" class="button-xs-fill">
+            <button
+              type="button"
+              @click.prevent="create"
+              class="button-xs-fill"
+            >
               Add
             </button>
           </div>
@@ -751,7 +755,7 @@ export default {
           ),
           minLength: helpers.withMessage(
             "National ID must be 14 digits long",
-            maxLength(14)
+            minLength(14)
           ),
         },
         gender: {
@@ -860,8 +864,9 @@ export default {
     },
     async create() {
       await this.v$.$validate();
-      const isFormCorrect = this.v$.$invalid;
-      if (!isFormCorrect) {
+      const result = this.v$.$error;
+      if (!result) {
+        console.log("valid");
         this.addSecurity();
       }
     },

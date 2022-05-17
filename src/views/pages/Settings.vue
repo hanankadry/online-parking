@@ -577,7 +577,7 @@ export default {
     //get user data
     getUser() {
       axios
-        .get(`/admin/id/${this.parking_id}`)
+        .get(`/admin/user/${this.parking_id}`)
         .then((response) => {
           response.data.user.map((user) => {
             this.user.dob = user.dob;

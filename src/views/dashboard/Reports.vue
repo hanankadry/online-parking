@@ -6,19 +6,10 @@
     <div class="container-fluid">
       <div class="container-fluid p-3">
         <div class="row">
-          <div class="col-auto me-auto input-icons">
-            <i class="bi bi-search icon" />
-            <input
-              type="text"
-              class="m-1 input-md"
-              placeholder="Search"
-              v-model="searchInput"
-            />
-          </div>
-          <div class="col-auto dropdown">
-            <div class="row">
+          <div class="ms-3 col-auto me-auto dropdown">
+            <div class="row mb-2">
               <select
-                class="form-select select-sm-fill col me-1"
+                class="form-select select-lg-fill col me-1"
                 id="filter"
                 v-model="filter"
                 aria-expanded="false"
@@ -31,18 +22,9 @@
                 >
                   {{ option.name }}
                 </option>
-                <!-- <option class="dropdown-item" value="custom">custom</option> -->
               </select>
-              <!-- <button
-                id="hiddenBtn"
-                v-show="false"
-                data-bs-toggle="modal"
-                data-bs-target=".custom-modal"
-              >
-                Test
-              </button> -->
               <select
-                class="form-select select-sm-fill col"
+                class="form-select select-md-fill col"
                 id="type"
                 v-model="type"
                 aria-expanded="false"
@@ -56,11 +38,23 @@
                   {{ option.name }}
                 </option>
               </select>
+              <button
+                class="button-xs-unfill mt-0 col"
+                type="button"
+                @click.prevent="find"
+              >
+                <i class="bi bi-search sm-icon" />
+              </button>
             </div>
           </div>
           <div class="col-auto">
-            <button class="button-xs-unfill mt-0" type="button" @click="find">
-              <i class="bi bi-search sm-icon" />
+            <button
+              class="button-sm-fill"
+              id="hiddenBtn"
+              data-bs-toggle="modal"
+              data-bs-target=".custom-modal"
+            >
+              Custom Filter
             </button>
           </div>
         </div>
@@ -100,7 +94,7 @@
               >
               <span class="status-warning" v-else>{{ props.row.status }}</span>
             </span>
-            <!-- <span v-if="props.column.field == 'button'">
+            <span v-if="props.column.field == 'button'">
               <a
                 href=""
                 data-bs-toggle="modal"
@@ -110,14 +104,14 @@
                 <i class="bi bi-info-circle table-icon text-success" />
                 {{ props.row.button }}</a
               >
-            </span> -->
+            </span>
           </template>
         </vue-good-table>
       </div>
       <div class="data-container offset-9">
         Total Number of Data: {{ this.rows.length }}
       </div>
-
+      <!-- Custom Modal Start -->
       <div
         class="modal fade custom-modal"
         data-bs-keyboard="false"
@@ -132,6 +126,7 @@
               <h5 class="modal-title" id="staticBackdropLabel">Custom</h5>
               <button
                 type="button"
+                id="btn-custom-close"
                 class="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
@@ -163,6 +158,27 @@
                     />
                   </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <i class="bi bi-list-ol sm-icon" />
+                    <label for="to" class="form-label">Type</label>
+                    <select
+                      class="form-select select-sm"
+                      id="type"
+                      v-model="customType"
+                      aria-expanded="false"
+                    >
+                      <option
+                        class="dropdown-item"
+                        v-for="option in types"
+                        :key="option.index"
+                        :value="option.value"
+                      >
+                        {{ option.name }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
               </form>
             </div>
             <div class="modal-footer">
@@ -180,6 +196,114 @@
           </div>
         </div>
       </div>
+
+      <!-- Info Modal -->
+      <div
+        class="modal fade info-modal"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">
+                Report No. {{ current_row.id }}
+              </h5>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-6">
+                    <p>
+                      <strong>Created At:</strong>
+                      {{ current_row.created_at || current_row.date }}
+                    </p>
+                  </div>
+                  <div class="col-md-6">
+                    <p>
+                      <strong>ID:</strong>
+                      {{ current_row.id }}
+                    </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <p>
+                      <strong>Name:</strong>
+                      {{ current_row.name || current_row.slot_name }}
+                    </p>
+                  </div>
+                  <div class="col-md-4">
+                    <p>
+                      <strong>Email:</strong>
+                      {{ current_row.email ? current_row.email : "-" }}
+                    </p>
+                  </div>
+                  <div class="col-md-4">
+                    <p>
+                      <strong>Level:</strong>
+                      {{ current_row.level ? current_row.level : "-" }}
+                    </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <p>
+                      <strong>Status:</strong>
+                      {{ current_row.status }}
+                    </p>
+                  </div>
+                  <div class="col-md-4">
+                    <p>
+                      <strong>Work Hours:</strong>
+                      {{
+                        current_row.work_hours ? current_row.work_hours : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-md-4">
+                    <p>
+                      <strong>Phone:</strong>
+                      {{ current_row.phone ? current_row.phone : "-" }}
+                    </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-5">
+                    <p>
+                      <strong>Leave Time:</strong>
+                      {{
+                        current_row.leave_time ? current_row.leave_time : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-md-5">
+                    <p>
+                      <strong>Check In Time:</strong>
+                      {{
+                        current_row.checkin_time
+                          ? current_row.checkin_time
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="button-xs-unfill"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -190,6 +314,7 @@ export default {
   props: ["id"],
   data() {
     return {
+      current_row: {},
       parking_id: this.id,
       label: "Reports",
       href: "/reports",
@@ -215,6 +340,7 @@ export default {
         from: "",
         to: "",
       },
+      customType: "Type",
       rows: [],
       columns: [
         {
@@ -249,7 +375,7 @@ export default {
           label: "Action",
           field: "button",
           sortable: false,
-          width: "200px",
+          width: "100px",
         },
       ],
     };
@@ -284,22 +410,36 @@ export default {
                 type: "Parking Slots",
               }));
             } else {
-              this.rows =
-                response.data.reports.security.map((item) => ({
-                  ...item,
-                  type: "Security",
-                })) +
-                response.data.reports.parkingslots.map((item) => ({
-                  ...item,
-                  type: "Parking Slot",
-                })) +
-                response.data.reports.registrations.map((item) => ({
+              const security = response.data.reports.security.map((item) => ({
+                ...item,
+                type: "Security",
+              }));
+              const slots = response.data.reports.parkingslots.map((item) => ({
+                ...item,
+                type: "Parking Slot",
+              }));
+              const registrations = response.data.reports.registrations.map(
+                (item) => ({
                   id: item.id,
                   name: item.slot_name,
                   type: "Registrations",
                   created_at: item.date,
                   status: item.status,
-                }));
+                })
+              );
+              const all = [];
+              all.push(security, slots, registrations);
+              const simplifyArray = (arr = []) => {
+                const res = [];
+                arr.forEach((element) => {
+                  element.forEach((el) => {
+                    res.push(el);
+                  });
+                });
+                return res;
+              };
+              this.rows = simplifyArray(all);
+              console.log(this.rows);
             }
             console.log("success");
             console.log(response.data);
@@ -313,17 +453,68 @@ export default {
       }
     },
     findCustom() {
+      console.log(this.date.from);
+      console.log(this.date.to);
       axios
-        .get(`/admin/reports/custom/${this.parking_id}`, {
-          type: this.type,
-          from: this.date.from,
-          to: this.date.to,
-        })
+        .get(
+          `/admin/reports/custom/${this.parking_id}/${this.date.from}/${this.date.to}`
+        )
         .then((response) => {
-          this.rows = response.data.map((item) => ({
-            ...item,
-          }));
-          console.log(response.data);
+          if (this.customType == "security") {
+            this.rows = response.data.reports.security.map((item) => ({
+              ...item,
+              type: "Security",
+            }));
+          } else if (this.customType == "registrations") {
+            this.rows = response.data.reports.registrations.map((item) => ({
+              id: item.id,
+              name: item.slot_name,
+              type: "Registrations",
+              created_at: item.date,
+              status: item.status,
+            }));
+          } else if (this.customType == "parkingslots") {
+            this.rows = response.data.reports.parkingslots.map((item) => ({
+              ...item,
+              type: "Parking Slots",
+            }));
+          } else {
+            const security = response.data.reports.security.map((item) => ({
+              ...item,
+              type: "Security",
+            }));
+            const slots = response.data.reports.parkingslots.map((item) => ({
+              ...item,
+              type: "Parking Slot",
+            }));
+            const registrations = response.data.reports.registrations.map(
+              (item) => ({
+                id: item.id,
+                name: item.slot_name,
+                type: "Registrations",
+                created_at: item.date,
+                status: item.status,
+              })
+            );
+            const all = [];
+            all.push(security, slots, registrations);
+            const simplifyArray = (arr = []) => {
+              const res = [];
+              arr.forEach((element) => {
+                element.forEach((el) => {
+                  res.push(el);
+                });
+              });
+              return res;
+            };
+            this.rows = simplifyArray(all);
+            console.log(this.rows);
+            this.customType = "Type";
+            this.date.from = this.date.to = "";
+          }
+
+          const trigger = document.getElementById("btn-custom-close");
+          trigger.click();
         })
         .catch((errors) => {
           console.log(errors.data);
@@ -353,14 +544,64 @@ export default {
   display: inline-block;
   width: auto;
 }
-.select-sm-fill {
+.select-lg-fill {
   background-color: #f74464;
   border-radius: 95px;
   color: white;
   border: none;
-  width: 8rem;
+  width: 11.4rem;
   font-size: 1rem;
+  font-weight: bold;
 }
+
+.select-sm {
+  background-color: #374258;
+  color: white;
+  border: none;
+  font-size: 1rem;
+  padding-left: 2rem;
+  border-radius: 95px;
+  height: 50px;
+  margin-left: 10px;
+  background-image: url("@/assets/images/icons8-chevron-down-96.png");
+  background-position: calc(100% - 25px) calc(1em + 0.5px),
+    calc(100% - 19.8px) calc(1em + 5px);
+  background-size: 20px 20px, 20px 20px;
+  background-repeat: no-repeat;
+}
+.select-sm > option {
+  background-color: #f74464;
+  color: #374258;
+  border: none;
+  font-weight: bold;
+  padding: 10px;
+}
+.select-md-fill {
+  background-color: #f74464;
+  border-radius: 95px;
+  color: white;
+  border: none;
+  width: 10rem;
+  font-size: 1rem;
+  font-weight: bold;
+}
+.select-md-fill > option {
+  background-color: #374258;
+  color: white;
+  border: none;
+  padding: 10px;
+}
+.select-lg-fill > option {
+  background-color: #374258;
+  color: white;
+  border: none;
+  padding: 10px;
+}
+
+.button-sm-fill {
+  height: 45px;
+}
+
 .button-xs-unfill {
   background-color: transparent;
   height: 40px;

@@ -5,13 +5,15 @@
       <h2>Reset Your Password</h2>
       <h4 class="mb-5">Using the code we sent you</h4>
 
-      <form>
+      <form autocomplete="off">
         <div class="mt-5">
+          <p class="lead" v-show="errorMsg != null">{{ errorMsg }}</p>
           <div class="input-icons">
             <i class="bi bi-envelope icon" />
             <input
               class="form-control input-lg"
               type="email"
+              v-model="email"
               placeholder="Enter Email"
               required
             />
@@ -40,7 +42,7 @@
           <div class="row mt-0 mx-2">
             <div class="col-xl-2 col-lg-3 col-md-4">
               <a href="#" class="resend-code" id="link" @click="play">
-                <h5>Resend Code</h5></a
+                <h5>Resend Email</h5></a
               >
             </div>
             <div class="col-lg-3 col-md-3">
@@ -49,7 +51,11 @@
             </div>
           </div>
           <div class="btn-group-vertical mt-5">
-            <button type="submit" class="button-lg-fill" @click="reset">
+            <button
+              type="submit"
+              class="button-lg-fill"
+              @click.prevent="resetPass"
+            >
               Reset Password
             </button>
             <button type="button" class="button-lg-unfill" @click="goBack">
@@ -63,10 +69,16 @@
 </template>
 
 <script>
-import { getAuth, confirmPasswordReset } from "firebase/auth";
+import {
+  getAuth,
+  confirmPasswordReset,
+  sendPasswordResetEmail,
+} from "firebase/auth";
+import axios from "axios";
 export default {
   data() {
     return {
+      errorMsg: null,
       auth: getAuth(),
       min: "1:00",
       timerEnabled: false,
@@ -108,28 +120,52 @@ export default {
       confirmPasswordReset(this.auth, this.code, this.password)
         .then((response) => {
           console.log(response);
-          resetPass();
+          console.log("success");
+          // this.resetPass();
         })
         .catch((errors) => {
+          console.log("failure");
           const errorCode = errors.code;
+          if (errorCode == "auth/invalid-action-code") {
+            this.errorMsg =
+              "Reset code had expired! Click Resend Email to get a new one.";
+          }
           console.log(errorCode);
         });
-      // this.$router.push("/login");
+      this.$router.push("/login");
     },
     resetPass() {
-      axios
-        .post(`/user/updatepass/${this.email}`)
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((errors) => {
-          console.log(errors.data);
-        });
+      if (this.password == this.confirm_pass) {
+        axios
+          .post(`/admin/newpass/${this.email}`, {
+            password: this.password,
+          })
+          .then((response) => {
+            this.reset();
+            console.log("success");
+            console.log(response.data);
+          })
+          .catch((errors) => {
+            console.log("failure");
+            console.log(errors.data);
+          });
+      } else {
+        this.errorMsg = "Password and Confirm Password don't match.";
+      }
     },
     goBack() {
       this.$router.push("/forgot");
     },
     play() {
+      sendPasswordResetEmail(this.auth, this.email)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          console.log(errorCode);
+        });
+      console.log(this.email);
       this.timerEnabled = true;
     },
   },
@@ -137,6 +173,14 @@ export default {
 </script>
 
 <style scoped>
+.lead {
+  color: white;
+  width: 20rem;
+  text-align: justify;
+  background-color: rgba(255, 64, 0, 0.4);
+  padding: 5px;
+  font-size: 12pt;
+}
 .container {
   font-weight: bold;
   text-align: justify;
