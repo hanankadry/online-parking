@@ -108,7 +108,7 @@
           </template>
         </vue-good-table>
       </div>
-      <div class="data-container offset-9">
+      <div class="data-container mb-3 offset-9">
         Total Number of Data: {{ this.rows.length }}
       </div>
       <!-- Custom Modal Start -->
