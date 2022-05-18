@@ -7,6 +7,9 @@
 
       <form>
         <div class="mt-5">
+          <p class="lead" v-show="errorMsg != null">
+            {{ errorMsg }}
+          </p>
           <label for="email" class="form-label mb-0">Enter Account Email</label>
           <div class="input-icons">
             <i class="bi bi-envelope icon" />
@@ -46,6 +49,7 @@ export default {
     return {
       email: "",
       auth: getAuth(),
+      errorMsg: null,
     };
   },
   methods: {
@@ -53,13 +57,15 @@ export default {
       sendPasswordResetEmail(this.auth, this.email)
         .then((response) => {
           console.log(response);
+          router.push(`/sent/${this.email}`);
         })
         .catch((error) => {
           const errorCode = error.code;
           console.log(errorCode);
+          if (errorCode == "auth/user-not-found") {
+            this.errorMsg = "User not found, Please check your email.";
+          }
         });
-      console.log(this.email);
-      router.push(`/sent/${this.email}`);
     },
     signIn() {
       router.push("/login");
@@ -69,6 +75,14 @@ export default {
 </script>
 
 <style scoped>
+.lead {
+  color: white;
+  width: 20rem;
+  text-align: justify;
+  background-color: rgba(255, 64, 0, 0.4);
+  padding: 5px;
+  font-size: 12pt;
+}
 .container {
   font-weight: bold;
   text-align: justify;

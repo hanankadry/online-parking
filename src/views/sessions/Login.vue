@@ -103,11 +103,11 @@ export default {
     });
   },
   methods: {
-    signIn() {
-      this.getUser();
+    async signIn() {
+      await this.getUser();
     },
-    getUser() {
-      axios
+    async getUser() {
+      await axios
         .get(`/admin/${this.user.email}`)
         .then((response) => {
           if (response.data.code == 200) {
@@ -125,8 +125,8 @@ export default {
           console.log(errors.data);
         });
     },
-    getParkingID(user_id) {
-      axios
+    async getParkingID(user_id) {
+      await axios
         .get(`/admin/parking/${user_id}`)
         .then((response) => {
           this.parking_id = response.data.parking.find((item) => item.id).id;
@@ -139,7 +139,7 @@ export default {
     },
     async checkUser(user_id) {
       if (this.user.rememeber == true) {
-        setPersistence(this.auth, browserLocalPersistence)
+        await setPersistence(this.auth, browserLocalPersistence)
           .then(() => {
             console.log("Local");
             return this.firebaseSignIn(user_id);
@@ -149,7 +149,7 @@ export default {
             console.log(errorCode);
           });
       } else {
-        setPersistence(this.auth, browserSessionPersistence)
+        await setPersistence(this.auth, browserSessionPersistence)
           .then(() => {
             console.log("Session");
             return this.firebaseSignIn(user_id);
@@ -181,8 +181,8 @@ export default {
           console.log(errorCode);
         });
     },
-    signUp() {
-      this.$router.push("/signup");
+    async signUp() {
+      await this.$router.push("/signup");
     },
   },
 };

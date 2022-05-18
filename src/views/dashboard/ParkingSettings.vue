@@ -79,6 +79,7 @@
               type="checkbox"
               v-model="parkingSpace.fees"
               id="fees"
+              disabled
             />
             <label for="fees" class="form-label ms-3">Fees</label>
             <i class="bi bi-cash-coin sm-icon" />
@@ -93,21 +94,31 @@
             />
           </div>
         </div>
-        <div class="row">
-          <button
-            class="button-sm-fill col-1 offset-md-10 me-5"
-            @click="enable"
-            v-if="editting == false"
-          >
-            Edit
-          </button>
-          <div class="buttons col offset-md-9 me-4" v-else>
-            <button class="button-sm-unfill me-2" type="button" @click="cancel">
-              Cancel
+        <div class="container">
+          <div class="row justify-content-end">
+            <button
+              class="button-sm-fill col-md-2 me-5"
+              @click="enable"
+              v-if="editting == false"
+            >
+              Edit
             </button>
-            <button class="button-sm-fill" type="button" @click="disable">
-              Save
-            </button>
+            <div class="buttons col-md-4 offset-md-4 me-1" v-else>
+              <button
+                class="button-sm-unfill col-5 me-2"
+                type="button"
+                @click="cancel"
+              >
+                Cancel
+              </button>
+              <button
+                class="button-sm-fill col-5"
+                type="button"
+                @click="update(parking_id)"
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -124,7 +135,7 @@ export default {
       editting: false,
       label: "Parking Settings",
       href: "/parkingSettings",
-      parking_id: this.$route.params.id,
+      parking_id: this.id,
       user_id: "",
       parkingSpace: {
         location: "",
@@ -143,6 +154,7 @@ export default {
     if (this.parkingSpace.fee != null) {
       this.parkingSpace.fees = true;
     }
+    // console.log(this.parking_id);
   },
   methods: {
     getParkingSpace(id) {
@@ -181,7 +193,6 @@ export default {
         if (confirm("Are you sure you want to cancel these changes?") == true) {
           console.log("confirm");
           this.disable();
-          this.getParkingSpace(this.parking_id);
         } else {
           console.log("cancel");
         }
@@ -213,7 +224,6 @@ export default {
       } else {
         this.parkingSpace.fees = false;
       }
-      this.update(this.parking_id);
     },
     update(id) {
       axios
@@ -229,6 +239,7 @@ export default {
         })
         .then((response) => {
           this.makeToast("update successful", "success");
+          this.disable();
           console.log(response.data);
         })
         .catch((errors) => {

@@ -3,7 +3,7 @@
   <header class="header">
     <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container-fluid">
-        <router-link class="nav-brand" :to="{ path: `/home/${user_id}` }">
+        <router-link class="nav-brand" :to="{ path: `/${user_id}` }">
           <img src="@/assets/images/logo.jpg" class="logo" />
         </router-link>
         <button

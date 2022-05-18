@@ -61,15 +61,6 @@
               <i class="bi bi-info-circle table-icon text-success"></i>
               {{ props.row.button }}</a
             >
-            <a
-              href=""
-              data-bs-toggle="modal"
-              data-bs-target=".delete-modal"
-              @click="this.current_registration = props.row"
-            >
-              <i class="bi bi-x-lg table-icon text-danger"></i>
-              {{ props.row.button }}</a
-            >
           </span>
         </template>
       </vue-good-table>
@@ -185,7 +176,7 @@
             <form>
               <div class="row form-box justify-content-center">
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-2">
                     <label for="day" class="form-label"
                       >Day: {{ current_registration.day }}</label
                     >
@@ -195,19 +186,14 @@
                       >Created At: {{ current_registration.date }}</label
                     >
                   </div>
+                  <div class="col-md-4">
+                    <label for="createdAt" class="form-label"
+                      >Status: {{ current_registration.status }}</label
+                    >
+                  </div>
                 </div>
                 <div class="row mt-5">
-                  <div class="col-md-6">
-                    <label for="status" class="form-label">Status</label>
-                    <input
-                      type="text"
-                      v-model="current_registration.status"
-                      class="form-control input-lg"
-                      id="status"
-                      required
-                    />
-                  </div>
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     <label for="slotName" class="form-label">Slot Name</label>
                     <input
                       type="text"
@@ -217,9 +203,7 @@
                       required
                     />
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     <label for="leaveTime" class="form-label">Leave Time</label>
                     <input
                       type="time"
@@ -230,7 +214,7 @@
                       required
                     />
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     <label for="checkIn" class="form-label"
                       >Check In Time</label
                     >
@@ -267,43 +251,6 @@
       </div>
     </div>
 
-    <!-- Delete Modal -->
-    <div
-      class="modal fade delete-modal"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">
-              Delete Registration No. "{{ current_registration.id }}"
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-              id="btn-delete-close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            Are you sure you want to delete {{ current_registration.id }}?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="button-xs-unfill">Cancel</button>
-            <button
-              type="button"
-              class="button-xs-danger"
-              @click="deleteRegistration(current_registration.id)"
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -374,7 +321,6 @@ export default {
   },
   mounted() {
     this.show(this.parking_id);
-    // this.getParkingID();
   },
   methods: {
     cancel(registration) {
@@ -436,21 +382,6 @@ export default {
         })
         .catch((errors) => {
           this.makeToast("update failed", "error");
-          console.log(errors.data);
-        });
-    },
-    deleteRegistration(id) {
-      axios
-        .post(`/registration/delete/${id}`)
-        .then((response) => {
-          this.makeToast("delete successful", "success");
-          this.show(this.parking_id);
-          const trigger = document.getElementById("btn-delete-close");
-          trigger.click();
-          console.log(response.data);
-        })
-        .catch((errors) => {
-          this.makeToast("delete failed", "error");
           console.log(errors.data);
         });
     },
@@ -520,7 +451,32 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   background-size: 20px 20px, 20px 20px;
   background-repeat: no-repeat;
 }
+.selector-lg {
+  border-radius: 95px;
+  height: 50px;
+  background-color: #374258;
+  color: white;
+  border: none;
+  padding-left: 30px;
+  background-image: url("@/assets/images/icons8-chevron-down-96.png");
+  background-position: calc(100% - 25px) calc(0.6em + 0.5px),
+    calc(100% - 19.8px) calc(0.6em + 5px);
+  background-size: 30px 30px, 30px 30px;
+  background-repeat: no-repeat;
+}
 
+.selector-lg > option {
+  background-color: #f74464;
+  color: #374258;
+  border: none;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.selector-lg > option:hover {
+  background-color: white;
+  color: #374258;
+}
 .text-success {
   color: #02b902;
 }

@@ -39,7 +39,7 @@
                 </option>
               </select>
               <button
-                class="button-xs-unfill mt-0 col"
+                class="button-sm-unfill mt-0 col"
                 type="button"
                 @click.prevent="find"
               >
@@ -603,6 +603,12 @@ export default {
 }
 
 .button-xs-unfill {
+  background-color: transparent;
+  height: 40px;
+  border: 3px solid #f74464;
+}
+
+.button-sm-unfill {
   background-color: transparent;
   height: 40px;
   border: none;

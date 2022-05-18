@@ -175,7 +175,7 @@
                     <button
                       class="button-md-fill col"
                       type="button"
-                      @click="updateUser"
+                      @click.prevent="updateUser"
                     >
                       Save
                     </button>
@@ -278,17 +278,17 @@
                     />
                   </div>
                 </div>
-                <div class="row pb-3 px-5">
-                  <div class="buttons col offset-lg-6">
+                <div class="row mt-4 pb-3 px-5">
+                  <div class="buttons col-6">
                     <button
-                      class="button-md-unfill me-2"
+                      class="button-md-unfill col-md-5 me-2 mt-2"
                       type="button"
                       @click="cancel('password')"
                     >
                       Cancel
                     </button>
                     <button
-                      class="button-md-fill"
+                      class="button-md-fill col-md-5 mt-2"
                       type="button"
                       @click.prevent="updatePass"
                     >
@@ -321,7 +321,9 @@
                 </div>
                 <hr />
                 <div class="row">
-                  <p class="lead">Are you sure you want to delete this account?</p>
+                  <p class="lead">
+                    Are you sure you want to delete this account?
+                  </p>
                   <p class="lead">
                     All data related to this account will not be recovered if
                     the account is deleted.
@@ -364,6 +366,7 @@ import {
   numeric,
   helpers,
 } from "@vuelidate/validators";
+import router from "@/router";
 export default {
   props: ["id"],
   data() {
@@ -526,6 +529,7 @@ export default {
         .post(`/user/delete/${id}`)
         .then((response) => {
           console.log(response.data);
+          this.$router.push("/login");
         })
         .catch((errors) => {
           console.log(errors.data);
@@ -605,9 +609,10 @@ export default {
       this.$toast.show(msg, { type: type });
     },
     //general settings save btn action
-    updateGeneral() {
-      this.v$.$validate();
-      if (!this.v$.$error) {
+    async updateGeneral() {
+      await this.v$.$validate();
+      const result = this.v$.$error;
+      if (!result) {
         this.updateUser();
       }
     },
@@ -742,9 +747,11 @@ export default {
           this.showCheck = false;
           this.user.password = this.update_pass.newPass;
           this.show = false;
+          this.makeToast("password change successful", "success");
           console.log(response.data);
         })
         .catch((errors) => {
+          this.makeToast("password change failed", "error");
           console.log(errors.data);
         });
 

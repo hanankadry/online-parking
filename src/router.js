@@ -6,7 +6,7 @@ import NotFound from '@/views/pages/NotFound'
 const routes = [
 
   {
-    path: '/home/:id*',
+    path: '/:id*',
     name: 'home',
     component: () => import('@/views/Home.vue'),
     props: true,
@@ -32,7 +32,7 @@ const routes = [
 
   },
   {
-    path: '/reset/:pathMatch(.*)*',
+    path: '/reset',
     name: 'reset',
     component: () => import('@/views/sessions/Reset'),
     props: true

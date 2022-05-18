@@ -22,7 +22,7 @@
               <router-link
                 class="nav-link active"
                 aria-current="page"
-                :to="{ path: `/home/${parking_id}` }"
+                :to="{ path: `/${parking_id}` }"
                 ><i class="bi bi-house-door nav-icon"></i>
               </router-link>
             </li>
@@ -87,7 +87,7 @@
     >
       <div class="offcanvas-header">
         <h5 class="offcanvas-title">
-          <router-link class="nav-brand" :to="{ path: `/home/${parking_id}` }">
+          <router-link class="nav-brand" :to="{ path: `/${parking_id}` }">
             <img src="@/assets/images/logo.jpg" class="logo" />
           </router-link>
         </h5>
@@ -123,9 +123,15 @@
           active-class="active"
           exact
         >
-          <i class="bi bi-person nav-icon" />Security Men</router-link
+          <i class="bi bi-person nav-icon" active-class="active" />Security
+          Men</router-link
         >
-        <router-link :to="{ path: `/parkingSlots/${parking_id}` }" class="nav"
+        <router-link
+          :to="{ path: `/parkingSlots/${parking_id}` }"
+          class="nav"
+          active-class="active"
+          exact
+          id="slots"
           ><i class="bi bi-square-half nav-icon" />Parking Slots</router-link
         >
         <router-link
@@ -171,20 +177,15 @@ export default {
   },
   props: ["id"],
   created() {
-    // watch the params of the route to fetch the data again
     this.$watch(
       () => this.$route.params,
       () => {
         this.fetchData();
       },
-      // fetch the data when the view is created and the data is
-      // already being observed
       { immediate: true }
     );
   },
-  // mounted() {
-  //   this.getUserID();
-  // },
+
   methods: {
     fetchData() {
       this.parking_id = this.$route.params.id;
@@ -324,6 +325,10 @@ a .nav-link:hover {
 
 .offcanvas-body .nav:hover,
 .offcanvas-body .nav-icon:hover {
+  color: #f74464;
+}
+
+.nav-icon:active {
   color: #f74464;
 }
 

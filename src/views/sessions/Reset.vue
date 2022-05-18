@@ -7,7 +7,9 @@
 
       <form autocomplete="off">
         <div class="mt-5">
-          <p class="lead" v-show="errorMsg != null">{{ errorMsg }}</p>
+          <p class="lead" v-show="errorMsg != null">
+            {{ errorMsg }}
+          </p>
           <div class="input-icons">
             <i class="bi bi-envelope icon" />
             <input
@@ -78,6 +80,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      disabled: false,
       errorMsg: null,
       auth: getAuth(),
       min: "1:00",
@@ -98,7 +101,6 @@ export default {
         }, 1000);
       }
     },
-
     timerCount: {
       handler(value) {
         if (value > 0 && this.timerEnabled) {
@@ -108,20 +110,24 @@ export default {
         }
         if (this.timerCount == 0) {
           this.timerEnabled = false;
+          this.disabled = false;
+          document.getElementById("link").style.pointerEvents = "auto";
           this.timerCount = 59;
         }
       },
       immediate: true, // This ensures the watcher is triggered upon creation
     },
   },
-
+  created() {
+    console.log(this.$attrs);
+  },
   methods: {
     reset() {
       confirmPasswordReset(this.auth, this.code, this.password)
         .then((response) => {
           console.log(response);
           console.log("success");
-          // this.resetPass();
+          this.$router.push("/login");
         })
         .catch((errors) => {
           console.log("failure");
@@ -132,7 +138,6 @@ export default {
           }
           console.log(errorCode);
         });
-      this.$router.push("/login");
     },
     resetPass() {
       if (this.password == this.confirm_pass) {
@@ -167,6 +172,10 @@ export default {
         });
       console.log(this.email);
       this.timerEnabled = true;
+      this.disabled = true;
+      if (this.disabled == true) {
+        document.getElementById("link").style.pointerEvents = "none";
+      }
     },
   },
 };

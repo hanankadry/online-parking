@@ -23,7 +23,7 @@
     <div class="text">
       You seem lost. The page you're looking for isn't found.
     </div>
-    <router-link class="button" to="/home">Go Back Home</router-link>
+    <router-link class="button" to="/">Go Back Home</router-link>
   </div>
 </template>
 

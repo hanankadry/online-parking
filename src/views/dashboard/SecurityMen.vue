@@ -48,15 +48,6 @@
             <a
               href=""
               data-bs-toggle="modal"
-              data-bs-target=".edit-modal"
-              @click="current_user = props.row"
-            >
-              <i class="bi bi-pencil-square table-icon"></i>
-              {{ props.row.button }}</a
-            >
-            <a
-              href=""
-              data-bs-toggle="modal"
               data-bs-target=".info-modal"
               @click="current_user = props.row"
             >
@@ -84,160 +75,6 @@
           </span>
         </template>
       </vue-good-table>
-    </div>
-    <!-- Edit Modal -->
-    <div
-      class="modal fade edit-modal"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-labelledby="staticBackdropLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="staticBackdropLabel">
-              Edit Security Man No. "{{ current_user.id }}"
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              id="btn-update-close"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="row form-box justify-content-center">
-                <div class="row">
-                  <div class="col-md-6">
-                    <i class="bi bi-person sm-icon" />
-                    <label for="name" class="form-label">Name</label>
-                    <input
-                      type="text"
-                      v-model="current_user.name"
-                      class="form-control input-lg"
-                      id="name"
-                      required
-                    />
-                  </div>
-                  <div class="col-md-6">
-                    <i class="bi bi-envelope sm-icon" />
-                    <label for="email" class="form-label">Email</label>
-                    <input
-                      type="email"
-                      v-model="current_user.email"
-                      class="form-control input-lg"
-                      id="email"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <i class="bi bi-person-lines-fill sm-icon" />
-                    <label for="national_id" class="form-label"
-                      >National ID</label
-                    >
-                    <input
-                      type="number"
-                      v-model="current_user.security_id"
-                      class="form-control input-lg"
-                      id="national_id"
-                      required
-                    />
-                  </div>
-                  <div class="col-md-6">
-                    <i class="bi bi-gender-ambiguous sm-icon" />
-                    <label for="gender" class="form-label">Gender</label>
-                    <select
-                      class="form-select selector-lg"
-                      id="gender"
-                      v-model="current_user.gender"
-                      required
-                    >
-                      <option selected>Choose Gender</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-md-12">
-                    <i class="bi bi-geo-alt sm-icon" />
-                    <label for="address" class="form-label">Address</label>
-                    <input
-                      type="text"
-                      v-model="current_user.address"
-                      class="form-control input-lg"
-                      id="address"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <i class="bi bi-calendar2-week sm-icon" />
-                    <label for="dob" class="form-label">Date of Birth</label>
-                    <input
-                      type="date"
-                      v-model="current_user.dob"
-                      class="form-control input-lg date"
-                      id="dob"
-                      required
-                    />
-                  </div>
-                  <div class="col-md-6">
-                    <i class="bi bi-telephone sm-icon" />
-                    <label for="phone" class="form-label">Phone</label>
-                    <input
-                      type="tel"
-                      pattern="[0-9]{4}-[0-9]{3}-[0-9]{4}"
-                      v-model="current_user.phone"
-                      class="form-control input-lg"
-                      id="phone"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <i class="bi bi-clock sm-icon" />
-                    <label for="work_hours" class="form-label"
-                      >Work Hours</label
-                    >
-                    <input
-                      type="time"
-                      v-model="current_user.work_hours"
-                      class="form-control col-3 input-lg"
-                      id="work_hours"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="button-xs-unfill"
-              @click="cancel(current_user, 'edit')"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              class="button-xs-fill"
-              @click="updateSecurity(current_user.id)"
-            >
-              Update
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- Info Modal -->
@@ -628,7 +465,7 @@
             <button
               type="button"
               class="button-xs-unfill"
-              @click="cancel(new_user, 'add')"
+              @click="cancel(new_user)"
             >
               Cancel
             </button>
@@ -793,7 +630,7 @@ export default {
     };
   },
   methods: {
-    cancel(user, modal) {
+    cancel(user) {
       const condition =
         (user.name ||
           user.address ||
@@ -804,41 +641,21 @@ export default {
           user.dob ||
           user.work_hours ||
           user.status) != null;
-      if (modal == "edit") {
-        if (condition) {
-          if (
-            confirm("Are you sure you want to cancel these changes?") == true
-          ) {
-            console.log("confirm");
-            const trigger = document.getElementById("btn-update-close");
-            trigger.click();
 
-            this.show(this.parking_id);
-          } else {
-            console.log("cancel");
-          }
-        } else {
-          const trigger = document.getElementById("btn-update-close");
-          trigger.click();
-        }
-      } else if (modal == "add") {
-        if (condition) {
-          if (
-            confirm("Are you sure you want to cancel these changes?") == true
-          ) {
-            console.log("confirm");
-            this.new_user = {};
-            const trigger = document.getElementById("btn-add-close");
-            trigger.click();
-            this.show(this.parking_id);
-          } else {
-            console.log("cancel");
-          }
-        } else {
+      if (condition) {
+        if (confirm("Are you sure you want to cancel these changes?") == true) {
+          console.log("confirm");
+          this.new_user = {};
           const trigger = document.getElementById("btn-add-close");
           trigger.click();
-          this.new_user = {};
+          this.show(this.parking_id);
+        } else {
+          console.log("cancel");
         }
+      } else {
+        const trigger = document.getElementById("btn-add-close");
+        trigger.click();
+        this.new_user = {};
       }
     },
     getAge() {
@@ -898,30 +715,6 @@ export default {
           console.log(errors.data);
         });
       console.log(this.new_user);
-    },
-    updateSecurity(id) {
-      axios
-        .post(`/security/update/${id}`, {
-          security_id: this.current_user.security_id,
-          name: this.current_user.name,
-          email: this.current_user.email,
-          gender: this.current_user.gender,
-          address: this.current_user.address,
-          dob: this.current_user.dob,
-          work_hours: this.current_user.work_hours,
-          phone: this.current_user.phone,
-        })
-        .then((response) => {
-          this.makeToast("update succesful", "success");
-          const trigger = document.getElementById("btn-update-close");
-          trigger.click();
-          this.show(this.parking_id);
-          console.log(response.data);
-        })
-        .catch((errors) => {
-          this.makeToast("update failed", "error");
-          console.log(errors.data);
-        });
     },
     activateSecurity(id) {
       if (this.current_user.status == "active") {

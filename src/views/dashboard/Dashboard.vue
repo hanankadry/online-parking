@@ -169,40 +169,23 @@ export default {
       slotRows: [],
       loading: true,
       error: null,
-      post: null,
       showCards: false,
     };
   },
   created() {
-    // watch the params of the route to fetch the data again
-    this.$watch(
-      () => this.$route.params,
-      () => {
-        this.fetchData();
-      },
-      // fetch the data when the view is created and the data is
-      // already being observed
-      { immediate: true }
-    );
-  },
-  mounted() {
-    // if (this.slotRows == []) {
-    //   this.loading = true;
-    // } else {
-    //   this.getAll();
-    // }
+    this.fetchData();
   },
   methods: {
-    fetchData() {
-      this.error = this.post = null;
+    async fetchData() {
+      this.error = null;
       this.loading = true;
-      this.getChartValues(this.$route.params.id);
-      this.getRegistrations(this.$route.params.id);
-      this.getSlots(this.$route.params.id);
-      this.getStatistics(this.$route.params.id);
+      await this.getRegistrations(this.$route.params.id);
+      await this.getChartValues(this.$route.params.id);
+      await this.getSlots(this.$route.params.id);
+      await this.getStatistics(this.$route.params.id);
     },
-    getChartValues(id) {
-      axios
+    async getChartValues(id) {
+      await axios
         .get(`/admin/chart/${id}`)
         .then((response) => {
           for (let i = 0; i < 7; i++) {
@@ -217,8 +200,8 @@ export default {
           console.log(errors.data);
         });
     },
-    getStatistics(id) {
-      axios
+    async getStatistics(id) {
+      await axios
         .get(`/admin/dashboard/${id}`)
         .then((response) => {
           const posts = response.data;
@@ -258,8 +241,8 @@ export default {
           console.log(errors.data);
         });
     },
-    getSlots(id) {
-      axios
+    async getSlots(id) {
+      await axios
         .get(`/parkingslot/parking/${id}`)
         .then((response) => {
           this.slotRows = response.data.map((item) => ({
@@ -271,8 +254,8 @@ export default {
           console.log(errors.data);
         });
     },
-    getRegistrations(id) {
-      axios
+    async getRegistrations(id) {
+      await axios
         .get(`/registration/parking/${id}`)
         .then((response) => {
           this.registrationRows = response.data.registration.map((item) => ({

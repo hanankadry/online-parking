@@ -1,11 +1,11 @@
 <template>
   <div class="container chart my-5">
-      <apexchart
-        type="bar"
-        height="350"
-        :options="barChartOptions"
-        :series="barSeries"
-      ></apexchart>
+    <apexchart
+      type="bar"
+      height="350"
+      :options="barChartOptions"
+      :series="barSeries"
+    ></apexchart>
   </div>
 </template>
 
