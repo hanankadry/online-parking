@@ -234,7 +234,7 @@ export default {
       const auth = getAuth();
       signOut(auth)
         .then(() => {
-          this.$router.push("/login");
+          this.$router.push("/");
         })
         .catch((error) => {
           alert(error.message);
