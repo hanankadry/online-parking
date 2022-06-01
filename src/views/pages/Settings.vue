@@ -449,6 +449,12 @@ export default {
     this.getUser();
   },
   methods: {
+    exportData() {
+      this.exportRegistrations();
+      this.exportSecurity();
+      this.exportSlots();
+      console.log("exported");
+    },
     exportSecurity() {
       axios
         .get(`/admin/exportsec/${this.parking_id}`, { responseType: "blob" })
@@ -508,12 +514,6 @@ export default {
         .catch((errors) => {
           console.log(errors.data);
         });
-    },
-    exportData() {
-      this.exportRegistrations();
-      this.exportSecurity();
-      this.exportSlots();
-      console.log("exported");
     },
     deleteAccount(id) {
       const user = this.auth.currentUser;

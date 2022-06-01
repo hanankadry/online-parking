@@ -829,7 +829,7 @@ export default {
               console.log(errors.data);
             });
         } else {
-          this.getAllSlots(this.parkingSlots);
+          this.addAllSlots(this.parkingSlots);
         }
       } else {
         this.makeToast("insert failed", "error");
@@ -840,7 +840,7 @@ export default {
         this.new_slot = {};
       }
     },
-    getAllSlots(array) {
+    addAllSlots(array) {
       this.slots = this.getSlots(array);
       this.levels = this.getLevels(array);
       for (let i = 0; i < this.slots.length; i++) {
