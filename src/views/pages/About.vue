@@ -46,7 +46,7 @@
   <!-- End Header -->
   <div class="container">
     <div class="card-header text-center">About</div>
-    <div class="card">
+    
       <div class="card-body">
         <h5 class="card-title text-center">Team Info</h5>
         <p class="card-text">
@@ -82,13 +82,13 @@
           Toka Magdy: 
           <ul>
             <li>Web Application Developer</li>
-            <li>Contact at: (+200) 123-456-7890</li>
+            <li>Contact at: (+200)1003553146</li>
             <li>Email: toka.fmagdy@gmail.com</li>
           </ul>
         </p>
       </div>
-    </div>
-    <div class="card">
+    
+    
       <div class="card-body">
         <h5 class="card-title text-center">Us</h5>
         <p class="card-text">
@@ -96,13 +96,13 @@
           graduation project Under supervision Dr. Islam El Kabani
         </p>
       </div>
-    </div>
-    <div class="card">
+    
+    
       <div class="card-body">
         <h5 class="card-title text-center">Contact Us</h5>
         <p class="card-text">Contact Us at ..........@gmail.com</p>
       </div>
-    </div>
+    
   </div>
     <!-- Start Footer -->
   <footer class="footer">
