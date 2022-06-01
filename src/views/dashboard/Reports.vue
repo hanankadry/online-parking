@@ -386,9 +386,9 @@ export default {
       const trigger = document.getElementById("hiddenBtn");
       trigger.click();
     },
-    find() {
+    async find() {
       if (this.filter != "Filter" && this.type != "Type") {
-        axios
+        await axios
           .get(`/admin/reports/${this.parking_id}/${this.filter}`)
           .then((response) => {
             if (this.type == "security") {
@@ -452,10 +452,8 @@ export default {
         console.log("Must enter type and filter");
       }
     },
-    findCustom() {
-      console.log(this.date.from);
-      console.log(this.date.to);
-      axios
+    async findCustom() {
+      await axios
         .get(
           `/admin/reports/custom/${this.parking_id}/${this.date.from}/${this.date.to}`
         )
