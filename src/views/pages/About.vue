@@ -55,35 +55,35 @@
             <li>Project Leader</li>
             <li>Mobile Application Developer</li>
             <li>Contact at: (+200) 123-456-7890</li>
-            <li>Email: donia@gmail.com</li>
+            <li>Email: sim.donia.hesham@alexu.edu.eg</li>
           </ul>
 
           Rowan Essam: 
           <ul>
             <li>Mobile Application Developer</li>
             <li>Contact at: (+200) 123-456-7890</li>
-            <li>Email: rowan@gmail.com</li>
+            <li>Email: sim.rowan.essam@alexu.edu.eg</li>
           </ul>
 
           Ramy Mahmoud: 
           <ul>
             <li>Mobile Application Developer</li>
             <li>Contact at: (+200) 123-456-7890</li>
-            <li>Email: ramy@gmail.com</li>
+            <li>Email: sim.ramy.mahmoud@alexu.edu.eg</li>
           </ul>
 
           Hanan Abd El-kader: 
           <ul>
             <li>Web Application Developer</li>
             <li>Contact at: (+200) 155-458-9890</li>
-            <li>Email: hanan.kadry@outlook.com</li>
+            <li>Email: sim.hanan.mohamed@alexu.edu.eg</li>
           </ul>
 
           Toka Magdy: 
           <ul>
             <li>Web Application Developer</li>
-            <li>Contact at: (+200)1003553146</li>
-            <li>Email: toka.fmagdy@gmail.com</li>
+            <li>Contact at: (+200) 100-355-3146</li>
+            <li>Email: sim.toka.magdy@alexu.edu.eg</li>
           </ul>
         </p>
       </div>
@@ -91,16 +91,10 @@
     
       <div class="card-body">
         <h5 class="card-title text-center">Us</h5>
-        <p class="card-text">
-          We are a Group of friends graduate at July 2022. Implement
-          graduation project Under supervision Dr. Islam El Kabani
+        <p class="card-text text-center">
+          We are a team that grouped together to bring the <strong>Go'N'Park</strong> Web and Mobile App to life, for our graduation project.
+          Under the supervision of Dr. Islam El-Kabany.
         </p>
-      </div>
-    
-    
-      <div class="card-body">
-        <h5 class="card-title text-center">Contact Us</h5>
-        <p class="card-text">Contact Us at ..........@gmail.com</p>
       </div>
     
   </div>

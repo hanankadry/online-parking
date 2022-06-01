@@ -22,6 +22,7 @@
     "firebaseui": "^6.0.1",
     "vue": "^3.2.31",
     "vue-class-component": "^8.0.0-rc.1",
+    "vue-disable-autocomplete": "0.0.4",
     "vue-good-table-next": "^0.1.0",
     "vue-router": "^4.0.14",
     "vue3-apexcharts": "^1.4.1",

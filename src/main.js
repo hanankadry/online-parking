@@ -10,6 +10,8 @@ import NotificationContainer from "@/components/NotificationContainer.vue"
 import VueGoodTablePlugin from 'vue-good-table-next'
 import axios from 'axios'
 import Toaster from "@meforma/vue-toaster"
+import DisableAutocomplete from 'vue-disable-autocomplete';
+
 
 axios.defaults.baseURL = "http://localhost:8000/api/"
 axios.defaults.withCredentials = false;
@@ -42,7 +44,7 @@ initializeApp(firebaseConfig);
 app.use(router).use(VueApexCharts).use(VueGoodTablePlugin).use(Toaster, {
   position: "top-right",
   max: 5
-}).mount('#app');
+}).use(DisableAutocomplete).mount('#app');
 
 app.component("breadcrumb", Breadcrumb);
 app.component("background", Background);

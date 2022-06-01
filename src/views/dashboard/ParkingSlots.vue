@@ -308,7 +308,7 @@
             ></button>
           </div>
           <div class="modal-body">
-            Are you sure you want to delete {{ current_slot.name }}?
+            Are you sure you want to delete "{{ current_slot.name }}"?
           </div>
           <div class="modal-footer">
             <button
@@ -423,7 +423,7 @@
                           v-model="new_slot.status"
                           required
                         >
-                          <option selected>Choose Status</option>
+                          <option value="choose">Choose Status</option>
                           <option value="available">Available</option>
                           <option value="unavailable">Unavailable</option>
                           <option value="out of order">Out of Order</option>
@@ -489,7 +489,7 @@
                       v-for="(input, index) in parkingSlots"
                       :key="index"
                     >
-                      <div class="col-lg-3">
+                      <div class="col-lg-4">
                         <label for="alphabet" class="form-label ms-4"
                           >Alphabet</label
                         >
@@ -520,7 +520,7 @@
                           required
                         />
                       </div>
-                      <div class="col-lg-3">
+                      <div class="col-lg-2">
                         <label for="level" class="form-label ms-4">Level</label>
                         <input
                           type="number"
@@ -605,7 +605,7 @@ export default {
         id: "",
         name: "",
         level: "",
-        status: "",
+        status: "choose",
       },
       full: false,
       errorMsg: "",
@@ -613,6 +613,7 @@ export default {
       slots: [],
       levels: [],
       Alphabets: [
+        "Choose Alphabet",
         "A",
         "B",
         "C",
@@ -674,7 +675,7 @@ export default {
         },
       ],
       rows: [],
-      parkingSlots: [{ alphabet: "", number: "", level: "" }],
+      parkingSlots: [{ alphabet: "Choose Alphabet", number: "", level: "" }],
       parkingSpace: {
         capacity: "",
         levels: "",
@@ -687,7 +688,7 @@ export default {
   },
   methods: {
     add() {
-      this.parkingSlots.push({ alphabet: "", number: "", level: "" });
+      this.parkingSlots.push({ alphabet: "Choose Alphabet", number: "", level: "" });
     },
     remove() {
       this.parkingSlots.pop();

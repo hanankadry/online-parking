@@ -265,10 +265,16 @@
             ></button>
           </div>
           <div class="modal-body">
-            Are you sure you want to delete {{ current_user.name }}?
+            Are you sure you want to delete <strong>{{ current_user.name }}</strong>?
           </div>
           <div class="modal-footer">
-            <button type="button" class="button-xs-unfill">Cancel</button>
+            <button
+              type="button"
+              class="button-xs-unfill"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
             <button
               type="button"
               @click="deleteSecurity(current_user.id)"
@@ -381,7 +387,7 @@
                       v-model="new_user.gender"
                       required
                     >
-                      <option selected>Choose Gender</option>
+                      <option value="choose">Choose Gender</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                     </select>
@@ -423,7 +429,7 @@
                       v-model="new_user.status"
                       required
                     >
-                      <option selected>Choose Status</option>
+                      <option value="choose">Choose Status</option>
                       <option value="active">Active</option>
                       <option value="inactive">Inactive</option>
                     </select>
@@ -518,12 +524,12 @@ export default {
         security_id: "",
         email: "",
         address: "",
-        gender: "",
+        gender: "choose",
         phone: "",
         dob: "",
         created_at: "",
         work_hours: "",
-        status: "",
+        status: "choose",
       },
       searchInput: "",
       label: "Security Men",

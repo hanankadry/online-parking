@@ -209,7 +209,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="staticBackdropLabel">
-                Report No. {{ current_row.id }}
+                Report No. "{{ current_row.id }}"
               </h5>
             </div>
             <div class="modal-body">
@@ -381,11 +381,6 @@ export default {
     };
   },
   methods: {
-    trigger() {
-      console.log("triggered");
-      const trigger = document.getElementById("hiddenBtn");
-      trigger.click();
-    },
     async find() {
       if (this.filter != "Filter" && this.type != "Type") {
         await axios
@@ -441,11 +436,11 @@ export default {
               this.rows = simplifyArray(all);
               console.log(this.rows);
             }
-            console.log("success");
             console.log(response.data);
+            this.filter = "Filter";
+            this.type = "Type";
           })
           .catch((errors) => {
-            console.log("fail");
             console.log(errors.data);
           });
       } else {
@@ -507,12 +502,11 @@ export default {
             };
             this.rows = simplifyArray(all);
             console.log(this.rows);
-            this.customType = "Type";
-            this.date.from = this.date.to = "";
           }
-
           const trigger = document.getElementById("btn-custom-close");
           trigger.click();
+          this.customType = "Type";
+          this.date.from = this.date.to = null;
         })
         .catch((errors) => {
           console.log(errors.data);

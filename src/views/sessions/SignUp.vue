@@ -110,7 +110,7 @@
                 id="gender"
                 required
               >
-                <option selected>Choose Gender</option>
+                <option value="choose">Choose Gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
               </select>
@@ -213,7 +213,7 @@
                 id="category"
                 required
               >
-                <option selected value="default">Choose Category</option>
+                <option value="choose">Choose Category</option>
                 <option value="mall">Mall</option>
                 <option value="club">Sports Club</option>
                 <option value="public">Public Parking</option>
@@ -282,10 +282,6 @@
             type="submit"
             @click.prevent="createAccount"
           >
-            <!-- @click.prevent="
-              createAccount(numOfAlpha, numPerAlpha, parkingSpace.capacity)
-            "
-          > -->
             Create Account
           </button>
         </div>
@@ -321,7 +317,7 @@ export default {
       parkingSpace: {
         id: "",
         location: "",
-        category: "",
+        category: "choose",
         description: "",
         levels: "",
         fees: false,
@@ -336,7 +332,7 @@ export default {
         address: "",
         password: "",
         confirm_password: "",
-        gender: "",
+        gender: "choose",
         phone: "",
         dob: "",
       },
