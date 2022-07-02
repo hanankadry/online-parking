@@ -652,6 +652,7 @@ export default {
         if (confirm("Are you sure you want to cancel these changes?") == true) {
           console.log("confirm");
           this.new_user = {};
+          this.v$.$errors = [];
           const trigger = document.getElementById("btn-add-close");
           trigger.click();
           this.show(this.parking_id);
@@ -679,6 +680,7 @@ export default {
           this.rows = response.data.security.map((item) => ({
             ...item,
           }));
+          this.v$.$errors = [];
           console.log(response.data);
         })
         .catch((errors) => {

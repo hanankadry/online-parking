@@ -688,7 +688,11 @@ export default {
   },
   methods: {
     add() {
-      this.parkingSlots.push({ alphabet: "Choose Alphabet", number: "", level: "" });
+      this.parkingSlots.push({
+        alphabet: "Choose Alphabet",
+        number: "",
+        level: "",
+      });
     },
     remove() {
       this.parkingSlots.pop();
@@ -717,8 +721,15 @@ export default {
             confirm("Are you sure you want to cancel these changes?") == true
           ) {
             console.log("confirm");
-            this.new_slot = {};
-            this.parkingSlots = [{ alphabet: "", number: "", level: "" }];
+            this.new_slot = {
+              id: "",
+              name: "",
+              level: "",
+              status: "choose",
+            };
+            this.parkingSlots = [
+              { alphabet: "Choose Alphabet", number: "", level: "" },
+            ];
             this.slotLevel = "";
             this.numOfSlots = "";
             const trigger = document.getElementById("btn-add-close");
@@ -728,12 +739,19 @@ export default {
             console.log("cancel");
           }
         } else {
-          const trigger = document.getElementById("btn-add-close");
-          trigger.click();
-          this.new_slot = {};
-          this.parkingSlots = [{ alphabet: "", number: "", level: "" }];
+          this.new_slot = {
+            id: "",
+            name: "",
+            level: "",
+            status: "choose",
+          };
+          this.parkingSlots = [
+            { alphabet: "Choose Alphabet", number: "", level: "" },
+          ];
           this.slotLevel = "";
           this.numOfSlots = "";
+          const trigger = document.getElementById("btn-add-close");
+          trigger.click();
         }
       }
     },
@@ -819,9 +837,19 @@ export default {
             })
             .then((response) => {
               this.makeToast("insert successful", "success");
+              this.new_slot = {
+                id: "",
+                name: "",
+                level: "",
+                status: "choose",
+              };
+              this.parkingSlots = [
+                { alphabet: "Choose Alphabet", number: "", level: "" },
+              ];
+              this.slotLevel = "";
+              this.numOfSlots = "";
               const trigger = document.getElementById("btn-add-close");
               trigger.click();
-              this.new_slot = {};
               this.show(this.parking_id);
               console.log(response.data);
             })
@@ -854,6 +882,17 @@ export default {
           })
           .then((response) => {
             this.makeToast("insert successful", "success");
+            this.new_slot = {
+              id: "",
+              name: "",
+              level: "",
+              status: "choose",
+            };
+            this.parkingSlots = [
+              { alphabet: "Choose Alphabet", number: "", level: "" },
+            ];
+            this.slotLevel = "";
+            this.numOfSlots = "";
             const trigger = document.getElementById("btn-add-close");
             trigger.click();
             this.show(this.parking_id);
